@@ -1,0 +1,16 @@
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+    <h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+<h2><?=$this->translate('label_developers-admin_version')?></h2>
+<p>Version: <?=$this->version?></p>
+
+<h2><?=$this->translate('label_developers-admin_host')?></h2>
+<p>Domain: <?=DOMAIN?></p>
+<p>This url: <?=$this->url()?></p>
+
+<h2><?=$this->translate('label_developers-admin_db-settings')?></h2>
+<?php Zend_Debug::dump($this->db_conn); ?>
+
+<h2><?=$this->translate('label_developers-admin_php-version')?></h2>
+<?=phpversion()?>

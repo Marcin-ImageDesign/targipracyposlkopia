@@ -1,0 +1,111 @@
+<?php echo $this->doctype() ?>
+<html class="main">
+<head>
+    <?php $this->headMeta()->setHttpEquiv('Content-Type', 'text/html;charset=utf-8'); ?>
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-startup-image" href="/apple-touch-icon.png" />   
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link type="image/x-icon" rel="shortcut icon" href="/favicon.ico">
+    <link type="image/x-icon" rel="icon" href="/favicon.ico">
+    <script type="text/javascript">var cookie_voxexpo="CookiesPolicyAccepted-VoxExpo";</script>
+    <?php $this->headScript()
+        ->prependFile('/_js/mccookies.js')
+        ->prependFile('/_js/swfobject.js')
+        ->prependFile('/_js/forms.js')
+        ->prependFile('/_js/jquery/jquery.form-3.18.js')
+        ->prependFile('/_js/jquery/jquery.tools.min.js')
+        ->prependFile('/_js/jquery/jquery-1.8.1.min.js')
+    ; ?>
+    <?php $this->headLink()
+        ->prependStylesheet('/_css/frontend/default/style.css')
+        ->prependStylesheet( '/_css/frontend/default/jquery.mCustomScrollbar.css' )
+        ->prependStylesheet( '/_css/frontend/default/overlay_element.css' )
+        ->prependStylesheet( '/_css/frontend/default/lightbox.css' )
+        ->prependStylesheet( '/_css/frontend/default/jquery-ui.theme.min.css' )
+        ->prependStylesheet( '/_css/frontend/default/jquery-ui.min.css' )
+//        ->prependStylesheet( '/_css/frontend/default/overlay_element.css' )
+        ->prependStylesheet('https://fonts.googleapis.com/css?family=Dosis:400,500,600,700&subset=latin,latin-ext'); ?>
+    <?php $this->selectedEvent->getStyle()?$this->headStyle()->appendStyle($this->selectedEvent->getStyle()):'';?>
+
+    <?php echo $this->headTitle(); ?>
+    <?php
+        preg_match(
+            '@<meta name="description" content="(.*?)" >@mu',
+            $this->headMeta()->toString(), 
+            $matches
+        );
+
+        if (! empty($matches))
+            $this->headMeta()->appendName('og:description', $matches[1]);
+
+        preg_match('@<title>(.*?)</title>@mu', $this->headTitle(), $matches);
+
+        if (! empty($matches))
+            $this->headMeta()->appendName('og:title', $matches[1]);
+    ?>
+    <?php echo $this->headMeta()->toString()."\r\n"; ?>
+    <?php echo $this->headLink()->toString()."\r\n"; ?>
+    <?php echo $this->headStyle()->toString()."\r\n"; ?>
+    
+    <meta name="viewport" content="width=1260, user-scalable=no" />
+    <script type="text/javascript" src="/_js/modernizr.custom.55919.js"></script>
+</head>
+<!-- ONET_BODYTAG_BEGIN --><body><!-- ONET_BODYTAG_END -->
+
+    <?php echo $this->layout()->content?>
+
+
+        
+    <footer>
+        <?php echo $this->placeholder('footer-content')?>
+    </footer>
+   </div>
+
+    <?php echo $this->render('_init-overlay.phtml') ?>
+
+    <?php $this->headScript()->captureStart(); ?>
+        function changePage(sel, showElem, hideElems) {
+            $(sel).bind('click', function(e) {
+            e.preventDefault();
+            $('.hallPageBtn a').removeClass('active');
+            $(this).addClass('active');
+            $(showElem).show(500);
+            $(hideElems).hide(500);
+            });
+        }
+
+        $(document).ready(function(){
+            changePage('.formBtn', '#Section', '#Edycje,#Poprzednie,#Wspolpraca');
+            changePage('#EdycjeBtn', '#Edycje', '#Section,#Poprzednie,#Wspolpraca');
+            changePage('#PoprzednieBtn', '#Poprzednie', '#Section,#Edycje,#Wspolpraca');
+            changePage('.WspolpracaBtn', '#Wspolpraca', '#Section,#Edycje,#Poprzednie');
+            <?php if (!$this->showEvent): ?>
+                changePage('#WystawcyBtn', '#Section', '#Edycje,#Poprzednie,#Wspolpraca');
+            <?php endif; ?>
+            changePage('header .logo', '#Section', '#Wspolpraca,#Edycje,#Poprzednie');
+
+        });
+
+    <?php $this->headScript()->captureEnd(); ?>
+    
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-168357141-1"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    
+    gtag('config', 'UA-168357141-1');
+    </script>
+    <!-- <//?php echo $this->googleAnalytics; ?> -->
+
+    <?php echo $this->headScript()->toString()."\r\n"; ?>
+</body>
+</html>

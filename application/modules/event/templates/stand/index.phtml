@@ -1,0 +1,181 @@
+<?php $this->placeholder('briefcase-submenu')->captureStart();?>
+    <ul class="inner_submenu">
+        <li>
+            <?php if(false && $this->userAuth->canAddToBriefcase($this->id_briefcase_type,$this->exhibStand->getId())):?>
+                <a class="briefcase" href="<?php echo $this->url(array('id_briefcase_type'=>$this->id_briefcase_type,'element'=>$this->exhibStand->getId(),'namespace'=>$this->selectedEvent->getId()),'briefcase_add-element')?>?return=<?php echo Zend_Controller_Front::getInstance()->getRequest()->getRequestUri();?>"> <?php echo $this->translate('label_event_stand_index_briefcase-add');?></a>
+            <?php endif;?>
+        </li>
+    </ul>
+<?php $this->placeholder('briefcase-submenu')->captureEnd();?>
+   
+<?php $this->placeholder('h1')->captureStart();?>
+    <h1 class="title"><?=$this->escape($this->selectedEvent->getTitle())?></h1>
+<?php $this->placeholder('h1')->captureEnd();?>
+    
+    <div id="frame">
+        <div class="frameIns" style="">
+            <?php echo $this->render('stand/_view_stand.phtml');?>
+        </div>
+        <div class="padd20" style="height:176px; overflow:hidden;">
+           <!--<div>
+                <p class="lineTitle"><?php echo $this->translate('label_event_stand_index_proposed_produkt');?></p>
+                <div class="floatL" style="width:100px">
+                    <a href="#" title=""><img src="http://targi.zumi.pl/cdn/756/47ada-b-100-100.jpg" alt="" /></a>
+                </div>
+                <div class="floatR" style="width: 821px;">
+                    <a href="#" title="">Aluminiowe drzwi zewnętrzne</a><br />
+                    Boczna brama segmentowa HST
+                    <div class="productIcons">
+                        <a href="#" class="productShop" target="_blank">Odwiedź sklep</a>
+                        <a href="#" class="productMore">Szczegóły</a>
+                        <a class="productBriefcaseAdd add_element tooltipLoad briefcase" href="#">
+                                <?= $this->translate('label_briefcase_add-to-briefcase'); ?>
+                        </a>
+
+                        <div class="clr"></div>
+                    </div>
+                </div>
+
+                <div class="clr"></div>
+            </div>-->
+            <?php if ($this->exhibStand->getIsContactActive()):?>
+               <div class="floatL" style="width:445px">
+                    <p class="lineTitle"><?php echo $this->translate('label_event_stand_index_contact-with-exhibitor');?></p>
+                    <a title="" class="contentLoad btnYellow floatL" href="<?php echo $this->url(array('hall_uri'=>$this->hall_uri,'event_uri' => $this->selectedEvent->getUri(), 'stand_uri' => $this->exhibStand->getUri()), 'event_stand_contact');?>"><?php echo $this->translate('label_event_stand_index_contact-form');?></a>
+                    <div class="clr"></div>
+                    
+                    
+                </div>
+            <?php endif;?>
+            <div class="<?php if ($this->exhibStand->getIsContactActive()):?>floatR<?php else:?>floatL<?php endif;?>" style="width:445px">
+                <p class="lineTitle"><?php echo $this->translate('label_event_stand_index_info-exhibitor');?></p>
+                <?php if($this->exhibStand->getShortContact()) : ?>
+                  <?= nl2br($this->exhibStand->getShortContact()); ?>
+                <?php else: ?>
+                    <?php echo $this->translate('label_event_stand_contact_no-data'); ?>  
+                <?php endif; ?>
+            </div>
+            <div class="clr"></div>
+            
+        </div>
+        
+    </div>
+    
+<?php $this->headScript()->captureStart(); ?>
+
+    $(window).load(function(){
+        $('.standCont').css({visibility:'visible'});
+        $('.frameIns').css({backgroundImage:'none'});
+    });
+
+
+        /* -- YT API -- */
+    <?php if ($this->exhibStand->getStandVideos()):?>
+        var tag = document.createElement('script');
+        $(window).load(function(){
+            tag.src = "https://www.youtube.com/iframe_api";
+            var firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        })
+
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '100%',
+                width: '100%',
+                frameborder: 0,
+                videoId: '<?php echo $this->exhibStand->getStandVideos()?>',
+                playerVars: {
+                    'wmode': 'transparent',
+                    'controls': 0,
+                    'theme': 'light',
+                    'color': 'white',
+                    'showinfo': 0,
+                    'showsearch': 0,
+                    'rel': 0,
+                    'egm': 1
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            
+            // poprawka iPad - film nie odtwarza si ę automatycznie
+            var isiPad = navigator.userAgent.match(/iPad/i) != null;
+            // właczaj tylko wtedy gdy nie jest odtwarzane na iPad
+            if (!isiPad) {
+                event.target.playVideo();
+            }
+            
+            // wyłaczone 
+            //event.target.playVideo();
+            
+        }
+
+        var done = false;
+        function onPlayerStateChange(event) {
+            setVolume(0);
+            if(event.data == 0) { //end video
+                playVideo()
+            }
+        }
+        
+        function pauseVideo() {
+            player.pauseVideo();
+        }
+        
+        function stopVideo() {
+            player.stopVideo();
+        }
+        function playVideo() {
+            player.playVideo();
+        }
+
+        function getDuration() {
+            return player.getDuration();
+        }
+        
+        function seekTo(sec) {
+            player.seekTo(sec);
+        }
+        
+        function getCurrentTime() {
+            return player.getCurrentTime();
+        }
+        
+        function setVolume(percent) {
+            if (player) {
+                player.setVolume(percent);
+            }
+        }
+        
+        function setVolumeTo(percent) {
+            if (player) {
+                currentVolume = Math.floor(player.getVolume());
+                currentlyVolume = currentVolume;
+                if(percent > currentVolume) {
+                    for (i=currentVolume; i<=percent; i++) player.setVolume(i);
+                } else {
+                    for (i=currentVolume; i>=percent; i--) player.setVolume(i);
+                }
+            }
+        }
+        
+        function akaFullscreen(sel) {
+            var currentTime = getCurrentTime();
+            pauseVideo();
+            loadOverlay(''+sel+'?start='+currentTime+'');
+            $('.close').click(function() {
+                playVideo();
+            });
+        }
+
+    <?php endif;?>
+<?php $this->headScript()->captureEnd(); ?>
+
+
+

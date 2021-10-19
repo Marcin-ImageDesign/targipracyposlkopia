@@ -1,0 +1,123 @@
+<?php if ($this->exhibStand->isImageLogoExists()): ?>
+    <a href="<?php echo $this->url(['event_uri' => $this->selectedEvent->getUri(), 'hall_uri' => $this->hall_uri, 'stand_uri' => $this->exhibStand->getUri()], 'event_stand'); ?>"
+       title="<?php echo $this->escape($this->exhibStand->getName()) ?>" class="add_token">
+        <img src="<?php echo Service_Image::getUrl($this->exhibStand->id_image_logo, 220, 77); ?>"
+             style="margin:0px auto 22px auto;" alt=""/>
+    </a>
+<?php endif; ?>
+
+    <div style="margin-bottom:20px; height:155px; overflow:hidden;">
+        <a class="add_token" href="<?php echo $this->url(['event_uri' => $this->selectedEvent->getUri(), 'hall_uri' => $this->hall_uri, 'stand_uri' => $this->exhibStand->getUri()], 'event_stand'); ?>"
+           title="<?php echo $this->escape($this->exhibStand->getName()) ?>">
+            <p class="navTitle"
+               style="margin-top:0px; text-align:center; padding-right:10px; padding-bottom: 10px;"><?= $this->escape($this->exhibStand->getName()); ?></p>
+        </a>
+        <p class="navDesc"><?= strip_tags($this->exhibStand->getShortInfo()); ?></p>
+    </div>
+    <ul>
+        <li><a class="iAbout contentLoad add_token"
+               href="<?php echo $this->url(['event_uri' => $this->selectedEvent->getUri(), 'hall_uri' => $this->hall_uri, 'stand_uri' => $this->exhibStand->getUri()], 'event_stand_info'); ?>"><?= $this->translate('label_event_stand_about-us'); ?></a>
+        </li>
+        <!-- <li><a class="iChat contentLoad" href="<?php //echo $this->url( array( 'event_uri' => $this->selectedEvent->getUri(), 'stand_uri' => $this->exhibStand->getUri() ), 'event_stand_chat' ); ?>"><? //= $this->translate('label_event_stand_chat');?></a></li> -->
+        <?php if ($this->exhibStand->getIsContactActive()): ?>
+            <li><a  class="iAskQuestion contentLoad add_token"
+                   href="<?php echo $this->url(['event_uri' => $this->selectedEvent->getUri(), 'hall_uri' => $this->hall_uri, 'stand_uri' => $this->exhibStand->getUri()], 'event_stand_contact'); ?>"><?= $this->translate('label_event_stand_ask-question'); ?></a>
+            </li>
+        <?php endif; ?>
+        <?php $www_adress = $this->exhibStand->getWwwAdress() ?>
+        <?php if (!empty($www_adress)): ?>
+            <li><a class="iWww add_token" target="_blank" widthLightbox="300px"
+                   href="<?php echo $this->url(['event_uri' => $this->selectedEvent->getUri(), 'hall_uri' => $this->hall_uri, 'stand_uri' => $this->exhibStand->getUri()], 'event_stand_www-site'); ?>"><?= $this->translate('label_event_stand_www-site'); ?></a>
+            </li>
+        <?php endif; ?>
+        <?php if ($this->exhibStand->getCountBargains() > 0): ?>
+            <li><a class="iBargains add_token"
+                   href="<?php echo $this->url(['event_uri' => $this->selectedEvent->getUri(), 'hall_uri' => $this->hall_uri, 'stand_uri' => $this->exhibStand->getUri(), 'promoted' => 1], 'event_stand-offer_index_promoted'); ?>"><?= $this->translate('label_event_stand_bargains'); ?></a>
+            </li>
+        <?php endif; ?>
+
+        <?php if ($this->exhibStand->getCountProducts() > 0): ?>
+            <li><a class="iProducts add_token"
+                   href="<?php echo $this->url(['event_uri' => $this->selectedEvent->getUri(), 'hall_uri' => $this->hall_uri, 'stand_uri' => $this->exhibStand->getUri()], 'event_stand-offer_index'); ?>"><?= $this->translate('label_event_stand_offers'); ?></a>
+            </li>
+        <?php endif; ?>
+        <?php if ($this->exhibStand->getCountVideos() > 0): ?>
+            <li><a class="iMovie add_token"
+                   href="<?php echo $this->url(['event_uri' => $this->selectedEvent->getUri(), 'hall_uri' => $this->hall_uri, 'stand_uri' => $this->exhibStand->getUri()], 'event_stand-video_index'); ?>"><?= $this->translate('label_event_stand_videos'); ?></a>
+            </li>
+        <?php endif; ?>
+        <?php if ($this->exhibStand->getCountFiles() > 0) : ?>
+            <li><a class="iCatalogue"
+                   href="<?= $this->url(['event_uri' => $this->selectedEvent->getUri(), 'hall_uri' => $this->hall_uri, 'stand_uri' => $this->exhibStand->getUri()], 'event_stand_files'); ?>"><?= $this->translate('label_event_stand_files'); ?></a>
+            </li>
+        <?php endif; ?>
+
+        <?php if ($this->exhibStand->isFbAddress()): ?>
+            <li><a class="iFb add_token"
+                   href="<?php echo $this->url(['event_uri' => $this->selectedEvent->getUri(), 'hall_uri' => $this->hall_uri, 'stand_uri' => $this->exhibStand->getUri()], 'event_stand_facebook'); ?>"
+                   target="_blank"><?= $this->translate('label_event_stand_facebook'); ?></a>
+            </li>
+        <?php endif; ?>
+
+        <?php if ($this->exhibStand->isSkypeName()): ?>
+            <li>
+                <a class="iSkype add_token"
+                   href="<?php echo $this->url(['event_uri' => $this->selectedEvent->getUri(), 'hall_uri' => $this->hall_uri, 'stand_uri' => $this->exhibStand->getUri()], 'event_stand_skype'); ?>"
+                   target="_blank"><?= $this->translate('label_event_stand_skype'); ?></a>
+            </li>
+        <?php endif; ?>
+
+        <li style="text-align:left">
+            <br/>
+            <div class="fb-share-button" value="<?= $this->translate('label_share') ?>"
+                 data-href="<?php echo $this->url(['event_uri' => $this->selectedEvent->getUri(), 'hall_uri' => $this->hall_uri, 'stand_uri' => $this->exhibStand->getUri()], 'event_stand'); ?>"
+                 data-layout="button"></div>
+        </li>
+    </ul>
+<?php $prefix = (isset($_SERVER['Https-IS-On']) && $_SERVER['Https-IS-On'] == 'on') ? 'https://' : 'http://'; ?>
+
+    <div id="fb-root"></div>
+<?php $this->headScript()->captureStart(); ?>
+    <!-- Load Facebook SDK for JavaScript -->
+
+    (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+    fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+<?php $this->headScript()->captureEnd(); ?>
+
+<?php if (!empty($this->exhibStand->getGoogleAnalytics()) && trim($this->exhibStand->getGoogleAnalytics()) != '') : ?>
+    <?php $this->headScript()->appendFile(
+        'https://www.googletagmanager.com/gtag/js?id=' . trim($this->exhibStand->getGoogleAnalytics()),
+        'text/javascript',
+        array('async' => true)
+    ); ?>
+
+    <?php $this->headScript()->captureStart(); ?>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+    dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', '<?= trim($this->exhibStand->getGoogleAnalytics()); ?>');
+    <?php $this->headScript()->captureEnd(); ?>
+<?php endif; ?>
+
+<?php $this->headScript()->captureStart(); ?>
+<?= $this->exhibStand->getGoogleAnalytics() ?>
+<?php $this->headScript()->captureEnd(); ?>
+
+<?php if ($this->exhibStand->is_active_chat && !$this->selectedEvent->getIsArchive()): ?>
+    <?php $this->headScript()->appendFile(CHAT_URL . "/chat_widget.js?token={$this->exhibStand->getChatGroupId()}"); ?>
+<?php endif; ?>
+    <!-- zakładka kontakt -->
+<?php if ($this->exhibStand->getIsContactActive()): ?>
+    <a href="<?php echo $this->url(['event_uri' => $this->selectedEvent->getUri(), 'hall_uri' => $this->hall_uri, 'stand_uri' => $this->exhibStand->getUri()], 'event_stand_contact'); ?>"
+       class="add_token contentLoad contact_tab contact_<?php echo Engine_I18n::getLangCode(); ?>"></a>
+<?php endif; ?>

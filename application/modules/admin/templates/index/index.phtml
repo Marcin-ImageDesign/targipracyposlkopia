@@ -1,0 +1,22 @@
+<div>
+    <?=$this->translate('label_admin-welcome_click-module-yoy-want-to-change')?>
+
+    <?php
+        $manual_file = '/_media/manual_v_4.1.docx';
+        $filename = $this->selectedBaseUser->getPublicRelativeRepositoryPath().DS.'manual.pdf';
+        if(file_exists($filename)){
+            $manual_file = $this->selectedBaseUser->getPublicBrowserRepositoryPath().'/'.'manual.pdf';
+        }
+    ?>
+    <br />
+    <a class="download_manual" href="<?=$manual_file?>?t=<?=time()?>">
+       <?=$this->translate('label_admin-dowload_user-manual')?>
+    </a>
+</div>
+<?php if($this->selectedEvent): ?>
+    <div>
+        <?php echo $this->translate('label_selected_menage_even'); ?>:
+        <?php echo $this->escape($this->selectedEvent->getTitle()); ?>
+    </div>
+<?php endif; ?>
+

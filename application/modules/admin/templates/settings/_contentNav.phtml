@@ -1,0 +1,13 @@
+<ul class="contents">
+    <?php echo $this->render('_backLink.phtml');?>
+    <li>
+        <a href="<?php echo $this->url(array(), 'admin_settings-main'); ?>">
+            <?php echo $this->translate('Main page event'); ?>
+        </a>
+    </li>
+    <li>
+        <a href="<?php echo $this->url(array(), 'admin_settings-main-boxes'); ?>">
+            <?php echo $this->translate('Main page boxes'); ?>
+        </a>
+    </li>
+</ul>

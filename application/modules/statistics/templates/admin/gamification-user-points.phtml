@@ -1,0 +1,41 @@
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+<h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+<?php $this->placeholder('aside')->captureStart(); ?>
+<?php echo $this->filter; ?>
+<?php $this->placeholder('aside')->captureEnd(); ?>
+
+<h2>
+    <?php echo $this->event->getTitle();?>
+    &nbsp;/&nbsp;
+    <?php echo $this->escape($this->user->getFirstName()).' '.$this->escape($this->user->getLastName()); ?>
+</h2>
+
+<?php if ($this->pointsList): ?>
+<table cellspacing="0" cellpadding="0" class="grid datas">
+    <tbody>
+        <tr>
+            <th class="head" width="10%">date</th>
+            <th class="head">type action</th>
+            <th class="head">stand</th>
+            <th class="head right">point</th>
+        </tr>
+        
+        <?php foreach ($this->pointsList as $key => $point): ?>
+            <tr class="row <?php if (0 == ($key % 2)): ?>odd<?php else: ?>even<?php endif; ?>">
+                <td nowrap valign="top" class="col"><?php echo $point['created_at']; ?></td>
+                <td valign="top" class="col">
+                    <?php echo $point['description']; ?>
+                    <?php if ($point['id_element_item']): ?>
+                        (<?php echo $point['id_element_item']; ?>)
+                    <?php endif; ?>
+                </td>
+                <td valign="top" class="col"><?php echo $point['id_element']; ?></td>
+                <td class="right"><?php echo $point['point']; ?></td>
+            </tr>                
+        <?php endforeach; ?>
+
+    </tbody>
+</table>
+<?php endif; ?>     

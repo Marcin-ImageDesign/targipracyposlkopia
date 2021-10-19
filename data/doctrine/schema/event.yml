@@ -1,0 +1,647 @@
+Event:
+  connection: baza
+  tableName: event
+  options:
+    orderBy: created_at DESC
+  columns:
+    id_event:
+      type: integer
+      primary: true
+      autoincrement: true
+    id_base_user: integer
+    id_user_created: integer
+    hash: string (32)
+    created_at: timestamp
+    id_image_light:
+      type: text
+      default: null
+    id_image:
+      type: text
+      default: null
+    id_event_miniature:
+      type: integer
+      notnull: false
+    bg_id_image:
+      type: text
+      notnull: false
+    bg_color:
+      type: string
+      notnull: true
+    date_start: date
+    date_end: date
+    is_active:
+      type: boolean
+      default: true
+    is_archive:
+      type: boolean
+      default: false
+    is_scheduled:
+      type: boolean
+      default: false
+    is_login_required:
+      type: boolean
+      default: false
+    is_shop_active:
+      type: boolean
+      default: false
+    is_reception_active:
+      type: boolean
+      default: false
+    id_event_hall_map:
+      type: integer
+      notnull: false
+    id_home_page:
+      type: integer
+      notnull: false
+    home_page_url:
+      type: string
+      notnull: true
+    map_sponsors:
+      type: string
+      default: '[]'
+      notnull: true
+    map_patrons:
+      type: string
+      default: '[]'
+      notnull: true
+    style:
+      type: string
+      default: null
+    directory:
+      type: string
+      notnull: false
+    file_css:
+      type: string
+      default: null
+    email_for_order:
+      type: string (64)
+      default: ''
+    data_banner_group:
+      type: string
+      default: '[]'
+      notnull: true
+    short_name:
+      type: string
+      default: null
+    is_slider_on:
+      type: boolean
+      default: true
+    replace_text:
+      type: string
+      default: null
+      notnull: false
+    replace_text_class:
+      type: string
+      default: null
+      notnull: false
+    fb_app_id:
+      type: string
+      default: null
+      notnull: false
+    fb_secret:
+      type: string
+      default: null
+  indexes:
+    hash:
+      fields: hash
+      type: unique
+  relations:
+    BaseUser:
+      local: id_base_user
+      foreign: id_base_user
+      onDelete: CASCADE
+    UserCreated:
+      class: User
+      local: id_user_created
+      foreign: id_user
+      onDelete: SET NULL
+    Translations:
+      class: EventTranslation
+      foreignAlias: Event
+      local: id_event
+      foreign: id_event
+      type: many
+      foreignType: one
+    EventHallMap:
+      foreignAlias: EventHall
+      local: id_event_hall_map
+      foreign: id_event_hall_map
+      type: one
+      foreignType: one
+      onDelete: SET NULL
+    EventHallMaps:
+      class: EventHallMap
+      foreignAlias: Event
+      local: id_event
+      foreign: id_event
+      type: many
+      foreignType: one
+    HomePage:
+      local: id_home_page
+      foreign: id_home_page
+      type: one
+      foreignType: one
+    HomePages:
+      local: id_event
+      foreign: id_event
+      type: many
+      foreignType: one
+    ImageLight:
+      local: id_image_light
+      foreign: id_image
+      type: one
+      foreignType: one
+    Image:
+      local: id_image
+      foreign: id_image
+      type: one
+      foreignType: one
+    BgImage:
+      class: Image
+      foreignAlias: EventBg
+      local: bg_id_image
+      foreign: id_image
+      type: one
+      foreignType: one
+
+EventFile:
+  connection: baza
+  tableName: event_file
+  columns:
+    id_event_file:
+      type: integer
+      primary: true
+      autoincrement: true
+    id_event:
+      type: integer
+      primary: true
+    hash: string (32)
+    created_at: timestamp
+    title: string
+    lead: string
+    file_ext:
+      type: string
+      size: 8
+    image_ext:
+      type: string
+      size: 8
+  indexes:
+    hash:
+      fields: hash
+      type: unique
+  relations:
+    Event:
+      local: id_event
+      foreign: id_event
+      type: one
+      foreignType: many
+      onDelete: CASCADE
+
+EventHallMap:
+  connection: baza
+  tableName: event_hall_map
+  columns:
+    id_event_hall_map:
+      type: integer
+      primary: true
+      autoincrement: true
+    hash:
+      type: string (32)
+      notnull: true
+    id_image:
+      type: integer
+      notnull: false
+    height:
+      type: integer
+      notnull: true
+    width:
+      type: integer
+      notnull: true
+    hall_map:
+      type: string
+    zoom_data:
+      type: string
+      default: null
+    id_event: integer
+    uri:
+      type: string(255)
+      default: 'main_hall'
+    id_promo_photo:
+      type: integer
+      notnull: false
+    is_template:
+      type: boolean
+      default: false
+    order:
+      type: integer
+      default: null
+  indexes:
+    hash:
+      fields: hash
+      type: unique
+  relations:
+    Translations:
+      class: EventHallMapTranslation
+      local: id_event_hall_map
+      foreign: id_event_hall_map
+      type: many
+      foreignType: one
+
+EventHallMapTranslation:
+  connection: baza
+  tableName: event_hall_map_translation
+  attributes:
+    coll_key: id_language
+  columns:
+    id_event_hall_map:
+      type: integer
+      primary: true
+    id_language:
+      type: integer
+      primary: true
+    name:
+      type: string
+      size: 255
+      default: ''
+    description:
+      type: string
+      size: 255
+      default: ''
+  relations:
+    Language:
+      local: id_language
+      foreign: id_language
+      onDelete: CASCADE
+
+EventTranslation:
+  connection: baza
+  tableName: event_translation
+  attributes:
+    coll_key: id_language
+  columns:
+    id_event:
+      type: integer
+      primary: true
+    id_language:
+      type: integer
+      primary: true
+    title:
+      type: string
+      size: 255
+      default: ''
+    seo_description:
+      type: string
+      size: 255
+      default: ''
+    seo_keywords:
+      type: string
+      size: 255
+      default: ''
+    seo_title:
+      type: string
+      size: 255
+      default: ''
+    lead: text
+    description: text
+    rules: text
+    uri: string (255)
+    map_sponsors:
+      type: string
+      default: '[]'
+      notnull: true
+  relations:
+    Language:
+      local: id_language
+      foreign: id_language
+      onDelete: CASCADE
+
+EventStandNumber:
+  connection: baza
+  tableName: event_stand_number
+  columns:
+    id_event_stand_number:
+      type: integer
+      primary: true
+      autoincrement: true
+    id_event_hall_map:
+      type: integer
+      notnull: true
+    id_stand_level:
+      type: integer
+      notnull: true
+    hash:
+      type: string (32)
+      notnull: true
+    is_active:
+      type: boolean
+      default: true
+    number:
+      type: integer
+      notnull: true
+    name:
+      type: string (255)
+      notnull: true
+    logo_pos_x:
+      type: integer
+      notnull: true
+    logo_pos_y:
+      type: integer
+      notnull: true
+    map_cords:
+      type: string
+      notnull: true
+  indexes:
+    hash:
+      fields: hash
+      type: unique
+  relations:
+    EventHallMap:
+      class: EventHallMap
+      foreignAlias: EventStandNumbers
+      local: id_event_hall_map
+      foreign: id_event_hall_map
+      type: one
+      foreignType: many
+      onDelete: CASCADE
+    StandLevel:
+      class: StandLevel
+      foreignAlias: EventStandNumbers
+      local: id_stand_level
+      foreign: id_stand_level
+      type: one
+      foreignType: many
+
+EventHasUser:
+  connection: baza
+  tableName: event_has_user
+  columns:
+    id_event:
+      type: integer
+      primary: true
+    id_user:
+      type: integer
+      primary: true
+    created_at: timestamp
+    hash: string (32)
+    is_confirm:
+      type: boolean
+      default: false
+  indexes:
+    hash:
+      fields: hash
+      type: unique
+  relations:
+    Event:
+      local: id_event
+      foreign: id_event
+      onDelete: CASCADE
+    User:
+      local: id_user
+      foreign: id_user
+      onDelete: CASCADE
+
+EventSite:
+  connection: baza
+  tableName: event_site
+  columns:
+    id_event_site:
+      type: integer
+      primary: true
+      autoincrement: true
+    id_event: integer
+    id_base_user: integer
+    hash: string (32)
+    is_active:
+      type: boolean
+      default: true
+    title:
+      type: string
+      size: 255
+      default: ''    
+    uri: string (255)  
+    content:
+      type: string
+      default: ''
+    is_protected:
+      type: boolean
+      default: false
+    order:
+      type: integer
+      notnull: true
+  indexes:
+    hash:
+      fields: hash
+      type: unique
+  relations:
+    Event:
+      local: id_event
+      foreign: id_event
+      onDelete: CASCADE
+    BaseUser:
+      local: id_base_user
+      foreign: id_base_user
+      onDelete: CASCADE
+    EventSiteLanguage:
+      foreignAlias: EventSite
+      local: id_event_site
+      foreign: id_event_site
+      type: many
+      foreignType: one
+    EventSiteLanguageOne:
+      foreignAlias: EventSiteOne
+      class: EventSiteLanguage
+      local: id_event_site
+      foreign: id_event_site
+      type: one
+      foreignType: one
+
+EventSiteLanguage:
+  connection: baza
+  tableName: event_site_language
+  columns:
+    id_event_site:
+      type: integer
+      primary: true
+    id_base_user_language:
+      type: integer
+      primary: true
+    title:
+      type: string
+      size: 255
+      default: ''      
+    uri: string (255)
+    content:
+      type: string
+      default: ''
+  relations:
+    EventSite:
+      foreignAlias: EventSiteLanguage
+      local: id_event_site
+      foreign: id_event_site
+      type: one
+      foreignType: many
+      onDelete: CASCADE
+    EventSiteOne:
+      class: EventSite
+      foreignAlias: EventSiteLanguageOne
+      local: id_event_site
+      foreign: id_event_site
+      type: one
+      foreignType: one
+      onDelete: CASCADE
+    BaseUserLanguage:
+      local: id_base_user_language
+      foreign: id_base_user_language
+      onDelete: CASCADE
+      
+EventHasBrand:
+  connection: baza
+  tableName: event_has_brand
+  columns:
+    id_event:
+      type: integer
+      primary: true
+      notnull: true
+    id_brand:
+      type: integer
+      primary: true
+      notnull: true
+  relations:
+    Event:
+      local: id_event
+      foreign: id_event
+      type: one
+      foreignType: many
+      onDelete: CASCADE
+    Brand:
+      local: id_brand
+      foreign: id_brand
+      type: one
+      foreignType: many
+      onDelete: CASCADE
+
+EventBannerGroup:
+  connection: baza
+  tableName: event_banner_group
+  columns: 
+    key:
+      type: string(255)
+      primary: true
+
+EventBackground:
+  connection: baza
+  tableName: event_background
+  columns:
+    id_event_background:
+      type: integer
+      primary: true
+      autoincrement: true
+    name: string(255)
+    uri: string(255)
+    data_banner:
+      type: string
+      default: '[]'
+      notnull: true 
+    id_image: integer
+    is_animation_on: boolean
+
+EventVideo:
+  connection: baza
+  tableName: event_video
+  columns:
+    id_event_video:
+      type: integer
+      primary: true
+      autoincrement: true
+    id_event:
+      type: integer
+      notnull: true
+    created_at: timestamp
+    hash: string (32)
+    is_active:
+      type: boolean
+      default: true
+    key: string
+  relations:
+    Event:
+      local: id_event
+      foreign: id_event
+      foreignAlias: Videos
+      type: one
+      foreignType: many
+      onDelete: CASCADE
+    Translations:
+      class: EventVideoTranslation
+      local: id_event_video
+      foreign: id_event_video
+      type: many
+      foreignType: one
+
+EventVideoTranslation:
+  connection: baza
+  tableName: event_video_translation
+  attributes:
+    coll_key: id_language
+  columns:
+    id_event_video:
+      type: integer
+      primary: true
+    id_language:
+      type: integer
+      primary: true
+    name:
+      type: string
+      notnull: true
+    lead:
+      type: string
+      notnull: true
+  relations:
+    Language:
+      local: id_language
+      foreign: id_language
+      onDelete: CASCADE
+
+Notifications:
+  connection: baza
+  tableName: notifications
+  columns:
+    id_notification:
+      type: integer
+      primary: true
+    hash: string (32)
+    name:
+      type: text
+      notnull: true
+    notification_date:
+      type: datetime
+    notification_text: string
+    created_at: timestamp
+    id_event: 
+      type: integer
+  relations:
+    Event:
+      local: id_event
+      foreign: id_event
+      onDelete: CASCADE
+NotificationToUser:
+  connection: baza
+  tableName: notification_to_user
+  columns:
+    id:
+      type: integer
+      primary: true
+    hash: string(32)
+    created_at: timestamp
+    id_notification: integer
+    id_exhib_participation: integer
+    visible_in_history:
+      type: boolean
+      default: true
+  relations:
+    Notifications:
+      local: id_notification
+      foreign: id_notification
+    ExhibParticipation:
+      local: id_exhib_participation
+      foreign: id_exhib_participation
+      onDelete: CASCADE

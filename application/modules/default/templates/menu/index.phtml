@@ -1,0 +1,5 @@
+<?php $this->placeholder('h1')->captureStart(); ?>
+    <?php echo $this->escape( $this->menu->getTitle() ); ?>
+<?php $this->placeholder('h1')->captureEnd(); ?>
+
+<?php echo $this->menu->getText(); ?>

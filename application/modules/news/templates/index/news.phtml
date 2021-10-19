@@ -1,0 +1,25 @@
+
+
+
+<a href="<?=$this->url(array('event_uri' => $this->selectedEvent->getUri()), 'event_articles')?>" title="" class="back">← <strong><?php echo $this->translate('label_news_news_back');?></strong> <?php echo $this->translate('label_news_news_back-to-news-list');?></a>
+<h2><?php echo $this->news->getTitle();?> <span style="color:#c2c2c2;"></span></h2>
+<div class="clr"></div>
+<div class="mcsb">
+	<?php $this->news->id_image?$image = Image::find($this->news->id_image):$image = '';?>
+		<?php if ( $image ) : ?>
+					<img src="<?= $image->getUrl(array('width' => 316, 'height' => 165, 'resize' => 'b'));?>" style="float:right; margin:0px 0px 20px 20px;" alt="" />
+		<?php endif;?>
+    <?php if ($this->news->getPublicationStart()):?>
+		<p class="pub_date"><?php echo $this->translate('label_news_news_pub-date')?>:&nbsp;<?= $this->zend_date->setTimestamp(strtotime($this->news->getPublicationStart()))->toString('dd MMMM'); ?></p>
+	<?php endif;?>
+    <div class="pdDesc"><strong><?php echo $this->news->getLead() ;?></strong></div>
+    <div class="pdDesc">
+       <?php echo $this->news->getText();?>
+       <?php if ($this->news->getLinkOutside()):?>
+            <a target="_blank" href="<?=$this->news->getLinkOutside()?>" title="<?=$this->escape($this->translate('Read more'))?>">
+                   <?=$this->escape($this->translate('Read more'));?>
+            </a>
+        <?php endif;?>
+    </div>
+    <div class="clr"></div>
+</div>

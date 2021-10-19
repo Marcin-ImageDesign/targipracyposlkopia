@@ -1,0 +1,148 @@
+<?=$this->doctype()?>
+<html lang="<?php echo Zend_Registry::get('selectedLanguage')->getCode();?>">
+<head>
+    <?=$this->headTitle()->toString()."\n" ?>
+    <!--[if IE]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if IE 7]>
+    <link href="/_css/admin/ie7.css" media="screen" rel="stylesheet" type="text/css" />
+    <![endif]-->
+
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <?php if( $this->jQuery()->isEnabled() ): ?>
+        <?php echo $this->jQuery()
+                ->setLocalPath('/_js/jquery-1.7.2.min.js')
+                ->setUiLocalPath('/_js/admin/jquery-ui.min.js');?>
+    <?php endif; ?>
+    <?php // $this->headScript()->appendFile('/_js/jquery-gettext.js'); ?>
+    <!--<link href="/_js/pl.json" lang="pl" rel="gettext"/>-->
+    <?php // $this->headScript()->appendFile('/_js/jquery.browser.mobile.js'); ?>
+    <?php $this->headScript()->appendFile('/_js/admin/all.js'); ?>
+    <?php $this->headScript()->appendFile('/_js/admin/jquery.CUI.js'); ?>
+
+    <?php $this->headLink()->appendStylesheet('/_css/admin/reset.css'); ?>
+    <?php $this->headLink()->appendStylesheet('/_css/admin/styles.css'); ?>
+    <?php $this->headLink()->appendStylesheet('/_css/admin/jquery-ui.css'); ?>
+    <?php $this->headLink()->appendStylesheet('/_css/admin/grid.css'); ?>
+    <?php $this->headLink()->appendStylesheet('/_css/admin/buttons.css'); ?>
+    <?php $this->headLink()->appendStylesheet( '/_css/frontend/default/overlay_element.css' );?>
+    <?php $this->headLink()->appendStylesheet( '/_css/frontend/default/lightbox.css' );?>
+
+
+    <?php $this->headScript()->prependFile('/_js/forms.js'); ?>
+    <?php $this->headScript()->prependFile('/_js/jquery/jquery.form-3.18.js'); ?>
+    <?php $this->headScript()->prependFile('/_js/jquery/jquery.tools.min.js'); ?>
+    <?php $this->headScript()->prependFile('/_js/jquery/jquery.tinymce.js'); ?>
+    <?php $this->headScript()->prependFile('/_js/admin/jsTinyMce.js'); ?>
+
+    <?=$this->headMeta()->toString()."\n" ?>
+    <?=$this->headLink()?>
+</head>
+<!-- ONET_BODYTAG_BEGIN --><body><!-- ONET_BODYTAG_END -->
+    <header class="h">
+        <h1>
+            <a class="admin_header_href" style="text-transform: none;" href="/admin"></a>
+        </h1>
+        <nav>
+            <div class="redirector">
+                <label><?php echo $this->translate('label_selected_menage_event'); ?></label>
+                <select name="redirector" class="redirector">
+                    <?php if($this->userAuth->isAdmin()): ?>
+                        <option value="?setSelectedEvent="><?php echo $this->translate('label_select_menage_event'); ?></option>
+                    <?php endif; ?>
+                    <?php $selectedEventHash = $this->selectedEvent ? $this->selectedEvent->getHash() : ''; ?>
+                    <?php foreach($this->userHasEvent as $event): ?>
+                        <option
+                            value="<?php echo $this->url(); ?>?setSelectedEvent=<?php echo $event->getHash(); ?>"
+                            <?php if($selectedEventHash==$event->getHash()):?>selected<?php endif; ?>
+                        >
+                            <?php echo $this->escape($event->getTitle());?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <?php echo $this->navigation()->menu() ?>
+            <span class="user">
+                <span class="icon"></span>
+                <?php echo $this->escape( $this->userAuth->getName() ); ?>,
+                <a href="<?php echo $this->url( array(), 'logout' ); ?>">
+                    <?php echo $this->translate('cms_label_logout'); ?></a> &nbsp;|&nbsp;
+                <a href="/"><?php echo $this->escape( $this->selectedBaseUser->getName() );?></a>
+            </span>
+        </nav>
+	<?php echo $this->action( 'language-list', 'index', 'admin' ); ?>
+    </header>
+
+    <section class="<?php echo $this->placeholder('section-class');?>">
+        <nav>
+            <?php if ($this->placeholder('nav-left')): ?>
+                <?php echo $this->placeholder('nav-left') ?>
+            <?php endif ?>
+        </nav>
+
+        <header class="sh">
+            <?php if ($this->placeholder('headling_1')): ?>
+                <?php echo $this->placeholder('headling_1') ?>
+            <?php endif ?>
+        </header>
+
+<!--        <div class="breadcrumb">
+            <?php if(0 < ($count = count($this->breadcrumb))): ?>
+                <a href="<?=$this->url(array(), 'admin')?>" title="<?=$this->escape($this->translate('Home'))?>"><?=$this->escape($this->translate('Home'))?></a>
+                <?php foreach($this->breadcrumb as $k => $v): ?>
+                    &raquo;
+                    <?php if(($count-1) == $k || !isset($v['url'])): ?>
+                        <?=$this->escape($this->translate($v['label']))?>
+                    <?php else: ?>
+                        <a href="<?=$this->escape($v['url'])?>" title="<?=$this->translate($this->escape($v['label']))?>"><?=$this->escape($this->translate($v['label']))?></a>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>-->
+
+        <aside>
+            <?php echo $this->placeholder('aside') ?>
+        </aside>
+
+        <section>
+            <div class="message">
+                <?php echo $this->flash->getMessages(); ?>
+            </div>
+           <?php echo $this->layout()->content ?>
+           <div class="clear">&nbsp;</div>
+        </section>
+    </section>
+
+
+    <footer>&copy; VoxExpo</footer>
+    <?php echo $this->render('_init-overlay.phtml'); ?>
+    <script>
+        $('select.redirector').bind('change', function() {
+            if($(this).val()) location.href=$(this).val();
+        });
+        $('.overlay_block').css('width', '1035px');
+         
+        var more_translation = '<?php echo $this->translate('More');?>';
+        //koniec
+    </script>
+
+    <!-- Pokazujemy chat, tylko jesli operator supportu jest zalogowany -->
+        <?php if( isset($this->groupStatusList[$this->chat_support_id])):?>
+            <div class="toggleChat">
+                <p class="toggleChat"><a href="javascript:;" class="toggleChat">Zapraszamy do rozmowy!</a></p>
+                <div class="controlChat">
+                    <?php if(isset($this->formContact)):?>
+                    <p style="padding:10px;"><?php echo $this->translate('no_operator');?></p>
+                    <div class="clearfix chatForm" >
+                    <?php echo $this->formContact->render();?>
+                    </div>
+                    <?php endif;?>
+                    
+                </div>
+            </div>
+        <?php endif;?>
+    <!-- Koniec -->
+    <?php echo $this->headScript()->toString()."\r\n" ?>
+</body>
+</html>

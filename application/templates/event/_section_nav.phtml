@@ -1,0 +1,89 @@
+<?php $this->headLink()->appendStylesheet( '/_externals/map/css/style.css' ); ?>
+<p class="navTitle" style="margin-bottom:10px;"><?php echo $this->translate('label_event_index_hall_exhibitor-list');?>: <a href="javascript:;" onclick="toggleSearchPanel()" class="minBtn minBtnCollapse"><?php echo $this->translate('label_event_hide_filter');?></a></p>
+        <div class="exhibitorSearchPanel" style="height:108px">
+            <!--<label for="eName">Nazwa</label>-->
+            <input type="text" name="eName" id="eName" class="niceInput" placeholder="<?php echo $this->translate('label_event_type_keyword');?>" />
+            <div class="clr"></div>
+            <!--<label for="eBrand">Branża</label>-->
+            <select name="eBrand" id="eBrand" class="niceInput">
+                <option value=""><?php echo $this->translate('label_event_choose_brand');?></option>
+                <?php if (!empty($this->brandList)): ?>
+                    <?php foreach ($this->brandList as $key => $brand): ?>
+                        <option value="_<?php echo $key; ?>_"><?php echo $brand; ?></option>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </select>
+            <div class="clr"></div>
+            <!--<label for="eRegion">Region</label>-->
+            <select name="eRegion" id="eRegion" class="niceInput hideRegion">
+                <option value=""><?php echo $this->translate('label_event_choose_region');?></option>
+                <?php foreach ($this->provinceList as $key => $provinceName):?>
+                    <option value="_<?php echo $key;?>_"><?php echo $provinceName;?></option>
+                <?php endforeach;?>
+            </select>
+
+            <div class="clr"></div>
+            <!--<a href="javascript:;" onclick="exhibitorsDataFilter()" class="searchBtn" title="">Wyszukaj</a>
+            <a href="javascript:;" onclick="exhibitorsClearInputsVal()" class="clearBtn" title="">Wyczyść</a>
+            <div class="clr"></div>-->
+        </div>
+        <div class="exhibitorMscb">
+            <div class="mcsbOther">
+                <ul style="margin-bottom:30px;">
+                   <?php $i = 0; foreach ($this->exhibitorList as $exhibitor): ?>
+                       <li>
+                           <a data-title="<div class='img' style='background-image: url(<?php echo Service_Image::getUrl($exhibitor->id_image_logo, 220, 77); ?>)'></div><p class='cName'><?php echo $this->escape($exhibitor->getName()); ?></p><p class='cDesc'><?php echo  $this->escape($exhibitor->getShortInfo()); ?></p>
+                            <?php if( isset($this->groupStatusList[$exhibitor->live_chat_group_id]) /*&& $this->groupStatusList[$exhibitor->live_chat_group_id] == 'accepting chats'*/):?><p class=' chatIcon chatAvalible tooltipLoad'><?php echo $this->translate('label_exhibitor_avalible_on_chat');?></p>
+                            <?php endif;?>" href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'hall_uri' => $exhibitor->EventStandNumber->EventHallMap->getUri() ,'stand_uri' => $exhibitor->getUri()), 'event_stand'); ?>">
+                                    <?php if ($exhibitor->is_active_chat):?>
+                                        <span data-tooltip="chatAvalibility_<?=$i;?>" class=" chatIcon 
+                                            <?php if( isset($this->groupStatusList[$exhibitor->live_chat_group_id]) /*&& $this->groupStatusList[$exhibitor->live_chat_group_id] == 'accepting chats'*/):?>chatAvalibleIcon<?php else:?>chatUnavalibleIcon
+                                            <?php endif;?>
+                                         tooltipLoad"></span>
+                                        <div class="tooltipContent" style="width:150px;" id="chatAvalibility_<?=$i;?>">
+                                        <?php if( isset($this->groupStatusList[$exhibitor->live_chat_group_id]) /*&& $this->groupStatusList[$exhibitor->live_chat_group_id] == 'accepting chats'*/):?>
+                                            <?php echo $this->translate('tooltip_event_index_hall_come-and-talk');?>
+                                        <?php else:?>
+                                            <?php echo $this->translate('tooltip_event_index_hall_leave-message');?>
+                                        <?php endif;?></div>
+                                    <?php else:?>
+                                        <span class="chatIcon"></span>
+                                    <?php endif;?>
+                            <span class="nameContainer"><?= $this->escape($exhibitor->getName());?></span></a>
+                           <input type="hidden" name="brand[<?php echo $exhibitor->getHash() ?>]" class="hBrand" value="<?php foreach($exhibitor->ExhibStandHasBrand as $standBrand):?>_<?php echo $standBrand->getIdBrand();?>_ <?php endforeach;?>" />
+                           <input type="hidden" name="region[<?php echo $exhibitor->getHash() ?>]" class="hRegion" value="<?php foreach( $exhibitor->StandHasAddressProvince as $addressProvince): ?>_<?php echo $addressProvince->id_address_province;?>_ <?php endforeach;?>" />
+                           <input type="hidden" name="allRegion[<?php echo $exhibitor->getHash() ?>]" class="hAllRegion" value="<?php foreach( $exhibitor->StandHasAddressProvince as $addressProvince):?><?php if ($addressProvince->id_address_province == 17):?>1<?php endif;?><?php endforeach;?>" />
+                           <input type="hidden" name="desc[<?php echo $exhibitor->getHash() ?>]" class="hShortDesc" value="<?php echo $this->escape(strip_tags($exhibitor->getShortInfo()));?>" />
+                           <input type="hidden" name="keys[<?php echo $exhibitor->getHash() ?>]" class="hKeysDesc" value="<?php echo $this->escape(strip_tags($exhibitor->getStandKeywords()));?>" />
+                       </li>
+                    <?php $i++; endforeach;?>
+                </ul>
+                <div class="noResults"><?php echo $this->translate('no_results');?>.<br /><a href="javascript:;" onclick="exhibitorsClearInputsVal()" title=""><?php echo $this->translate('click_here');?></a>, <?php echo $this->translate('to_show_whole_exhibitor_list');?>.</div>
+            </div>
+        </div>
+
+<?php $this->headScript()->captureStart(); ?>        
+    $('div.exhibitorMscb ul li a').mousemove(function(e) {
+            sTitle = $(this).attr('data-title');
+            $('.tooltip').remove();
+            $('body').prepend('<div class="tooltip">'+sTitle+'</div>');
+
+            var ttWidth = parseInt($('.tooltip').outerWidth(true));
+            var ttHeight = parseInt($('.tooltip').outerHeight(true));
+            
+            if($('.map').size() > 0) {
+                var selMap = $('.map');
+            } else {
+                var selMap = $('section.content section');
+            }
+
+            var ePageX = selMap.offset().left + 40;
+            var ePageY = selMap.offset().top + (parseInt(selMap.outerHeight())/2) - (parseInt($('.tooltip').outerHeight())/2);
+            $('.tooltip').css({margin: (ePageY)+'px 0 0 '+(ePageX)+'px'}).stop().css({opacity:1});
+            if($('.map').size() > 0) $('.map').css({opacity:.6});
+    }).mouseout(function() {
+            $('.tooltip').css({opacity:0}).remove();
+            if($('.map').size() > 0) $('.map').css({opacity:1});
+    });
+<?php $this->headScript()->captureEnd(); ?>
+    

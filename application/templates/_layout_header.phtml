@@ -1,0 +1,111 @@
+<?php $this->headScript()->appendFile('/_js/jquery.simplyscroll.min.js'); ?>
+<?php $this->headLink()->appendStylesheet('/_css/frontend/default/jquery.simplyscroll.css'); ?>
+<?php $isChatSchedule = $this->selectedEvent->isChatSchedule(); ?>
+<div class="line" style="padding:0">
+    <div class="ins">
+        <?php $patrons = $this->selectedEvent->getMapPatrons(); ?>
+        <?php $sponsors = $this->selectedEvent->getMapSponsors(); ?>
+        <p class="sponsorsTxt"><?= $this->translate('label_header_sponsors'); ?></p>
+        <div class="partnersSlider <?= $isChatSchedule ? 'partnerSliderShort' : 'partnerSliderMedium' ?>" style="overflow: hidden;">
+            <ul class="partnersSliderWrapper" style="float: left;">
+                <?php if (!empty($sponsors)): ?>
+                    <?php foreach ($sponsors as $key => $sponsor): ?>
+                        <li class="partnerItem">
+                            <span class="logo <?php if ($key == 0): ?>firstElem<?php endif; ?>">
+                                <a
+                                 <?php if (!empty($sponsor['style'])) : ?>
+                                     style="<?= $sponsor['style'] ?>"
+                                 <?php else: ?>
+                                     <?php if (isset($sponsor['attr'])) {
+                                         foreach ($sponsor['attr'] as $name => $attr): ?>
+                                             <?= $name . " = " . $attr; ?>
+                                         <?php endforeach;
+                                     } ?>
+                                 <?php endif; ?>
+                                  href="<?= $sponsor['link']; ?>"
+                                  <?php if (!empty($sponsor['target'])): ?>target="<?= $sponsor['target']; ?>"<?php endif; ?> title="<?= $sponsor['name']; ?>">
+                                    <img class="animOp"
+                                         src="<?php if (!isset($sponsor['image' . $key])) : ?><?= $sponsor['image']; ?><?php else: ?><?= Service_Image::getUrl($sponsor['image' . $key], ['height' => 35, 'resize' => 'h']); ?><?php endif; ?>"
+                                         alt="<?= $sponsor['name']; ?>"/>
+                                </a>
+                            </span>
+                        </li>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </ul>
+        </div>
+
+        <?php if ($this->userAuth) : ?>
+            <div class="headerButton account">
+                <a href="<?php echo $this->url(['event_uri' => $this->selectedEvent->getUri()], 'user_account_edit'); ?>">
+                    <span class="iAccount">
+                        <?php echo $this->translate('My account'); ?>
+                    </span>
+                </a>
+            </div>
+        <?php else: ?>
+            <div class="headerButton register">
+                <a href="<?php echo $this->url(['event_uri' => $this->selectedEvent->getUri()], 'default_login-register_index'); ?>">
+                    <span class="iRegister">
+                         <?php echo $this->translate('Logowanie do teczki'); ?>
+                    </span>
+                </a>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($isChatSchedule): ?>
+            <div class="headerButton ChatSchedule">
+                <a href="<?= $this->url(['event_uri' => $this->selectedEvent->getUri()], 'event_chat-schedule'); ?>">
+                    <span class="iChatSchedule">
+                        <?= $this->translate('Chaty'); ?>
+                    </span>
+                </a>
+            </div>
+        <?php endif; ?>
+
+        <!-- Żeby nie zaciemniać, skrypty oddzielnie, zależnie od trybu -->
+        <!-- Jedna belka -->
+        <?php if (empty($patrons)): ?>
+            <script type="text/javascript">
+                <?php $this->headScript()->captureStart(); ?>
+                $(window).load(function () {
+                    if ($('.partnersSliderWrapper').width() > 950)
+                        $(".partnersSliderWrapper").simplyScroll({customClass: 'simply-scroll simply-scroll-auto'});
+                });
+                <?php $this->headScript()->captureEnd(); ?>
+            </script>
+            <!-- Dwie belki -->
+        <?php else: ?>
+            <script type="text/javascript">
+                <?php $this->headScript()->captureStart(); ?>
+                $(window).load(function () {
+                    //różnica wysokości =  złamany wiersz - odpalamy slider
+                    if ($('.partnersSliderWrapper').height() > $('.partnersSlider').height())
+                        $(".partnersSliderWrapper").simplyScroll({customClass: 'simply-scroll simply-scroll-auto'});
+                    //analogicznie dla partnerów medialnych
+                    if ($('.mediapartnersSliderWrapper').height() > $('.partnersSlider ').height()) {
+                        $(".mediapartnersSliderWrapper").simplyScroll({customClass: 'simply-scroll-shortest'});
+                    }
+                });
+                <?php $this->headScript()->captureEnd(); ?>
+            </script>
+        <?php endif; ?>
+        <div class="clr"></div>
+    </div>
+
+    <?php $baseUser = Zend_Registry::get('BaseUser'); ?>
+    <?php $selectedLanguage = Zend_Registry::get('selectedLanguage'); ?>
+    <?php if ($baseUser->getBaseUserLanguage()->count()): ?>
+        <div style="position:absolute; right: 15px;top: 15px">
+        <?php foreach ($baseUser->getBaseUserLanguage() as $language): ?>
+            <?php if ($language->getCode() != $selectedLanguage->getCode()): ?>
+                <a  style="display:none" href="?selected-language=<?= $language->code ?>" title="<?= $this->escape($language->name) ?>">
+                        <?php if ($language->issetIcon()): ?>
+                            <img src="<?= $language->getIconSrc(); ?>"/>
+                        <?php endif; ?>
+                </a>
+            <?php endif; ?>
+        <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+</div>

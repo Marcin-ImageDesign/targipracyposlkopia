@@ -1,0 +1,7 @@
+<div class="frontend_content boxWithShadow">
+    <?php $this->placeholder('h1')->captureStart(); ?>
+    <h1><?php echo $this->escape( $this->translate('label_user_register_thx_resend_activate_link').' - '.$this->translate('label_user_register_thx_thank-you') ); ?></h1>
+    <?php $this->placeholder('h1')->captureEnd(); ?>
+    <div class="thanks"><strong><?php echo $this->translate('label_user_register_thx_comm-resend_activate_link') ;?></strong>. <?php echo $this->translate('label_user_register_thx_comm-wait-for');?> <u><?php echo $this->translate('label_user_register_thx_comm-you-account-activation');?></u>. <a class="readMore blueColor" href="<?php echo $this->url(array(), 'home') ?>" style="width:auto;float:right;margin-top:9px;"><?php echo $this->translate('label_user_register_thx_home-page');?></a></div>
+</div>
+<div class="onlyShadow"></div>

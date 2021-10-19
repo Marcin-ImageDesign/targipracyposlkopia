@@ -1,0 +1,64 @@
+<div class="header_wrapper" style="border-bottom:1px solid #c2c2c2;height:35px;">
+<h2 style="border:0 none;" class="floatL"><?php echo $this->translate('Historia powiadomień');?></h2>
+<div class="notification_filters floatR">
+    <span class="floatL"><?php echo $this->translate('Pokaż powiadomienia z:');?></span>
+    <a href="<?php echo $this->url(array(), 'user_account_notifications-history');?>?filter=today" class="floatL notification_filter <?php if ($this->filter == 'today'):?>active<?php endif;?>"><?php echo $this->translate('Dziś');?></a>
+    <a href="<?php echo $this->url(array(), 'user_account_notifications-history');?>?filter=yesterday" class="floatL notification_filter <?php if ($this->filter == 'yesterday'):?>active<?php endif;?>"><?php echo $this->translate('Wczoraj');?></a>
+    <a href="<?php echo $this->url(array(), 'user_account_notifications-history');?>" class="floatL notification_filter <?php if (empty($this->filter)):?>active<?php endif;?>"><?php echo $this->translate('Wszystkie');?></a>
+</div>
+</div>
+ <div id="source_wrapper" class="defaultDataTable">
+     <table cellspacing="0" id="source_no_sort" style="width:100%" cellpadding="10" class="grid datas products_list">
+                <thead class="border_tr">
+                    <tr>
+                        <th class="head" width="200">
+                            <?php echo $this->translate('Data powiadomienia');?>
+                        </th>
+                        <th class="head">
+                            <?php echo $this->translate('Tytuł');?>
+                        </th>
+                        <th class="head">
+                            <?php echo $this->translate('Treść'); ?>
+                        </th>
+                        <th class="head" width="50"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if ($this->notificationHistory->count() > 0):?>
+                        <?php foreach ($this->notificationHistory as $not):?>
+                            <tr style="border-bottom: 1px solid #c2c2c2 ">
+                                <td><?php echo $not->Notifications->getNotificationDate();?></td>
+                                <td><?php echo  $not->Notifications->getName();?></td>
+                                <td><?php echo  $not->Notifications->getNotificationText();?></td>
+                                <td><a class="notification_delete" title="<?php echo $this->translate('Usuń');?>" href="<?php echo $this->url(array('hash' => $not->getHash()), 'user_account_notification-delete');?>">x</a></td>
+                            </tr>
+                        <?php endforeach;?>
+                    <?php else:?>
+                        <tr>
+                            <td colspan="4"><div style="text-align:center;font-weight: bold"><?php echo $this->translate('Brak archiwalnych powiadomień');?></div></td>
+                        </tr>
+                    <?php endif;?>
+                </tbody>
+    </table>
+ </div>
+ <div style="clear:both"></div>
+<div id="pagination">
+    <?php echo $this->render('commponents/pagination.phtml'); ?>
+</div>
+ <?php $this->headScript()->captureStart(); ?>
+
+    $(document).ready(function() {
+
+
+        //custom scrollbar tylko dla wyników
+        $("#source_wrapper").mCustomScrollbar({
+            scrollInertia:0,
+            advanced:{
+                updateOnContentResize: true
+            }
+        });    
+    
+
+    });
+     
+<?php $this->headScript()->captureEnd(); ?>

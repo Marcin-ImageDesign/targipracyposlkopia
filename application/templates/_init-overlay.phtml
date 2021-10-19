@@ -1,0 +1,190 @@
+<div class="overlay_block" id="overlay_block_load">
+    <div class="overlay_title"></div>
+	<div class="overlay_content"></div>
+</div>
+<div style="display: none;" id="overlay_loading_info">
+	<div class="overlay_title">Wczytuję</div>
+	<div class="overlay_content" style="">
+            <div style="width: 268px; margin: auto;">
+                <div style="margin-left:20px; float:left; margin-right:10px; width:42px; height:80px; background: url('/_images/frontend/default/overlay/lightbox-ico-loading.gif') center center no-repeat;"></div>
+                <div style="float:left; margin-left:0px; line-height:80px; height:58px; padding-top:22px;">
+                    <span style="display:block;font-size:20px;color:#272727; font-weight:bold; line-height:20px"><?php echo $this->escape( $this->translate( 'Please wait' ) ); ?></span>
+                    <span style="display:block;font-size:11px;color:#9d9d9d; line-height:17px"><?php echo $this->escape( $this->translate( 'loading' ) ); ?></span>
+                </div>
+            </div>
+	</div>
+</div>
+
+
+<?php $this->headScript()->captureStart(); ?>
+    var window_size;
+    
+    function window_measure()
+    {
+        window_size = [Math.round($(window).width()*0.9),Math.round($(window).height()*0.8)];
+    }
+    
+    $(window).load(function() {
+        bindOverlay();
+        window_measure();
+    });
+    
+    
+    
+    $(window).resize(function(){
+        window_measure();
+        $('#overlay_block_load').css('left', (($(window).width() - $('#overlay_block_load').width())/2 + 'px'));
+    });
+    
+    var overloadDisplay = false;
+    
+    if(!fnOnClose){
+        var fnOnClose =  function(){
+            overloadDisplay = false;
+            $('#overlay_block_load .overlay_content').css('max-height','580px').html(''); // nie zmieniać!  // zmieniłem z 450 na 580 kdaniszewski  };
+            if (typeof beforeClose == 'function'){
+                beforeClose();
+                delete beforeClose;
+
+            }
+        }
+    }
+    
+    var confOverlay = {
+        mask: '#eee',
+        //top: '15%',
+        top: 50,
+        load: true,
+        fixed: false,
+        closeOnClick: false,
+        left: ($(window).width() - $('#overlay_block_load').width())/2 + 'px',
+        onBeforeLoad: function(){ overloadDisplay = true; },
+        onClose: fnOnClose
+    };
+    
+    
+    function bindOverlay()
+    {
+        $("a.contentLoad").click( function(){
+            var href = $(this).attr('href');
+            var width = $(this).attr('widthLightbox');
+            var height = $(this).attr('heightLightbox');
+            var maxHeight = $(this).attr('maxHeightLightbox');
+            
+            loadOverlay( href, width, height, maxHeight );
+            
+            return false;
+        });
+    }
+    
+    
+    function loadOverlay(href, width, height, maxHeight)
+    {
+        if (typeof width === "undefined" || width===null) width = "975px";
+        if (typeof height === "undefined" || height===null) height = 'auto';
+        if (typeof maxHeight === "undefined" || maxHeight===null) maxHeight = "auto";
+        
+        if(width == 'max'){ width= window_size[0]+'px';} 
+        if(height == 'max'){ height= window_size[1]+'px';} 
+        
+        $('#overlay_block_load').css({ width: width, height: height, maxHeight: maxHeight });
+        leftCss = ( $(window).width() - $('#overlay_block_load').width())/2 + 'px',
+        //topCss = (( $(window).height() - $('#overlay_block_load').height())/2)-20 + 'px',
+        $('#overlay_block_load').css({ left: leftCss, top: '40px' });
+        
+        var wrap = $('#overlay_block_load').find(".overlay_content");
+        wrap.html( $('#overlay_loading_info').find(".overlay_content").html() );
+        
+        if( !overloadDisplay ){
+            $("#overlay_block_load").overlay(confOverlay).load();
+        }
+
+        $.ajax({
+            async: "false",
+            type: "GET",
+            url: href,
+            success: function(data) {
+                wrap.html(data);
+                $("a.contentLoad").unbind('click');
+                bindOverlay();
+                bindAjaxForm();
+                runBriefcase();
+                if ($('.overlay_block .register-extended-header').length > 0){
+                    $('.register-extended').hide();
+                    $('.register-content').height($('#UserRegisterForm').height() + 320);
+                    $('label[for="UserRegister-accept_data"]').shorten({
+                        showChars: 81,
+                        moreText: 'rozwiń',
+                        lessText: 'zwiń'
+                    });
+
+                    $('label[for="UserRegister-accept_marketing"]').shorten({
+                        showChars: 53,
+                        moreText: 'rozwiń',
+                        lessText: 'zwiń'
+                    });
+                    $('a.morelink').click(function(){
+                        if($(this).hasClass('less')){
+                            $('.register-content').height($('#UserRegisterForm').height() + 280); //obejście hacka z default js
+                        } else{
+                            $('.register-content').height($('#UserRegisterForm').height() + 420); //obejście hacka z default js
+                        }
+                        $('.mcsb').mCustomScrollbar('update');
+                    });
+
+                    $('select.companyPosition').change(function(){
+
+                        var value = $(this).find('option:selected').val();
+                        if(value  >1 && value < 5){
+                            $('select.companyPositionDetail2').parents('.form-item').hide();
+                            $('select.companyPositionDetail').parents('.form-item').show('fast');
+                            $('.register-content').height($('#UserRegisterForm').height() + 420);
+                        } else if(value == 5 ) {
+                            $('select.companyPositionDetail').parents('.form-item').hide();
+                            $('select.companyPositionDetail2').parents('.form-item').show('fast');
+                            $('.register-content').height($('#UserRegisterForm').height() + 420);
+                        } else {
+                            $('select.companyPositionDetail').parents('.form-item').hide('fast');
+                            $('select.companyPositionDetail2').parents('.form-item').hide('fast');
+                            $('.register-content').height($('#UserRegisterForm').height() + 360);
+                        }
+                        $('.mcsb').mCustomScrollbar('update');
+                    }).change();
+
+
+                }
+                $('.register-extended-header').click(function(){
+                    $('.register-extended').toggle();
+                    $('.register-content').height($('#UserRegisterForm').height() + 360);
+                    $(".overlay_block div.mcsb").mCustomScrollbar('update');
+                });
+                $(".overlay_block div.mcsb").mCustomScrollbar({
+                    autoDraggerLength:true,
+                    scrollButtons:{
+                        enable:false
+                    }
+                });
+                $(".overlay_block div.mcsb").mCustomScrollbar('update');
+            }
+        });
+
+}
+    
+<?php $this->headScript()->captureEnd(); ?>
+
+<?php
+    $request = Zend_Controller_Front::getInstance()->getRequest();
+    $loadOverlay = $request->getParam('loadOverlay');
+    if(!empty($loadOverlay)){
+        $widthOverlay = $request->getParam('widthOverlay');
+        $heightOverlay = $request->getParam('heightOverlay');
+        $maxHeightOverlay = $request->getParam('maxHeightOverlay');
+        ?>
+            <?php $this->headScript()->captureStart(); ?>
+                $(document).ready(function() {
+                    loadOverlay('<?php echo $loadOverlay; ?>', '<?php echo $widthOverlay; ?>', '<?php echo $heightOverlay; ?>', '<?php echo $maxHeightOverlay; ?>');
+                });
+           <?php $this->headScript()->captureEnd(); ?>
+        <?php
+    }
+?>

@@ -1,0 +1,18 @@
+<?php $this->headLink()->appendStylesheet('/_css/admin/form.css'); ?>
+
+<?php if ($this->ftp->getConnectionError()): ?>
+    <h1><?php echo $this->translate('ftp_connection_error'); echo ': ' . $this->ftp->getConnectionError(); ?></h1> 
+<?php endif; ?>
+
+<?php echo $this->formFtp; ?>
+
+<?php if ($this->copiedFiles): ?>
+    <div class="copiedFilesList">
+        <p>skopiowane pliki:</p>
+        <ul>
+            <?php foreach ($this->copiedFiles as $file): ?>
+                <li><?php echo $file; ?></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+<?php endif; ?>

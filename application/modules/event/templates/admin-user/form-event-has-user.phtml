@@ -1,0 +1,15 @@
+<?php
+$this->headLink()->appendStylesheet('/_css/admin/form.css');
+$this->headLink()->appendStylesheet('/_css/admin/ui.multiselect.css');
+$this->headLink()->appendStylesheet('/_css/admin/common.css');
+$this->headScript()->appendFile('/_js/admin/jquery-ui.min.js');
+$this->headScript()->appendFile('/_js/admin/ui.multiselect.js');
+?>
+
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+<h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+<div>
+    <?php echo $this->formEventHasUser; ?>
+</div>
+<div class="cl"></div>

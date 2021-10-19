@@ -1,0 +1,198 @@
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+<?php
+    echo $this->partial(
+    '_headling_button.phtml', array('title' => $this->translate('cms-button_user_add'), 'url' => '/admin/user/new'));
+?>
+<h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+<?php $this->placeholder('aside')->captureStart(); ?>
+<?php echo $this->filter; ?>
+<script type="text/javascript">
+    $(document).ready(function(){
+        var select = $('select.select-user-filter'),
+        div_parent = $('select.select-user-filter').parent();
+        select.css('display','none');
+        select.each(function(){
+            if($(this).val()== '1'){
+                $(this).parent().append('<span onselectstart="return false;" style="-moz-user-select: none;" class="switch-1">1</span>');
+            }else if ($(this).val() === '0'){
+                $(this).parent().append('<span onselectstart="return false;" style="-moz-user-select: none;" class="switch-0">0</span>');
+            }else{
+                $(this).parent().append('<span onselectstart="return false;" style="-moz-user-select: none;" class="switch-all">-1</span>');
+            }
+        });
+	
+        div_parent.find('span').css('cursor','pointer');
+	
+        div_parent.find('span').click(function(){
+            if($(this).attr('class')=='switch-1'){
+                $(this).attr('class','switch-0');
+                $(this).parent().find('select').val($(this).parent().find('select option:nth-child(2)').val());
+            }else if($(this).attr('class')=='switch-0'){
+                $(this).attr('class','switch-all');
+                $(this).parent().find('select').val($(this).parent().find('select option:nth-child(1)').val());
+            }else{
+                $(this).attr('class','switch-1');
+                $(this).parent().find('select').val($(this).parent().find('select option:nth-child(3)').val());
+            }; 
+        });
+	
+    });
+    
+</script>
+<?php $this->placeholder('aside')->captureEnd(); ?>
+
+<?php $this->placeholder('toolbar')->captureStart(); ?>
+<?php echo $this->render('admin/pagination.phtml'); ?>
+<?php $this->placeholder('toolbar')->captureEnd(); ?>
+<?php $isSuperAdmin = Zend_Auth::getInstance()->getIdentity()->BaseUser->isSuperAdmin(); ?>
+    <div class="toolbar toolbar-top"><?php echo $this->placeholder('toolbar'); ?></div>
+    <table cellspacing="0" cellpadding="0" class="grid datas">
+        <tbody>
+            <tr>
+                <th class="head <?php if($this->orderCol == 'last_name'): ?>sorting-<?php if($this->orderDir == 'DESC'): ?>desc<?php else: ?>asc<?php endif; ?><?php endif; ?>">
+                    <a href="?order=last_name <?php if($this->orderDir == 'DESC'): ?>ASC<?php else: ?>DESC<?php endif; ?>&page=1">
+                        <span class="ui-icon"></span><?php echo $this->translate('cms-table_user_col-surename')?>
+                    </a>
+                </th>  
+                <th class="head <?php if($this->orderCol == 'first_name'): ?>sorting-<?php if($this->orderDir == 'DESC'): ?>desc<?php else: ?>asc<?php endif; ?><?php endif; ?>">
+                    <a href="?order=first_name <?php if($this->orderDir == 'DESC'): ?>ASC<?php else: ?>DESC<?php endif; ?>&page=1">
+                        <span class="ui-icon"></span><?php echo $this->translate('cms-table_user_col-name');?>
+                    </a>
+                </th>
+                <th class="head <?php if($this->orderCol == 'email'): ?>sorting-<?php if($this->orderDir == 'DESC'): ?>desc<?php else: ?>asc<?php endif; ?><?php endif; ?>">
+                    <a href="?order=email <?php if($this->orderDir == 'DESC'): ?>ASC<?php else: ?>DESC<?php endif; ?>&page=1">
+                        <span class="ui-icon"></span><?=$this->translate('cms-table_user_col-email')?>
+                    </a>
+                </th>
+                <th class="head <?php if($this->orderCol == 'company'): ?>sorting-<?php if($this->orderDir == 'DESC'): ?>desc<?php else: ?>asc<?php endif; ?><?php endif; ?>">
+                    <a href="?order=company <?php if($this->orderDir == 'DESC'): ?>ASC<?php else: ?>DESC<?php endif; ?>&page=1">
+                        <span class="ui-icon"></span><?=$this->translate('cms-table_user_col-company')?>
+                    </a>
+                </th>
+                <th class="head <?php if($this->orderCol == 'created_at'): ?>sorting-<?php if($this->orderDir == 'DESC'): ?>desc<?php else: ?>asc<?php endif; ?><?php endif; ?>">
+                    <a href="?order=created_at <?php if($this->orderDir == 'DESC'): ?>ASC<?php else: ?>DESC<?php endif; ?>&page=1">
+                        <span class="ui-icon"></span><?=$this->translate('cms-table_user_col-created')?>
+                    </a>
+                </th>
+                <?php if($isSuperAdmin): ?>
+                    <th class="head <?php if($this->orderCol == 'id_base_user'): ?>sorting-<?php if($this->orderDir == 'DESC'): ?>desc<?php else: ?>asc<?php endif; ?><?php endif; ?>">
+                        <a href="?order=id_base_user <?php if($this->orderDir == 'DESC'): ?>ASC<?php else: ?>DESC<?php endif; ?>&page=1">
+                            <span class="ui-icon"></span><?=$this->translate('cms-table_user_col-client')?>
+                        </a>
+                    </th>
+                <?php endif; ?>
+                <th class="head <?php if($this->orderCol == 'is_active'): ?>sorting-<?php if($this->orderDir == 'DESC'): ?>desc<?php else: ?>asc<?php endif; ?><?php endif; ?>">
+                    <a href="?order=is_active <?php if($this->orderDir == 'DESC'): ?>ASC<?php else: ?>DESC<?php endif; ?>&page=1">
+                        <span class="ui-icon"></span><?=$this->translate('cms-table_user_col-is-active')?>
+                    </a>
+                </th>
+                <th width="60px" class="head"></th>
+            </tr>
+            <tr class="row row-template">
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+                <?php if($isSuperAdmin): ?>
+                    <td valign="top" class="col"></td>
+                <?php endif; ?>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+            </tr>
+
+            <?php $userCanEditAll = $this->userAuth->hasAccess(AuthPermission::USER_ADMIN_CAN_EDIT_ALL); ?>
+            <?php foreach($this->userList as $key => $user): ?>
+                <?php
+                    $canEdit = false;
+                    if($userCanEditAll ||
+                       in_array($user->id_user_role, array(UserRole::ROLE_USER, UserRole::ROLE_EXHIBITOR, UserRole::ROLE_MODERATOR))
+                    ){
+                        $canEdit = true;
+                    }
+                ?> 
+                <tr class="row <?php if(0 == ($key % 2)): ?>odd<?php else: ?>even<?php endif; ?>">
+                    <td valign="top" class="col">
+                        <?php if($canEdit): ?>
+                            <a href="<?php echo $this->url(array('hash' => $user->getHash()), 'admin_user_edit'); ?>">
+                                <?php echo $this->escape($user->getLastName()); ?>
+                            </a>
+                        <?php else: ?>
+                            <?php echo $this->escape($user->getLastName()); ?>
+                        <?php endif; ?>
+                    </td>
+                    <td valign="top" class="col">
+                        <?php if($canEdit): ?>
+                            <a href="<?php echo $this->url(array('hash' => $user->getHash()), 'admin_user_edit'); ?>">
+                                <?php echo $this->escape($user->getFirstName()); ?>
+                            </a>
+                        <?php else: ?>
+                            <?php echo $this->escape($user->getFirstName()); ?>
+                        <?php endif; ?>
+                    </td>
+                    <td valign="top" class="col">
+                        <?php if($canEdit): ?>
+                            <a href="<?php echo $this->url(array('hash' => $user->getHash()), 'admin_user_edit'); ?>">
+                                <?php echo $this->escape($user->getEmail()); ?>
+                            </a>
+                        <?php else: ?>
+                            <?php echo $this->escape($user->getEmail()); ?>
+                        <?php endif; ?>
+                    </td>
+                    <td valign="top" class="col">
+                        <?php if($canEdit): ?>
+                            <a href="<?php echo $this->url(array('hash' => $user->getHash()), 'admin_user_edit'); ?>">
+                                <?php echo $this->escape($user->getCompany()); ?>
+                            </a>
+                        <?php else: ?>
+                            <?php echo $this->escape($user->getCompany()); ?>
+                        <?php endif; ?>
+                    </td>
+                    <td valign="top" class="col"><?php echo date('Y-m-d H:i', strtotime($user->created_at)); ?></td>
+                        <?php if($isSuperAdmin): ?>
+                            <td valign="top" class="col">
+                                <a href="<?php echo $this->url(array('hash' => $user->getHash()), 'admin_user_edit'); ?>">
+                                  <?php echo $this->escape($user->BaseUser->getName()); ?>
+                                </a>
+                            </td>
+                        <?php endif; ?>
+                    <td valign="top" class="col">
+                        <?php $isActive = (int) $user->is_active; ?>
+                        <?php if($canEdit): ?>
+                            <a href="<?php echo $this->url(array('hash' => $user->getHash()), 'admin_user_status'); ?>" class="status">
+                                <span class="switch-<?php echo $isActive; ?>"><?php echo $isActive; ?></span>
+                            </a>
+                        <?php else: ?>
+                            <span class="switch-<?php echo $isActive; ?>"><?php echo $isActive; ?></span>
+                        <?php endif; ?>
+                    </td>
+                    <td valign="top" class="col">
+                        <?php if($canEdit): ?>
+                            <ul class="actions">
+                                <li>
+                                    <a class="help" href="<?php echo $this->url(array('hash' => $user->getHash()), 'admin_user_edit'); ?>">
+                                        <span class="ui-icon ui-icon-pencil"><?php echo $this->translate('label_edit');?></span>
+                                        <span class="bullet" style="width: 24px;"><?php echo $this->translate('label_edit');?></span>
+                                        <span class="ui-icon ui-icon-triangle-1-s queue"></span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a onclick="return confirm('<?php echo $this->translate('cms-label_confirm-delete-item');?>')" title="<?php echo $this->translate('label_delete');?>" class="help" href="<?php echo $this->url(array('hash' => $user->getHash()), 'admin_user_delete'); ?>">
+                                        <span class="ui-icon ui-icon-close"><?php echo $this->translate('label_delete');?></span>
+                                        <span class="bullet" style="width: 36px;"><?php echo $this->translate('label_delete');?></span>
+                                        <span class="ui-icon ui-icon-triangle-1-s queue"></span>
+                                    </a>
+                                </li>
+                            </ul>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+
+        </tbody>
+    </table>
+    <div class="toolbar toolbar-bottom"><?php echo $this->placeholder('toolbar'); ?></div>
+
+

@@ -1,0 +1,75 @@
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+<h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+<?php $this->placeholder('aside')->captureStart(); ?>
+<?php echo $this->filter; ?>
+<?php $this->placeholder('aside')->captureEnd(); ?>
+
+<h2><?php echo $this->event->getTitle();?></h2>
+
+
+
+
+
+
+<a style="padding:5px;border:1px solid red;" href="<?php echo $this->url( array(), 'statistics_admin-gamification-convert-points' ); ?>">
+    Przelicz punkty
+</a><br /><br />
+
+
+<?php //$this->placeholder('toolbar')->captureStart(); ?>
+    <?php //echo $this->render('commponents/pagination.phtml'); ?>
+<?php //$this->placeholder('toolbar')->captureEnd(); ?>
+
+
+<table cellspacing="0" cellpadding="0" width="100%">
+    <tbody>
+        <tr>
+            <th class="head" width="50%">
+                Lista uczestników
+            </th>          
+        </tr>
+        <tr class="row">
+            <td valign="top" class="col" style="padding-right:5px;">
+                
+                <?php if ($this->participantsList): ?>
+                <table cellspacing="0" cellpadding="0" class="grid datas">
+                    <tbody>
+                        <tr>
+                            <th class="head" width="10%">pkt.</th>
+                            <th class="head">uczestnik</th>
+                            <th class="head">czy zablokowany</th>
+                            <th class="head right">id uczestnik</th>
+                        </tr>
+                        
+                        <?php /*foreach ($this->participantsList as $key => $participant): ?>
+                            <tr class="row <?php if (0 == ($key % 2)): ?>odd<?php else: ?>even<?php endif; ?>">
+                                <td valign="top" class="col"><?php echo $participant->getPoints(); ?></td>
+                                <td valign="top" class="col"><a class="edit" href="<?php echo $this->url(array('hash' => $participant->User->getHash()), 'statistics_admin-gamification-user-points'); ?>" ><?php echo $this->escape($participant->User->getFirstName()).' '.$this->escape($participant->User->getLastName()); ?> (<?php echo $participant->User->getEmail();?>)</a></td>
+                            <td class="right"><?php echo $participant->User->getId(); ?></td>
+                            </tr>                
+                        <?php endforeach; */?>
+
+                        <?php foreach ($this->participantsList as $key => $participant): ?>
+                            <tr class="row <?php if (0 == ($key % 2)): ?>odd<?php else: ?>even<?php endif; ?>">
+                                <td valign="top" class="col"><?php echo $participant['points']; ?></td>
+                                <td valign="top" class="col"><a class="edit" href="<?php echo $this->url(array('hash' => $participant['hash']), 'statistics_admin-gamification-user-points'); ?>" ><?php echo $this->escape($participant['first_name']).' '.$this->escape($participant['last_name']); ?> (<?php echo $participant['email'];?>)</a></td>
+                                <td><?php if ($participant['is_banned']):?>zablokowany<?php endif;?></td>
+                                <td class="right"><?php echo $participant['id_user']; ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+
+                    </tbody>
+                </table>
+                <?php endif; ?>     
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="toolbar toolbar-bottom"><?php echo $this->placeholder('toolbar'); ?></div>
+            </td>
+        </tr>
+    </tbody>
+</table>

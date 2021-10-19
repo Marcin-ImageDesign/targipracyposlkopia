@@ -1,0 +1,174 @@
+<div id="receptionIns" class="receptionIns" style="background-image: url('<?php echo $this->background_data->getUri();?>')">
+    
+    <div class="iconCont iconCont1" style="top:180px;left:130px;">
+        <a data-tooltip="showCashRegister" href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'site_uri' => 'informacje'), 'event_site');?>" title="" class="contentLoad presentationIcon tooltipLoad pBargain"></a>
+        <div class="tooltipContent" id="showCashRegister"><?php echo $this->translate('Harmonogram spotkań online');?></div>
+    </div>
+    
+    <div class="iconCont iconCont2" style="top:80px; left:520px;">
+        <a data-tooltip="showContact" href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'site_uri' => 'kontakt'), 'event_site');?>" title="" class="contentLoad presentationIcon tooltipLoad pContact"></a>
+        <div class="tooltipContent" id="showContact"><?php echo $this->translate('label_event_index_reception_contact');?></div>
+    </div>
+    
+    <div class="iconCont iconCont3" style="top:240px;left:300px;">
+        <a data-tooltip="showFiles" href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'event_files');?>" title="" class="contentLoad presentationIcon tooltipLoad pFiles"></a>
+        <div class="tooltipContent" id="showFiles"><?php echo $this->translate('label_event_index_reception_files');?></div>
+    </div>
+
+    <?php if ($this->show_gamification):?>
+        <div class="iconCont iconCont9" style="top:170px;left:550px;">
+            <a data-tooltip="showGamification" href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'event_gamification');?>" title=""
+               class="contentLoad presentationIcon tooltipLoad pGamification"></a>
+            <div class="tooltipContent" id="showGamification"><?php echo $this->translate('label_event_index_reception_gamification');?></div>
+        </div>
+    <?php endif;?>
+     <?php if ($this->show_webinars):?>
+        <div class="iconCont iconCont10" style="top:125px;left:275px;">
+            <a data-tooltip="showWebinars" href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'event_webinar');?>" title=""
+               class="contentLoad presentationIcon tooltipLoad pWebinars"></a>
+            <div class="tooltipContent" id="showWebinars"><?php echo $this->translate('label_event_index_reception_webinars');?></div>
+        </div>
+    <?php endif;?>
+
+    <div class="iconCont iconCont4" style="top:240px;left:580px;">
+        <a data-tooltip="videoGallery" href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'event-video_index');?>" title="" class="contentLoad presentationIcon tooltipLoad pVideo"></a>
+        <div class="tooltipContent" id="videoGallery"><?php echo $this->translate('label_event_index_video_gallery');?></div>
+    </div>
+
+    <div class="iconCont iconCont7" style="top:90px;left:365px;">
+        <a data-tooltip="new-visitor" href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'site_uri' => 'new-visitor-guide'), 'event_site');?>" title="" class="contentLoad speech_cloud tooltipLoad pNewVisitor"></a>
+        <div class="tooltipContent" id="new-visitor"><?php echo $this->translate('New visitor');?></div>
+    </div>
+    <ul class="hall_list iconCont5" style="margin-top:135px;">
+    <?php foreach ($this->event_halls as $hall):?>
+        <?php if ($hall['uri'] == 'main_hall'):?>
+            <li>
+            <a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'event_hall');?>" class="blue_button hall_<?php echo $hall['uri'];?>" style="">
+                <?php echo $this->translate('index_reception_enter_main_hall');?>
+            </a>
+            </li>
+        <?php else:?>
+            <li>
+            <a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'hall_uri' => $hall['uri']), 'event_hall_uri');?>" class="blue_button hall_<?php echo $hall['uri'];?>" style="">
+                <?php echo $hall['name'];?>
+            </a>
+            </li>
+        <?php endif;?>
+    <?php endforeach;?>
+    </ul>
+    
+    <?php 
+    	//$this->headScript()->prependFile('/_js/jquery.cycle.all.js');
+        $this->headScript()->appendFile('/_js/jquery.cycle.all.js');
+    ?>    
+    
+    <div class="bannersRotate iconCont6" style="top:250px;">    
+        <?php if (!empty($this->sideBanners)):?>
+        	<?php foreach($this->sideBanners as $key => $banner):?>
+        		<a href="<?php echo $banner['link'];?>" target="<?php echo $banner['target'];?>" style="<?php echo 'background-image: url(\''.Service_Image::getUrl($banner['img'], array('width'=>138, 'height'=>134, 'resize' => 'b')).'\'); '?>
+                    background-repeat:no-repeat;
+                    background-position:center center; 
+                ">
+        		</a> 
+        	<?php endforeach;?>
+        <?php endif;?>
+    </div>
+    
+    <?php $this->headScript()->captureStart(); ?>    
+    $('.bannersRotate').cycle({ 
+        fx:     'fade',
+        //random: true,
+        //center: true,
+    });    
+    <?php $this->headScript()->captureEnd(); ?>
+    
+    <div class="clearfix"></div>
+</div>
+
+
+
+
+<script type="text/javascript">
+<?php $this->headScript()->captureStart(); ?>     
+
+$(window).resize(function(){
+    resizeReception();resizeReceptionContent();
+});
+$(window).load(function(){
+    resizeReception();resizeReceptionContent();
+});
+
+
+function resizeReception(){
+
+    var documentHeight = parseInt($(window).height());
+    
+    var iconCont1=180;
+    var iconCont2=80;
+    var iconCont3=240;
+    var iconCont4=240;
+    var iconCont5=135;  //margin-top:135px;
+    var iconCont6=250;
+    var iconCont7=90;
+    var iconCont9=170;
+    var iconCont10=125;
+    
+    if (documentHeight>935){
+        $('#receptionIns').height(746);
+        $('body section.receptionContent section').height(746);
+        $('.iconCont1').css({'top':iconCont1+100});
+        $('.iconCont2').css({'top':iconCont2+100});
+        $('.iconCont3').css({'top':iconCont3+100});
+        $('.iconCont4').css({'top':iconCont4+100});
+        $('.iconCont5').css({'margin-top':iconCont5+100});
+        $('.iconCont6').css({'top':iconCont6+100});
+        $('.iconCont7').css({'top':iconCont7+100});
+        $('.iconCont9').css({'top':iconCont9+100});
+        $('.iconCont10').css({'top':iconCont10+100});
+    }else if (documentHeight>835){
+        $('#receptionIns').height(646);
+        $('body section.receptionContent section').height(646);
+        $('.iconCont1').css({'top':iconCont1+50});
+        $('.iconCont2').css({'top':iconCont2+50});
+        $('.iconCont3').css({'top':iconCont3+50});
+        $('.iconCont4').css({'top':iconCont4+50});
+        $('.iconCont5').css({'margin-top':iconCont5+50});
+        $('.iconCont6').css({'top':iconCont6+50});
+        $('.iconCont7').css({'top':iconCont7+50});
+        $('.iconCont9').css({'top':iconCont9+50});
+        $('.iconCont10').css({'top':iconCont10+50});
+    }else{                                          
+        $('#receptionIns').height(546);
+        $('body section.receptionContent section').height(546);
+        $('.iconCont1').css({'top':iconCont1});
+        $('.iconCont2').css({'top':iconCont2});
+        $('.iconCont3').css({'top':iconCont3});
+        $('.iconCont4').css({'top':iconCont4});
+        $('.iconCont5').css({'margin-top':iconCont5});
+        $('.iconCont6').css({'top':iconCont6});
+        $('.iconCont7').css({'top':iconCont7});
+        $('.iconCont9').css({'top':iconCont9});
+        $('.iconCont10').css({'top':iconCont10});
+    }
+
+}
+
+
+
+function resizeReceptionContent(){
+    set_height = $('#receptionIns').height();
+    $('.receptionContent > nav').height(set_height - 20);
+    //var window_height = $(window).height();
+    //for tall windows we're pulling footer down
+    //if (window_height > 650){
+        //$('footer').css({'position':'absolute', 'bottom': 0, 'width':'100%'})
+    //}
+}
+
+
+
+<?php $this->headScript()->captureEnd(); ?>
+</script>
+
+
+

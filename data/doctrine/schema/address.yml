@@ -1,0 +1,92 @@
+Address:
+  connection: baza
+  tableName: address
+  columns:
+    id_address:
+      type: integer
+      primary: true
+      autoincrement: true
+    id_address_city: integer
+    id_address_province: integer
+    id_address_quarter: integer
+    street:
+      type: string
+      size: 255
+      default: ''
+    zip_code:
+      type: string
+      size: 6
+      default: ''
+    number:
+      type: string
+      size: 32
+      default: ''
+    latitude: float
+    longitude: float
+  relations:
+    AddressCity:
+      local: id_address_city
+      foreign: id_address_city
+    AddressProvince:
+      local: id_address_province
+      foreign: id_address_province
+    AddressQuarter:
+      local: id_address_quarter
+      foreign: id_address_quarter
+
+AddressCity:
+  connection: baza
+  tableName: address_city
+  columns:
+    id_address_city:
+      type: integer
+      primary: true
+      autoincrement: true
+    id_address_province: integer
+    name: string (255)
+  relations:
+    AddressProvince:
+      local: id_address_province
+      foreign: id_address_province    
+
+AddressCountry:
+  connection: baza
+  tableName: address_country
+  columns:
+    id_address_country:
+      type: integer(10)
+      primary: true
+      autoincrement: true
+    name: string(255)
+    short_code: string(3)
+
+AddressProvince:
+  connection: baza
+  tableName: address_province
+  columns:
+    id_address_province:
+      type: integer
+      primary: true
+      autoincrement: true
+    name: string (255)
+    id_address_country: integer(10)
+  relations:
+    AddressCountry:
+      local: id_address_country
+      foreign: id_address_country
+
+AddressQuarter:
+  connection: baza
+  tableName: address_quarter
+  columns:
+    id_address_quarter:
+      type: integer
+      primary: true
+      autoincrement: true
+    id_address_city: integer
+    name: string (255)
+  relations:
+    AddressCity:
+      local: id_address_city
+      foreign: id_address_city 
+    

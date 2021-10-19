@@ -1,0 +1,24 @@
+<section id="form">
+    <div class="box half">
+        <div class="round art" style=" margin:4px; height:250px; position:relative;">
+
+            <h1 class="main" style="margin-bottom:10px; font-weight:600; line-height:0.9;color:#212121;">Już <?php echo $this->selectedEvent->getDateStartNice(); ?> największe<br>Wirtualne <?php echo $this->selectedEvent->getTitle(); ?></h1>
+            <div style=" font-size:22px; line-height:1.2; font-family:'Dosis';font-weight:600">Bądź tam gdzie Twoi klienci,<br>dotrzyj do 100 000 użytkowników.</div>
+            <img src="<?php echo Service_Image::getUrl(
+                $this->selectedEvent->getImageLight(),
+                276,
+                97,
+                'bi'
+            )?>" alt="Edukacja" style="position:absolute; left:0px; bottom:10px;">
+            <button class="WspolpracaBtn" style=" position:absolute; right:20px; bottom:20px; padding:15px 20px; font-size:21px;background:#2c3192;">Sprawdź ofertę teraz!</button>
+        </div>
+    </div>
+    <div class="box half">
+        <div class="round art" style="background:#2c3192; color:#fff;margin:4px; height:250px;">
+
+            <h2 style="margin-bottom:10px;">Dziękujemy za wysłanie formularza!</h2>
+            
+        </div>
+    </div>
+
+</section>

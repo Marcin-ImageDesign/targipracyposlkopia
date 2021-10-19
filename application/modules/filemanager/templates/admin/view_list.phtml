@@ -1,0 +1,66 @@
+
+
+<table cellspacing="0" cellpadding="0" class="grid datas">
+    <tbody>
+        <tr>
+            <th class="head first" style="width: 20px;">&nbsp;</th>
+            <th class="head" colspan="2"><?php echo $this->translate('File/Folder name'); ?></th>
+            <th class="head" style="width: 80px; text-align: right;"><?php echo $this->translate('Size'); ?></th>
+            <th class="head" style="width: 80px; text-align: center;"><?php echo $this->translate('Type'); ?></th>
+            <th class="head" style="width: 120px; text-align: center;"><?php echo $this->translate('Date of change'); ?></th>
+        </tr>
+
+        <?php if($this->path != '' && $this->path != '/'):?>
+            <tr>
+                <td class="col"></td>
+                <td class="col fileIcon" style="width: 5px;"><span class="parent"></span></td>
+                <td class="col fileName"><a href="<?=$this->url()?>?path=<?=$this->dirUp?>">.. <i>[<?php echo $this->translate('to up'); ?>]</i></a></td>
+                <td class="col"></td>
+                <td class="col"></td>
+                <td class="col"></td>
+            </tr>
+        <?php endif; ?>
+
+        <?php if( count($this->catalogContent) != 0 ): ?>
+            <?php $i=0; ?>
+            <?php foreach( $this->catalogContent as $key => $element ): ?>
+                <tr class="row addOnMouseOver <?php if( $this->selectedFiles['files_path'] == $this->path && array_key_exists($element['file'], $this->selectedFiles['files']) ): ?><?=$this->selectedFiles['operation']?>File<?php endif; ?>">
+                    <td class="col">
+                        <?=$this->formCheckbox('file['.$element['file'].']', 1, array( 'class' => 'selectedFile', 'idElementList' => 'elementList_'.$i, 'checked' => ( $this->selectedFiles['files_path'] == $this->path && array_key_exists($element['file'], $this->selectedFiles['files']) ) ) )?>
+                    </td>
+                    <td class="col fileIcon" style="width: 5px">
+                        <span class="<?=$element['ext']?>"></span>
+                    </td>
+                    <td class="col fileName">
+                        <?=$this->partial( 'admin/file_options.phtml', array( 'element' => $element, 'path' => $this->path, 'browserPath' => $this->browserPath, 'mode' => $this->mode, 't' => $this->t ) )?>
+                        <?php if($element['type']=='dir'):?>
+                            <a href="<?=$this->url()?>?path=<?=$this->path.'/'.$element['file']?>">
+                                <?=$element['file']?>
+                            </a>
+                        <?php else: ?>
+                            <?php if( $this->mode == 'get' ): ?>
+                                <a href="#" onClick="getFileElement('<?=$this->browserPath.'/'.$element['file']?>', '<?php echo $element['file']; ?>'); return false;"><?=$element['file']?></a>
+                            <?php else: ?>
+                                <a href="<?=$this->browserPath.'/'.$element['file']?>">
+                                    <?=$element['file']?>
+                                </a>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                    </td>
+                    <td class="col taRight"><?=$element['size']?></td>
+                    <td class="col taCenter">
+                        <?php if( $element['type']!='dir' ): ?>
+                            <?=$element['ext']?>
+                        <?php else: ?>
+                            <?php echo $this->translate('catalog'); ?>
+                        <?php endif; ?>
+                    </td>
+                    <td class="col taCenter"><?=date('Y-m-d H:i', $element['modificated'] )?></td>
+                </tr>
+                <?php $i++; ?>
+            <?php endforeach; ?>
+        <?php endif; ?>
+
+    </tbody>
+</table>
+

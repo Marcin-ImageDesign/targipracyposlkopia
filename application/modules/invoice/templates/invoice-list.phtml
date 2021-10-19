@@ -1,0 +1,45 @@
+
+<?php $i = 1; ?>
+<?php foreach ($this->invoiceList as $key => $item): ?>
+
+    <tr style="width: 100%;">
+        <td style="width: 5%;">
+            <?php echo $i++ . '.'; ?>
+        </td>        
+        <td style="width: 15%;">
+            <?= $item->number; ?>
+        </td>
+        <td style="width: 20%;">
+            <?= $item->ExhibParticipation->User->getName(); ?>
+        </td>
+        <td style="width: 15%;">
+            <?= $item->price_gross . ' PLN'; ?>
+        </td>
+        <td style="width: 15%;">
+            <?= $item->date_created; ?>
+        </td>
+        <td style="width: 15%;">
+            <?= $item->InvoiceStatus->getName(); ?>
+        </td>
+        <td style="width: 15%;">
+            <div class="actions">
+                <a title="Szczegóły" href="<?php echo $this->url(array('hash' => $item->hash), 'invoice_admin-details', true); ?>"> 
+                    <span class="ui-icon ui-icon-circle-zoomout"><?php echo $this->translate('Szczegóły'); ?></span>
+                </a>
+                <a title="Edytuj" href="<?php echo $this->url(array('hash' => $item->hash), 'invoice_admin-edit'); ?>"> 
+                    <span class="ui-icon ui-icon-document"><?php echo $this->translate('Edit'); ?></span>
+                </a>
+                <?php if (!empty($item->file_name)){?>
+                    <a title="Pobierz" href="<?php echo $this->url(array('hash' => $item->hash), 'invoice_admin-download'); ?>"> 
+                        <span class="ui-icon ui-icon-arrowthickstop-1-s"><?php echo $this->translate('Download'); ?></span>
+                    </a>
+                <?php } ?>
+                <a onclick="return confirm('<?php echo $this->translate('Czy na pewno chcesz usunąć wybraną fakturę?'); ?>')" title="<?php echo $this->translate('label_delete'); ?>" class="help" href="<?php echo $this->url(array('hash' => $item->hash), 'invoice_admin-delete', true); ?>">
+                    <span class="ui-icon ui-icon-close"><?php echo $this->translate('label_delete'); ?></span>
+                </a>
+            </div>   
+        </td>
+    </tr>
+
+
+<?php endforeach; ?>

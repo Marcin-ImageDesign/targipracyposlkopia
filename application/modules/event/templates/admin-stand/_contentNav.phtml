@@ -1,0 +1,44 @@
+<ul class="contents">
+
+    <?php if($this->selectedEvent && $this->userAuth->hasAccess('event_admin-stand_new')): ?>
+        <li>
+            <a href="<?php echo $this->url(array(), 'event_admin-stand_new'); ?>">
+                <img class="mb-3" src="/_images/icon/add.png"> <?php echo $this->translate('nav_section-nav_stand-add'); ?>
+            </a>
+        </li>
+    <?php endif; ?>
+        
+    <li style="margin-bottom: 18px;">
+        <a href="<?php echo $this->url(array(), 'event_admin-stand_index'); ?>">
+            <img class="mb-3" src="/_images/icon/tango_16/edit-copy.png"> <?php echo $this->translate('nav_section-nav_stand-list'); ?>
+        </a>
+    </li>
+    
+    <?php if($this->exhibStand && !$this->exhibStand->isNew() ): ?>
+        <li>
+            <a href="<?php echo $this->url(array('stand_hash' => $this->exhibStand->getHash()), 'event_admin-stand_edit'); ?>">
+                <img class="mb-3" src="/_images/icon/ico1/edit-yellow.gif"> <?php echo $this->translate('nav_section-nav_stand-edit'); ?>
+            </a>
+        </li>
+        <li>
+            <a href="<?php echo $this->url( array( 'hash' => $this->exhibStand->getHash(), 'event_hash' => $this->selected_event_hash ), 'event_admin-stand-files_index' ); ?>">
+               <img class="mb-3" src="/_images/icon/tango_16/edit-copy.png"> <?php echo $this->translate('nav_section-nav_stand-file-list'); ?>
+            </a>
+        </li>
+        <li>
+            <a href="<?php echo $this->url( array( 'stand_hash' => $this->exhibStand->getHash()), 'event_admin-stand-offer_index' ); ?>">
+               <img class="mb-3" src="/_images/icon/tango_16/edit-copy.png"> <?php echo $this->translate('nav_section-nav_offer-list'); ?>
+            </a>
+        </li>
+        <li>
+            <a href="<?php echo $this->url( array( 'stand_hash' => $this->exhibStand->getHash()), 'admin_stand-video_index' ); ?>">
+                <img class="mb-3" src="/_images/icon/tango_16/edit-copy.png"> <?php echo $this->translate('nav_section-nav_video-list'); ?>
+            </a>
+        </li>
+        <li>
+            <a href="<?php echo $this->url( array( 'stand_hash' => $this->exhibStand->getHash()), 'event_admin-stand-banner' ); ?>">
+               <img class="mb-3" src="/_images/icon/tango_16/image-x-generic.png"> <?php echo $this->translate('nav_section-nav_banner-list'); ?>
+            </a>
+        </li>
+    <?php endif; ?>
+</ul>

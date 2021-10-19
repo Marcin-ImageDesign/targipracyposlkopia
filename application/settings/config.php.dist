@@ -1,0 +1,14 @@
+<?php
+    $domain = 'zumi.local';
+    if(defined('SSL_URL_PATH')){
+        $domain = str_replace(array('http://','https://', '/'), '', SSL_URL_PATH);
+    }
+
+    define( 'DOMAIN' , $domain);
+    define( 'VCMS_DOMAIN' , $domain);
+    define( 'CHARSET', 'UTF-8' );
+    define( 'DS', DIRECTORY_SEPARATOR );
+
+    define('DIR_PRIVILIGES',    0777 );
+    define('FILE_PRIVILIGES',   0666 );
+    define('MAX_FILE_SIZE', 4.9*1024*1024); // wykorzystywana jedynie w menadżerze plików

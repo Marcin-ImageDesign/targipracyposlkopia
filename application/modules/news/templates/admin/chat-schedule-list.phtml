@@ -1,0 +1,26 @@
+
+<?php //var_dump($this->chatScheduleList);die; ?>
+<?php foreach ($this->chatScheduleList as $key => $item): ?>
+    <tr style="width: 100%;">
+        <td style="width: 20%;">
+            <img src="<?= Service_Image::getUrl($item['Image']['id_image'], 100) ?>"> <br>
+<!--            --><?//= $item['Translations'][Engine_I18n::getLangId()]['title']; ?>
+        </td>
+        <td style="width: 20%;">
+            <?= $item['publication_start']; ?>
+        </td>
+        <td style="width: 40%;">
+            <?= $item['Translations'][Engine_I18n::getLangId()]['text'] ?>
+        </td>
+        <td style="width: 1%;">
+            <div class="actions">
+                <a onclick="return confirm('<?php echo $this->translate('Czy na pewno chcesz usunąć wybrany element?'); ?>')" title="<?php echo $this->translate('label_delete'); ?>" class="help" href="<?php echo $this->url(array('hash' => $item['hash']), 'news_admin_delete', true); ?>">
+                    <span class="ui-icon ui-icon-close"><?php echo $this->translate('label_delete'); ?></span>
+                </a>
+            </div>
+        </td>
+
+    </tr>
+
+
+<?php endforeach; ?>

@@ -1,0 +1,69 @@
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+    <?=$this->partial( '_headling_button.phtml', array('title' => $this->translate('button_cms_stand-view-image_add'), 'url' => $this->url(array(), 'event_admin-stand-view-image_new')))?>
+<h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+<?php $this->placeholder('toolbar')->captureStart(); ?>
+    <?php echo $this->render('commponents/pagination.phtml'); ?>
+<?php $this->placeholder('toolbar')->captureEnd(); ?>
+
+<form id="grid-action-form" method="post" action="">
+    <div class="toolbar toolbar-top"><?php echo $this->placeholder('toolbar'); ?></div>
+    <table cellspacing="0" cellpadding="0" class="grid datas valign-middle" border="1">
+        <tbody>
+        <tr>
+            <th class="head"><?php echo $this->translate('label_cms_admin-stand-view-image_image'); ?></th>
+            <th class="head"><?php echo $this->translate('label_cms_admin-stand-view-image_name'); ?></th>
+            <th class="head"><?php echo $this->translate('label_cms_admin-stand-view-image_level'); ?></th>
+            <th class="head"><?php echo $this->translate('label_cms_admin-stand-view-image_is-active'); ?></th>
+            <th class="head"></th>
+        </tr>
+        <tr class="row row-template">
+            <td valign="top" class="first col"></td>
+            <td valign="top" class="col"></td>
+            <td valign="top" class="col"></td>
+            <td valign="top" class="col"></td>
+        </tr>
+
+        <?php foreach ($this->standViewImageList as $key => $standViewImage): ?>
+            <?php $editUrl = $this->url(array('hash' => $standViewImage->getHash()), 'event_admin-stand-view-image_edit'); ?>
+            <tr class="row <?php if (0 == ($key % 2)): ?>odd<?php else: ?>even<?php endif; ?>">
+                <td valign="top" class="col">
+                    <a href="<?=$editUrl?>">
+                        <img src="<?=Service_Image::getUrl($standViewImage->id_image, array('width' => 70))?>" style="max-width: 70px;" />
+                    </a>
+                </td>
+                <td valign="top" class="col">
+                    <a class="edit" href="<?=$editUrl?>">
+                        <?php echo $this->escape($standViewImage->getName()); ?>
+                    </a>
+                </td>
+                <td valign="top" class="col">
+                    <?php echo $this->escape($standViewImage->StandLevel->getName()); ?>
+                </td>
+                <td valign="top" class="col">
+                    <?php $isPublic = (int) $standViewImage->is_public; ?>
+                    <a href="<?php echo $this->url(array('hash' => $standViewImage->getHash()), 'event_admin-stand-view-image_public'); ?>" class="status">
+                        <span class="switch-<?php echo $isPublic; ?>"><?php echo $isPublic; ?></span>
+                    </a>
+                </td>
+                <td valign="top" class="col" nowrap>
+                    <ul class="actions">
+                        <li>
+                            <a title="<?php echo $this->translate('label_cms_option_edit'); ?>" class="help" href="<?php echo $editUrl; ?>">
+                                <span class="ui-icon ui-icon-pencil"><?php echo $this->translate('label_cms_option_edit'); ?></span>
+                                <span class="bullet" style="width: 24px;"><?php echo $this->translate('label_cms_option_edit'); ?></span>
+                                <span class="ui-icon ui-icon-triangle-1-s queue"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+
+        </tbody>
+    </table>
+
+</form>
+<div class="toolbar toolbar-bottom"><?php echo $this->placeholder('toolbar'); ?></div>
+

@@ -1,0 +1,88 @@
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+<?php
+
+echo $this->partial(
+        '_headling_button.phtml', array('title' => $this->translate('label_cms_add-new-notification'), 'url' => $this->url(array(), 'admin_event-notification_new')));
+
+?>
+<h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+<?php $this->placeholder('aside')->captureStart(); ?>
+    <?php echo $this->filter; ?>
+<?php $this->placeholder('aside')->captureEnd(); ?>
+
+<?php $this->placeholder('toolbar')->captureStart(); ?>
+<?php echo $this->render('commponents/pagination.phtml'); ?>
+<?php $this->placeholder('toolbar')->captureEnd(); ?>
+
+<form id="grid-action-form" method="post" action="">
+    <div class="toolbar toolbar-top"><?php echo $this->placeholder('toolbar'); ?></div>
+    <table cellspacing="0" cellpadding="0" class="grid datas">
+        <tbody>
+            <tr>
+                <th class="head" width="200">
+                    <?php echo $this->translate('Data wyświetlenia powiadomienia'); ?>
+                </th>
+                <th class="head" width="260">
+                    <?php echo $this->translate('Nazwa'); ?>
+                </th>
+                <th class="head">
+                    <?php echo $this->translate('Treść powiadomienia'); ?>
+                </th>
+                <th class="head" width="100">
+                    <?php echo $this->translate('Akcje'); ?>
+                </th>
+                
+            </tr>
+            <tr class="row row-template">
+                <td valign="top" class="first col"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+            </tr>
+
+            <?php foreach ($this->notification_list as $key => $not): ?>
+                <tr class="row <?php if (0 == ($key % 2)): ?>odd<?php else: ?>even<?php endif; ?>">
+                    <td valign="top" class="col">
+                        <a class="edit" href="<?php echo $this->url(array('hash' => $not['hash']), 'admin_event-notification_edit');?>">
+                             <?php echo date('Y-m-d H:i',strtotime($not['notification_date']));?>
+                        </a>
+                    </td>
+                    <td valign="top" class="col">
+                        <a class="edit" href="<?php echo $this->url(array('hash' => $not['hash']), 'admin_event-notification_edit');?>">
+                            <?php echo $this->limitText($not['name'], 8);?>
+                        </a>
+                    </td>
+                    <td valign="top" class="col">
+                        <a class="edit" href="<?php echo $this->url(array('hash' => $not['hash']), 'admin_event-notification_edit');?>">
+                            <?php echo $this->escape($this->limitText($not['notification_text'], 30));?>
+                        </a>
+                    </td>
+                    <td valign="top" class="col" nowrap>
+                        <ul class="actions">
+                            <li>
+                                <a title="<?php echo $this->translate('label_event_admin-stand-video_index_edit'); ?>" class="help" href="<?php echo $this->url(array('hash' => $not['hash']), 'admin_event-notification_edit');?>">
+                                    <span class="ui-icon ui-icon-pencil"><?php echo $this->translate('label_event_admin-stand-video_index_edit'); ?></span>
+                                    <span class="bullet" style="width: 24px;"><?php echo $this->translate('label_event_admin-stand-video_index_edit'); ?></span>
+                                    <span class="ui-icon ui-icon-triangle-1-s queue"></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a onclick="return confirm('<?php echo $this->translate('label_event_admin-stand-video_index_comm-confirm-delete'); ?>');" title="<?php echo $this->translate('label_event_admin-stand-video_index_delete'); ?>" class="help" href="<?php echo $this->url(array('hash' => $not['hash']), 'admin_event-notification_delete');?>">
+                                    <span class="ui-icon ui-icon-close"><?php echo $this->translate('label_event_admin-stand-video_index_delete'); ?></span>
+                                    <span class="bullet" style="width: 36px;"><?php echo $this->translate('label_event_admin-stand-video_index_delete'); ?></span>
+                                    <span class="ui-icon ui-icon-triangle-1-s queue"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>                
+            <?php endforeach; ?>
+
+        </tbody>
+    </table>
+
+</form>
+<div class="toolbar toolbar-bottom"><?php echo $this->placeholder('toolbar'); ?></div>

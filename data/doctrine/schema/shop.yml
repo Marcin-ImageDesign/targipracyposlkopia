@@ -1,0 +1,139 @@
+ShopOrder:
+  connection: baza
+  tableName: shop_order
+  actAs:
+    SoftDelete: ~
+  columns:
+    id_shop_order:
+      type: integer
+      primary: true
+      autoincrement: true
+    id_exhib_stand:
+      type: integer
+    id_shop_location:
+      type: integer
+      default: null
+    hash: string (32)
+    created_at: timestamp
+    deleted_at:
+      type: timestamp
+      notnull: false
+    is_read:
+      type: boolean
+      default: false
+    id_user: integer
+    price: float
+  indexes:
+    hash:
+      fields: hash
+      type: unique
+  relations:
+    ExhibStand:
+      foreignAlias: ShopOrders
+      local: id_exhib_stand
+      foreign: id_exhib_stand
+      type: one
+      foreignType: many
+      onDelete: CASCADE
+    ShopLocation:
+      foreignAlias: ShopOrders
+      local: id_shop_location
+      foreign: id_shop_location
+      type: one
+      foreignType: many
+      onDelete: SET NULL
+    User:
+      foreignAlias: ShopOrders
+      local: id_user
+      foreign: id_user
+      type: one
+      foreignType: many
+      onDelete: CASCADE
+
+ShopOrderProduct:
+  connection: baza
+  tableName: shop_order_product
+  columns:
+    id_shop_order_product:
+      type: integer
+      primary: true
+      autoincrement: true
+    id_shop_order: integer
+    id_stand_product: integer
+    count: float
+    price: float
+    price_total: float
+  relations:
+    ShopOrder:
+      foreignAlias: Products
+      local: id_shop_order
+      foreign: id_shop_order
+      type: one
+      foreignType: many
+      onDelete: CASCADE
+    Product:
+      class: StandProduct
+      foreignAlias: ShopOrderProducts
+      local: id_stand_product
+      foreign: id_stand_product
+      type: one
+      foreignType: many
+      onDelete: CASCADE
+
+ShopLocation:
+  connection: baza
+  tableName: shop_location
+  columns:
+    id_shop_location:
+      type: integer
+      primary: true
+      autoincrement: true
+    id_event: integer
+    hash:
+      type: string (32)
+    email: string (64)
+    country: string (50)
+    city: string (50)
+    post_code: string (6)
+    street: string (50)
+  indexes:
+    hash:
+      fields: hash
+      type: unique
+  relations:
+    Event:
+      foreignAlias: ShopLocations
+      local: id_event
+      foreign: id_event
+      type: one
+      foreignType: many
+      onDelete: CASCADE
+    Translations:
+      class: ShopLocationTranslation
+      local: id_shop_location
+      foreign: id_shop_location
+      type: many
+      foreignType: one
+
+
+ShopLocationTranslation:
+  connection: baza
+  tableName: shop_location_translation
+  attributes:
+    coll_key: id_language
+  columns:
+    id_shop_location:
+      type: integer
+      primary: true
+    id_language:
+      type: integer
+      primary: true
+    name: string (255)
+    description: string
+  relations:
+    Language:
+      local: id_language
+      foreign: id_language
+      onDelete: CASCADE
+
+

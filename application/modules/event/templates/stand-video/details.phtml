@@ -1,0 +1,9 @@
+<div class="videoWrapper">
+    <!--<div id="bigPlayer"></div>-->
+    <iframe width="100%" height="100%" src="https://www.youtube.com/embed/<?php echo $this->standVideo->getVideoKey();?>?autoplay=1&wmode=transparent&controls=1&theme=light&color=white&showinfo=0&showsearch=0&rel=0&egm=1&start=<?php echo $_GET['start'] ?>" frameborder="0" allowfullscreen></iframe>
+    
+</div>
+
+<?php $this->headScript()->captureStart(); ?>
+
+<?php $this->headScript()->captureEnd(); ?>

@@ -1,0 +1,35 @@
+<?php //$this->headLink()->appendStylesheet('/_css/admin/realestate.css') ?>
+
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+<h1><?php echo $this->placeholder('headling_1_content'); ?> - <small style="font-style:italic;">"<?php echo $this->escape($this->item->subject); ?>"</small></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+        <table cellspacing="0" cellpadding="0" class="grid datas">
+            <tbody>
+
+                <?php
+                $key = 0;
+                foreach( $this->items as $name => $value ): ?>
+                    <tr class="row <?php if( 0 == (++$key%2) ): ?>odd<?php else: ?>even<?php endif; ?>">
+                        <td></td>
+                        <td valign="top" class="col">
+                           <?php echo $this->translate($this->tlabel.$this->escape($name)); ?>
+                        </td>
+                        <td valign="top" class="col">
+                            <?php if ($name == 'product'):?>
+                                <a target="_blank" href="<?php echo $this->url(array('event_uri' => $this->product->ExhibStand->Event->getUri(),'stand_uri' => $this->product->ExhibStand->getUri(),'hall_uri'=>$this->product->ExhibStand->EventStandNumber->EventHallMap->uri, 'product_hash' => $this->product->getHash() ), 'event_stand-offer_details');?>"><?php echo $this->escape($value); ?></a>
+                            <?php elseif($name == 'stand'):?>
+                                <a target="_blank" href="<?php echo $this->url(array('event_uri' => $this->stand->Event->getUri(), 'hall_uri' => $this->stand->EventStandNumber->EventHallMap->getUri(), 'stand_uri'=> $this->stand->getUri()), 'event_stand');?>"><?php echo $this->escape($value); ?></a>
+                            <?php elseif($name == 'attachment'):?>
+                                <a target="_blank" href="<?php echo $this->url( array( 'id' => $this->item->getId() ), 'inquiry_admin_get_attachments' );?>"><?php echo $this->escape($value); ?></a>
+                            <?php else: ?>
+                                <?php echo $this->escape($value);?>
+                            <?php endif;?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+
+            </tbody>
+        </table>
+
+

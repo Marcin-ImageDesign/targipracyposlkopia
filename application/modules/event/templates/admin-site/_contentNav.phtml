@@ -1,0 +1,15 @@
+<ul class="contents">
+    <?php echo $this->render('_backLink.phtml');?>
+    <li>
+        <a href="<?php echo $this->url( array(), 'admin_event' ); ?>">
+            <?php echo $this->translate('Show events list'); ?>
+        </a>
+    </li>
+    <li>
+        <a href="<?php echo $this->url( array( 'hash' => $this->event->getHash() ), 'event_admin-site_new' ); ?>">
+          <img class="mb-3" src="/_images/icon/add.png" />  <?php echo $this->translate('Add site'); ?>
+        </a>
+    </li>
+</ul>
+
+<?php echo $this->render('_contentNav.phtml'); ?>

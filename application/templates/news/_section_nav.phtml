@@ -1,0 +1,25 @@
+<?php if ( $this->NewsList->count() > 0 ) : ?>
+<h2 class="side_article_title"><?php echo $this->translate('nav_event_article-list');?></h2>
+<div class="mcsbOther">
+<ul>
+	<?php foreach($this->NewsList as $news):?>
+	    <li><a class="" href="<?=$this->url(array('news_uri' => $news->getUri(), 'event_uri' => $this->selectedEvent->getUri()), 'event_news' ) ?>" ><?php echo $news->getTitle();?></a>
+	    </li>
+	<?php endforeach;?>
+    <?php if(isset($this->briefcaseList)):?>
+        <li>
+            <a href="<?php echo $this->url($this->backRouteParams, $this->backRoute);?>" ><?php echo $this->translate('label_news_news_back');?></a>
+        </li>
+    <?php endif;?>
+</ul>
+</div>
+<?php endif; ?>
+<?php $this->headScript()->captureStart(); ?>
+	$(window).load(function() {
+		var nav_h = $('.exhibitorsContent nav').height();
+		var offset = $('.side_article_title').outerHeight(true);
+		$('.mcsbOther').css('min-height', nav_h - offset+'px');
+		$('.mcsbOther').mCustomScrollbar("update");
+
+	});
+<?php $this->headScript()->captureEnd(); ?>

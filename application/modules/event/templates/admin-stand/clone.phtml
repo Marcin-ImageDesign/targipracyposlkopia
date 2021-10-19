@@ -1,0 +1,25 @@
+<?php echo $this->cloneForm;?>
+
+<script type="text/javascript">
+    var hlOptionsClone;
+    (function($) { 
+
+        var changeEventHallMapClone = function(){
+            var selected_hall = $('#EventFormAdminStandClone-event_hall_map option:selected').val();
+            var selectNumbers = $('#EventFormAdminStandClone-id_event_stand_number');
+            var stand_level = <?php echo $this->exhibStand->id_stand_level;?>;
+            selectNumbers.find('option').remove();
+            $.each(hlOptionsClone[selected_hall][stand_level], function(i, item) {
+                selectNumbers.append('<option value="'+i+'" label="'+item+'">'+item+'</option>');
+            });
+        }
+        
+        hlOptionsClone = $('#EventFormAdminStandClone-event_hall_map').data('hall-map-numbers');
+        $('#EventFormAdminStandClone-event_hall_map').on('change', changeEventHallMapClone).trigger('change');
+        $('#EventFormAdminStandClone-id_stand_level').trigger('loaded');
+        $(".multiselect").multiselect({dividerLocation: 0.5});
+
+        
+    })($);
+
+</script>

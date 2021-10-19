@@ -1,0 +1,6 @@
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+    <h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+<h2><?=$this->translate('label_developers-admin_clear-cache')?></h2>
+<?php Zend_Debug::dump($this->files_removed); ?>

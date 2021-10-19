@@ -1,0 +1,83 @@
+<?php if ($this->eventStandProductList->count() > 0) : ?>
+    <div id="briefcaseProduct">
+        <div id="briefcaseProductPrint">
+            <style>
+                @media print {
+                    .no-print, .no-print * {
+                        display: none !important;
+                    }
+                }
+            </style>
+            <table>
+                <thead>
+                <tr>
+                    <th style="width:100px;"><?php echo $this->translate('Obraz'); ?></th>
+                    <!--label_briefcase_product_logo-->
+                    <th style="width:150px;"><?php echo $this->translate('label_event_stand-offer_index_offer'); ?></th>
+                    <th><?php echo $this->translate('label_event_stand-offer_index_description'); ?></th>
+                    <th style="width:60px;">&nbsp;</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($this->eventStandProductList as $briefcaseDocument) : ?>
+                    <tr>
+                        <td class="name_stand">
+                            <?php if ($briefcaseDocument->imageExists()): ?>
+                                <a href="<?php echo $this->url(['event_uri' => $briefcaseDocument->ExhibStand->Event->getUri(), 'stand_uri' => $briefcaseDocument->ExhibStand->getUri(), 'hall_uri' => $briefcaseDocument->ExhibStand->EventStandNumber->EventHallMap->uri, 'product_hash' => $briefcaseDocument->getHash()], 'event_stand-offer_details'); ?>"
+                                   title="<?php echo $this->escape($briefcaseDocument->getName()) ?>">
+                                    <img width="100"
+                                         src="<?php echo Service_Image::getUrl($briefcaseDocument->id_image, 100); ?>"
+                                         alt="<?= $this->escape($briefcaseDocument->getName()) ?>"/>
+                                </a>
+                            <?php endif; ?>
+                        </td>
+                        <td class="name">
+                            <a href="<?php echo $this->url(['event_uri' => $briefcaseDocument->ExhibStand->Event->getUri(), 'stand_uri' => $briefcaseDocument->ExhibStand->getUri(), 'hall_uri' => $briefcaseDocument->ExhibStand->EventStandNumber->EventHallMap->uri, 'product_hash' => $briefcaseDocument->getHash()], 'event_stand-offer_details'); ?>"
+                               title="<?php echo $this->escape($briefcaseDocument->getName()) ?>"
+                               style="color: #000;text-decoration: none;font-weight: bold;">
+                                <?php echo $this->escape($briefcaseDocument->getName()); ?>
+                            </a>
+                        </td>
+                        <td class="desc">
+                            <p class="desc">
+                                <?php echo $this->limitText(strip_tags($briefcaseDocument->getDescription()), 30); ?>
+                            </p>
+                        </td>
+
+                        <td class="pobierz no-print">
+                            <a class="rem_element"
+                               title="<?= $this->escape($this->translate('label_briefcase_remove-from-briefcase')); ?>"
+                               href="<?php echo $this->url(['id_briefcase_type' => BriefcaseType::TYPE_BRIEFCASE_PRODUCT, 'element' => $briefcaseDocument->getId(), 'namespace' => $briefcaseDocument->ExhibStand->id_event], 'briefcase_remove-element') ?>?return=<?php echo $this->url(); ?>"
+                               class="contentLoad"
+                               onclick="return confirm('<?php echo $this->translate('label_briefcase_remove-from-briefcase-comm1'); ?>')"><img
+                                        style="margin-left: 7px;"
+                                        src="<?= $this->BaseUserUri() . '/_images/delete.png' ?>"/></a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="">
+            <a href="#" class="btnYellow" style="display: inline-block;"
+               onclick="print();"><?= $this->translate('label_print') ?></a>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        function print() {
+            var divToPrint = document.getElementById('briefcaseProductPrint');
+            var popupWin = window.open('', '_blank', 'width=auto,height=auto');
+            popupWin.document.open();
+            popupWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</html>');
+            popupWin.document.close();
+
+            return false;
+        }
+    </script>
+
+<?php endif; ?>
+<?php $this->headScript()->captureStart(); ?>
+    $("#briefcaseProduct").mCustomScrollbar();
+<?php $this->headScript()->captureEnd(); ?>

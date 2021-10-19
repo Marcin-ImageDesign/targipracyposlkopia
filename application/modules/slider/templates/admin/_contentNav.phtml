@@ -1,0 +1,17 @@
+<ul class="contents">
+    <?php echo $this->render('_backLink.phtml');?>
+    <?php if(!empty($this->sliderCategory)):?>
+	<li>
+	    <a href="<?php echo $this->url(array(), 'admin_slider-category'); ?>"><?php echo $this->translate('Show categories list');?></a>
+        </li>
+    <?php endif; ?>
+    <?php if (!empty($this->slider)): ?>
+        <li>
+	    <?php if ($this->sliderCategory): ?>
+		<a href="<?php echo $this->url(array('hash' => $this->sliderCategory->getHash()), 'admin_slider'); ?>"><?php echo $this->translate('Show list');?></a>
+	    <?php else: ?>
+		<a href="<?php echo $this->url(array(), 'admin_slider'); ?>"><?php echo $this->translate('Show list');?></a>
+	    <?php endif; ?>
+        </li>
+    <?php endif; ?>
+</ul>

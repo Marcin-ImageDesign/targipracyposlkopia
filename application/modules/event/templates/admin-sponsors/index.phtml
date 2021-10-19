@@ -1,0 +1,57 @@
+<?php $this->headLink()->appendStylesheet('/_css/admin/form.css'); ?>
+
+<?php if ($this->event): ?>
+<h1><?php echo $this->translate('h1_sponsors'); ?></h1>
+
+    <?php echo $this->eventSponsorsForm; ?>
+<?php else: ?>
+    <h1><?php echo $this->translate('no_event_selected'); ?></h1>
+<?php endif; ?>
+
+<script>
+<?php $this->headScript()->captureStart(); ?>
+
+    $(function() {
+        $('body').on('click', ".sponsorsAddBanner", sponsorsAddBanner);
+        $('body').on('click', ".hideShowGroup", hideShowGroup);
+        $('form#EventFormAdminSponsorsForm').sortable({
+            items: '> .sortSponsors'
+        });
+    });
+
+    var sponsorsAddBanner = function (){
+        var _this = $(this);
+        var value = _this.html();
+
+        $.ajax({
+            url:'<?=$this->url(array(), 'event_admin_sponsors_get-banner')?>'
+            ,type: 'post'
+            ,dataType: 'json'
+            ,beforeSend:function(){
+                _this.html('<?=$this->translate('label_loading_please_wait')?>');
+            }
+            ,success: function(data){
+                _this.html(value);
+                $('#sponsorsAddBanner').append(data.html);
+            }
+        });
+
+        return false;
+    }
+
+    var hideShowGroup = function (){
+
+        $('.sortSponsors').each(function() {
+            var _elem = $(this).children('.form-item')
+            if ( !_elem.hasClass('hideGroup') ) {
+                _elem.addClass('hideGroup').hide();
+            }else{
+                _elem.removeClass('hideGroup').show();
+            }
+        });
+
+        return false;
+    }
+
+<?php $this->headScript()->captureEnd(); ?>
+</script>

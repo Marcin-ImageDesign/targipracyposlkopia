@@ -1,0 +1,26 @@
+<?php if(!empty($this->eventSite)) : ?>
+    <?php if (!$this->hide_title):?>
+    <h2>
+        <?= $this->escape($this->eventSite->getTitle()) ?>
+    </h2>
+    <?php endif;?>
+    <?php if (!empty($this->eventSite)) :  ?>
+        <div class="standard_content mcsb">
+            <?php echo $this->eventSite->getContent(); ?>
+        </div>
+    <?php endif; ?>
+    <!-- Gdy jesteśmy na podstronie guide, dodajemy link do rejestracji -->
+    <?php if ($this->eventSite->getTitle() == 'New Visitor Guide'):?>
+        <a class='yellow_button' href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'user_register_index');?>"><?php echo $this->translate('Register');?></a>
+    <?php endif;?>
+    <?php if ($this->eventSite->getTitle() == 'Contact'):?>
+      
+    <script type="text/javascript"> 
+        function vicoOnLoad() { 
+            $('<iframe src="http://voxcommerce.pl/vchat/client.html" width="355" height="400" frameborder="0"></iframe>').insertAfter('.vchat_button');
+            $('.vchat_button').hide();
+        } 
+    </script> 
+    <?php endif;?>
+<?php endif; ?>
+       

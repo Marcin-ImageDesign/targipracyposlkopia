@@ -1,0 +1,45 @@
+<?php if ( $this->eventStandsList->count() > 0 ) : ?>
+<div id="briefcaseStand">
+    <table>
+    <?php if(count($this->eventStandsList)): ?>
+        <thead>
+            <tr>
+                <th style="width:160px;">Logo</th>
+                <th style="width:200px;"><?php echo $this->translate('label_briefcase_stand') ?></th>
+                <th><?php echo $this->translate('label_briefcase_description') ?></th>
+                <th style="width:60px;">&nbsp;</th>
+            </tr>
+        </thead>
+    <?php endif; ?>
+        <tbody>
+    <?php foreach ( $this->eventStandsList as $key => $exhibStand ) : ?>
+            <tr class="<?php if(0==($key%2)): ?>even<?php else: ?>odd<?php endif; ?>">
+                <td>
+                    <?php if($exhibStand->isImageLogoExists()): ?>
+                        <a href="<?php echo $this->url(array('event_uri'=>$exhibStand->Event->getUri(), 'hall_uri'=>$exhibStand->EventStandNumber->EventHallMap->uri,$this->hall_uri,'stand_uri'=>$exhibStand->getUri()), 'event_stand'); ?>" title="<?php echo $this->escape($exhibStand->getName())?>">
+                            <img src="<?php echo Service_Image::getUrl($exhibStand->id_image_logo, 220, 77);?>" style="margin-bottom:22px;" alt="" />
+                        </a>
+                    <?php endif; ?>
+                </td>
+                <td>
+                    <a href="<?=$this->url(array('event_uri'=>$exhibStand->Event->getUri(),'hall_uri'=>$exhibStand->EventStandNumber->EventHallMap->uri,'stand_uri'=>$exhibStand->getUri()),'event_stand') ?>" title="<?php echo $this->escape( $exhibStand->getName() ) ?>">
+                    <?php echo $this->escape( $exhibStand->getName() );?>
+                    </a>
+                </td>
+                <td>
+                    <?php echo $this->limitText(strip_tags( $exhibStand->getShortInfo() ), 30); ?>
+                </td>
+                <td>
+                    <a title="<?=$this->escape( $this->translate( 'label_briefcase_remove-from-briefcase' ) ); ?>" href="<?php echo $this->url(array('id_briefcase_type'=>BriefcaseType::TYPE_BRIEFCASE_STAND,'element'=>$exhibStand->getId(),'namespace'=>$exhibStand->id_event),'briefcase_remove-element')?>?return=<?php echo $this->url();?>" onclick="return confirm('<?php echo $this->translate('label_briefcase_remove-from-briefcase-comm1'); ?>')" class="deleteFromBriefcase">
+                    <img src="<?= $this->BaseUserUri().'/_images/delete.png'?>" />
+                </a>
+                </td>
+            </tr>
+    <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+<?php endif; ?>
+<?php $this->headScript()->captureStart(); ?>
+    $("#briefcaseStand").mCustomScrollbar();
+<?php $this->headScript()->captureEnd(); ?>

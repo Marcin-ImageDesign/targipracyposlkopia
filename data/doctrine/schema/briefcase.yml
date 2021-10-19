@@ -1,0 +1,72 @@
+Briefcase:
+  connection: baza
+  tableName: briefcase
+  columns:
+    id_briefcase:
+      type: integer(10)
+      primary: true
+      autoincrement: true
+    hash: string (32)
+    created_at: timestamp
+    is_active:
+      type: boolean
+      default: true
+    id_user: integer
+    id_briefcase_type: integer
+    id_element: integer
+    id_namespace: integer
+  indexes:
+    hash:
+      fields: hash
+      type: unique
+  relations:
+    User:
+      local: id_user
+      foreign: id_user
+      onDelete: CASCADE
+    BriefcaseType:
+      local: id_briefcase_type
+      foreign: id_briefcase_type
+      onDelete: CASCADE
+
+BriefcaseLink:
+  connection: baza
+  tableName: briefcase_link
+  columns:
+    id_briefcase_link:
+      type: integer(10)
+      primary: true
+      autoincrement: true
+    id_briefcase: integer
+    hash: string (32)
+    created_at: timestamp
+    id_user: integer
+    title: string
+    link: string
+  indexes:
+    hash:
+      fields: hash
+      type: unique
+  relations:
+    Briefcase:
+      local: id_briefcase
+      foreign: id_briefcase
+      onDelete: CASCADE
+    User:
+      local: id_user
+      foreign: id_user
+      onDelete: CASCADE
+
+BriefcaseType:
+  connection: baza
+  tableName: briefcase_type
+  columns:
+    id_briefcase_type:
+      type: integer(10)
+      primary: true
+      autoincrement: true
+    name: string (255)
+    plugin: string (255)
+    is_active:
+      type: boolean
+      default: true

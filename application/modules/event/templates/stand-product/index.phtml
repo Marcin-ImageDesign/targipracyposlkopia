@@ -1,0 +1,292 @@
+<?php $briefcaseService = Zend_Registry::get('BriefcaseService'); ?>
+<?php $this->placeholder('h1')->captureStart();?>
+    <h1 class="title"><?=$this->escape($this->selectedEvent->getTitle())?></h1>
+<?php $this->placeholder('h1')->captureEnd();?>
+
+<div class="dataTableRdk">
+    <h2>
+        <?php echo $this->translate( 'label_event_stand-offer_index_offers' ); ?>
+
+    </h2>
+    <div id="source_wrapper">
+        <table cellspacing="0" id="source" style="width:100%" cellpadding="10" class="grid datas products_list">
+            <thead class="border_tr">
+                <tr>
+                    <th class="head" style="width:80px">
+                        <span class="ui-icon"></span><?php echo $this->translate('label_event_stand-offer_index_logo'); ?>
+                    </th>
+                    <th class="head" style="width:320px">
+                        <span class="ui-icon"></span><?php echo $this->translate('label_event_stand-offer_index_offer'); ?>
+                    </th>
+                    <?php if ($this->show_prices):?>
+                        <th class="head">
+                            <span class="ui-icon"></span><?php echo $this->translate('label_event_stand-offer_index_price'); ?>
+                        </th>
+                    <?php endif;?>
+                    <th class="head">
+                        <span class="ui-icon"></span><?php echo $this->translate('label_event_stand-offer_index_description'); ?>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($this->standProductList as $standProduct): /** @var $standProduct StandProduct */ ?>
+                    <tr class="border_tr row <?php if ($standProduct->is_promotion):?>promotion_row<?php endif;?>" style="text-align:center;">
+                        <?php $url = '';
+                            if ($standProduct->getSkipOfferPage()){
+                                $url = $standProduct->getFormTarget();
+                            }else{
+                                $url =  $this->url(
+                                    array(
+                                        'event_uri' => $this->selectedEvent->getUri(),
+                                        'stand_uri' => $this->exhibStand->getUri(),
+                                        'product_hash' => $standProduct->getHash(),
+                                        'hall_uri'=>$this->exhibStand->EventStandNumber->EventHallMap->uri
+                                    ),
+                                   'event_stand-offer_details');
+                            };
+                        ?>
+                        <td valign="middle" align="center" class="col" style="text-align:center;">
+                            <?php if ($standProduct->imageExists()):?>
+                                <a <?php if ($standProduct->getSkipOfferPage()):?>target="_blank"<?php endif;?> href="<?php echo $url?>"
+                                   title="<?=$this->escape($standProduct->getName())?>"
+                                >
+                                    <img src="<?php echo Service_Image::getUrl($standProduct->id_image, 100);?>" alt="<?=$this->escape($standProduct->getName())?>" />
+                                </a>
+                            <?php endif;?>
+                        </td>
+                        <td valign="middle" align="center" class="col" style="text-align:center;">
+                            <?php if ($standProduct->is_promotion):?>
+                                <div class='promo_box'><?php echo $this->translate('Wyróżniona oferta');?></div>
+                            <?php endif;?>
+                            <a <?php if ($standProduct->getSkipOfferPage()):?>target="_blank"<?php endif;?> href="<?php echo $url?>"><?php echo $standProduct->getName() ?>
+                            </a>
+                        </td>
+                        <?php if ($this->show_prices):?>
+                            <td valign="middle" align="center" class="col" style="text-align:center;">
+                                <?php if($standProduct->priceExists()): ?>
+                                    <?php if ($standProduct->originalPriceExists()):?>
+                                        <span class="lineThrough"><?php echo $this->currency($standProduct->getOriginalPrice()); ?></span>
+                                        <br />
+                                    <?php endif;?>
+                                    <?php echo $this->currency($standProduct->getPrice()); ?>
+                                <?php else:?>
+                                    <?php echo $standProduct->getUnit(); ?>
+                                <?php endif;?>
+                            </td>
+                        <?php endif;?>
+                        <td valign="middle" align="center" class="col" style="text-align:center;">
+                            <div class="productIcons">
+                                <p><?php echo $this->LimitText($standProduct->getLead(), 18);?></p>
+
+                                <?php if($standProduct->linkExists() && $this->selectedEvent->getIsShopActive()): ?>
+                                <a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'stand_uri' => $this->exhibStand->getUri(), 'product_hash' => $standProduct->getHash()), 'event_stand-offer_shop');?>" class="productShop" target="_blank"><?php echo $this->translate('label_event_stand-offer_index_shop'); ?></a>
+                                <?php endif;?>
+
+                                <a <?php if ($standProduct->getSkipOfferPage()):?>target="_blank"<?php endif;?> href="<?php echo $url?>" class="productMore"><?php echo $this->escape($this->translate('label_event_stand-offer_index_see-details')); ?></a>
+
+                                <?php if ( true === $this->selectedEvent->is_shop_active ) : ?>
+                                    <form action="<?php echo $this->url( array('event_uri' => $this->selectedEvent->getUri()), 'shop_add' ) ?>">
+                                        <input type="hidden" name="element" value="<?php echo $standProduct->getId() ?>">
+                                        <input type="hidden" name="value" value="1">
+                                        <input type="submit" class="add2Cart floatR" style="float: right !important; margin-right: 20px;" value="<?= $this->escape($this->translate('label_briefcase_add-to-shop')); ?>">
+                                    </form>
+                                <?php else: ?>
+                                    <?php if(false == $briefcaseService->checkElementExists($this->id_briefcase_type, $standProduct->getId(), $this->selectedEvent->getId())):?>
+                                        <a class="productBriefcaseAdd add_element tooltipLoad briefcase" href="<?php echo $this->url(array('id_briefcase_type'=>$this->id_briefcase_type,'element'=>$standProduct->getId(),'namespace'=>$this->selectedEvent->getId()),'briefcase_add-element')?>?return=<?php echo $this->url();?>">
+                                            <?= $this->translate('label_briefcase_add-to-briefcase'); ?>
+                                        </a>
+                                        <div class="tooltipContent" id="addToBookmarks"><?= $this->translate('label_briefcase_add-to-briefcase'); ?></div>
+                                    <?php else:?>
+                                        <a class="productBriefcaseDel remove_element briefcase tooltipLoad" href="<?php echo $this->url(array('id_briefcase_type'=>$this->id_briefcase_type,'element'=>$standProduct->getId(),'namespace'=>$this->selectedEvent->getId()),'briefcase_remove-element')?>?return=<?php echo $this->url();?>">
+                                            <?= $this->translate('label_briefcase_remove-from-briefcase'); ?>
+                                        </a>
+                                        <div class="tooltipContent" id="removeFromBookmarks"><?= $this->translate('label_briefcase_remove-from-briefcase'); ?></div>
+                                    <?php endif;?>
+                                <?php endif; ?>
+                                <div class="clr"></div>
+                            </div>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+            <tfoot>
+            <tr>
+                <th colspan="1" rowspan="1"></th>
+                <?php if ($this->show_prices):?>
+                <th colspan="1" rowspan="1"></th>
+                <?php endif;?>
+                <th colspan="1" rowspan="1"></th>
+                <th colspan="1" class="" rowspan="1"></th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+
+</div>
+<?php echo $this->render('pagination.phtml'); ?>
+
+<script>
+<?php $this->headScript()->captureStart(); ?>
+    (function($) {
+    /*
+     * Function: fnGetColumnData
+     * Purpose:  Return an array of table values from a particular column.
+     * Returns:  array string: 1d data array
+     * Inputs:   object:oSettings - dataTable settings object. This is always the last argument past to the function
+     *           int:iColumn - the id of the column to extract the data from
+     *           bool:bUnique - optional - if set to false duplicated values are not filtered out
+     *           bool:bFiltered - optional - if set to false all the table data is used (not only the filtered)
+     *           bool:bIgnoreEmpty - optional - if set to false empty values are not filtered from the result array
+     * Author:   Benedikt Forchhammer <b.forchhammer /AT\ mind2.de>
+     */
+    $.fn.dataTableExt.oApi.fnGetColumnData = function ( oSettings, iColumn, bUnique, bFiltered, bIgnoreEmpty ) {
+        // check that we have a column id
+        if ( typeof iColumn == "undefined" ) return new Array();
+
+        // by default we only wany unique data
+        if ( typeof bUnique == "undefined" ) bUnique = true;
+
+        // by default we do want to only look at filtered data
+        if ( typeof bFiltered == "undefined" ) bFiltered = true;
+
+        // by default we do not wany to include empty values
+        if ( typeof bIgnoreEmpty == "undefined" ) bIgnoreEmpty = true;
+
+        // list of rows which we're going to loop through
+        var aiRows;
+
+        // use only filtered rows
+        if (bFiltered == true) aiRows = oSettings.aiDisplay;
+        // use all rows
+        else aiRows = oSettings.aiDisplayMaster; // all row numbers
+
+        // set up data array
+        var asResultData = new Array();
+
+        for (var i=0,c=aiRows.length; i<c; i++) {
+            iRow = aiRows[i];
+            var aData = this.fnGetData(iRow);
+            var sValue = aData[iColumn];
+
+            // ignore empty values?
+            if (bIgnoreEmpty == true && sValue.length == 0) continue;
+
+            // ignore unique values?
+            else if (bUnique == true && jQuery.inArray(sValue, asResultData) > -1) continue;
+
+            // else push the value onto the result data array
+            else asResultData.push(sValue);
+        }
+
+        return asResultData;
+    }}(jQuery));
+
+    function fnCreateSelect( aData )
+    {
+        var r='<select><option value=""></option>', i, iLen=aData.length;
+        for ( i=0 ; i<iLen ; i++ )
+        {
+            r += '<option value="'+aData[i]+'">'+aData[i]+'</option>';
+        }
+        return r+'</select>';
+
+    }
+
+    var oTable;
+
+    $(document).ready(function() {
+        //przez kontrolki w cms zmienia się liczba kolumn, trzeba to uwzględnić przy przekazywaniu obiektów konf, zwłaszcza do sortowania
+        var logotype_column = 'true';
+//        var sort_by_col = 1;
+//        var column_conf = [ { "sType": "natural" },
+//                      null,
+//                      null,
+//                      null,]
+//
+//        if (logotype_column === '1'){
+//            sort_by_col = 2;
+//            column_conf = [ { "sType": "natural" },
+//                      null,
+//                      null,
+//                      null,
+//                      null,]
+//        }
+        //custom scrollbar tylko dla wyników
+        $("#source_wrapper").mCustomScrollbar({
+            scrollInertia:0,
+            advanced:{
+                updateOnContentResize: true
+            }
+        });
+
+        <?php if ($this->show_prices):?>
+        cols = [null, null, null, null]
+        <?php else:?>
+        cols = [null, null, null]
+        <?php endif;?>
+
+        oTable = $('#source').dataTable( {
+                    // "iDisplayLength": 1000,
+                    "oLanguage": {
+                         "sSearch": "<?php echo $this->translate('label_event_stand-product_index_search');?>",
+                         "sZeroRecords": "<?php echo $this->translate('label_event_stand-product_index_no-results');?>",
+                         "oPaginate": {
+                            "sFirst":    "Pierwsza",
+                            "sPrevious": "Poprzednia",
+                            "sNext":     "Następna",
+                            "sLast":     "Ostatnia"
+                        }
+                    },
+                    "bPaginate": false,
+                    "bLengthChange": false,
+                    "sPaginationType": "full_numbers",
+                    "sDom": '<"filter_container"f>tp',
+                    "bSort": true,
+                    "bFilter": true,
+                    "bInfo": false,
+                    "bAutoWidth": false,
+                    "aaSorting": [],
+                    "aoColumns": cols
+                } );
+
+
+
+    /* Add a select menu for each TH element in the table footer */
+    $("tfoot th").each( function ( i ) {
+        if ($(this).hasClass( 'sector' )) {
+            this.innerHTML = fnCreateSelect( oTable.fnGetColumnData(i) );
+            $('select', this).change( function () {
+                oTable.fnFilter( $(this).val(), i );
+            } );
+        }
+    } );
+
+    //$('th.sector select').insertBefore('#source_filter');
+    $('<span id="clear" title="<?= $this->translate('label_event_stand-product_index_clear-search');?>">x</span> ').insertBefore($('#source_filter'));
+    //$('<div class="sector_label"><?php echo $this->translate('label_event_stand-product_index_choose-product');?></div>').insertBefore($('.filter_container select'));
+    $('.dataTableRdk select').hide();
+
+    $('#clear').click(function(){
+        $('#source_filter input').val('').trigger('keyup')
+    });
+
+//scrollbar tworzy sowje wrappery z position:relative, co powodowało zniknięcie selectów z belki - to powoduje że
+//bez zbędnego rzeźbienia wszystko działa jak powinno
+
+
+    $('.filter_container').insertBefore('.dataTableRdk h2');
+
+    $('.dataTableRdk table tr:odd td').addClass('rdkOdd');
+    $('.dataTableRdk table tr:even td').addClass('rdkEven');
+
+    $('table tr th').click(function() {
+        $('.dataTableRdk table tr:odd td').removeClass('rdkOdd').removeClass('rdkEven').addClass('rdkOdd');
+        $('.dataTableRdk table tr:even td').removeClass('rdkOdd').removeClass('rdkEven').addClass('rdkEven');
+    });
+
+
+
+
+    });
+<?php $this->headScript()->captureEnd(); ?>
+</script>

@@ -1,0 +1,18 @@
+<table border="0" cellpadding="5" cellspacing="5" width="600"  style="font-size: 12px; font-family: Tahoma;">
+    <tr>
+        <th colspan="2" align="left"><b><?php echo $this->translate('label_default_auth_mail-recovery_greet');?>, <?php echo $this->user->getName(); ?></b></th>
+    </tr>
+    <tr>
+        <td colspan="2"><?php echo $this->translate('label_default_auth_mail-recovery_comm1');?>
+        <?php echo $this->baseUser->getName();?>
+            <br />
+            <?php echo $this->translate('label_default_auth_mail-recovery_comm2');?> <a href="<?=$this->protocol?>://<?php echo $this->uri?>"><?php echo $this->translate('label_default_auth_mail-recovery_comm3');?></a>
+        </td>
+     </tr>
+     <tr>
+        <td colspan="2"><?php echo $this->translate('label_default_auth_mail-recovery_comm4');?>
+        <?php echo $this->baseUser->getName();?>
+        </td>
+     </tr>
+
+</table>

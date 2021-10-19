@@ -1,0 +1,19 @@
+<?php $this->placeholder('h1')->captureStart(); ?>
+<h1 class="title"><?= $this->escape($this->selectedEvent->getTitle()) ?></h1>
+<?php $this->placeholder('h1')->captureEnd(); ?>
+
+<div class="dataTableRdk">
+    <h2><?php echo $this->translate('nav_event_exhibitors_offer_login'); ?></h2>
+
+    <div id="source_wrapper">
+        <div class="line">
+            <form action="<?= $this->url(['event_uri' => $this->selectedEvent->getUri()], 'event_offer_login'); ?>"
+                  method="post">
+                <label for="password"
+                       style="padding-left:5px;"><?php echo $this->translate('nav_label_header_password'); ?></label>
+                <input type="password" name="password" class="std password"/>
+                <input type="submit" value="<?php echo $this->translate('Wyślij'); ?>" class="submitBtn"/>
+            </form>
+        </div>
+    </div>
+</div>

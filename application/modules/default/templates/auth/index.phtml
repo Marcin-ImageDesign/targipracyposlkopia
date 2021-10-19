@@ -1,0 +1,8 @@
+<h1><?php echo $this->escape( $this->translate( 'label_default_auth_index_login' ) ); ?></h1>
+
+<?php echo $this->form; ?>
+<a href="<?php echo $this->url( array('event_uri' => $this->selectedEvent->getUri() ), 'password-recover' ) ?>">
+<?php echo $this->escape( $this->translate( 'label_default_auth_recovery-password-button' ) );  ?>
+</a>
+
+

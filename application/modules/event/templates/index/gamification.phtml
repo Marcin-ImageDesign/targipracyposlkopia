@@ -1,0 +1,57 @@
+<?php $this->placeholder('h1')->captureStart();?>
+<h1 class="title"><?=$this->escape($this->selectedEvent->getTitle())?></h1>
+<?php $this->placeholder('h1')->captureEnd();?>
+
+<h2><?php echo $this->translate('label_event_index_reception_gamification'); ?></h2>
+
+
+
+<div id="gam_buttons">
+    <a class="gam_buttons active" data-href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'site_uri' => 'gamification_rules', 'hide_title' => true), 'event_site');?>" onclick="changeTabAjax(this)"><?php echo $this->translate('Regulamin grywalizacji');?></a>
+    <a class="gam_buttons " data-href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'event_ranking');?>" onclick="changeTabAjax(this)"><?php echo $this->translate('Klasyfikacja uczestników');?></a>
+    <a class="gam_buttons day_ranking" data-href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'day_ranking');?>" onclick="changeTabAjax(this)"><?php echo $this->translate('label_event_index_gamification_dayranking');?></a>
+    <a class="gam_buttons" data-href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'site_uri' => 'prizes', 'hide_title' => true), 'event_site');?>" onclick="changeTabAjax(this)"><?php echo $this->translate('Nagrody');?></a>
+    <a class="gam_buttons" data-href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'site_uri' => 'zwyciezcy', 'hide_title' => true), 'event_site');?>" onclick="changeTabAjax(this)"><?php echo $this->translate('Zwycięzcy');?></a>
+</div>
+
+
+<div id="wrap" class="">
+
+   <?php echo $this->eventSite->getContent();?>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#wrap').mCustomScrollbar({
+            autoDraggerLength:true,
+            scrollButtons:{
+                enable:false
+            }
+        });
+    })
+
+    function changeTabAjax(target){
+        var that = $(target);
+        var wrap = $('#wrap');
+
+        $.ajax({
+            async: "false",
+            type: "GET",
+            url: that.data('href'),
+            success: function(data) {
+                wrap.html(data);
+                if ($('.standard_content').hasClass('mcsb'))
+                    $('.standard_content').removeClass('mcsb');
+                $('.gam_buttons').removeClass('active');
+                that.addClass('active');
+                $('#wrap').mCustomScrollbar({
+                    autoDraggerLength:true,
+                    scrollButtons:{
+                        enable:false
+                    }
+                });
+            }
+        });
+    }
+</script>
+</div>
+<div style="clear: both;"></div>

@@ -1,0 +1,146 @@
+<ul class="">
+    <li class="companyBg">
+        <?php
+        if ($this->selectedEvent->hasHomePageUrl()) {
+            $link = $this->selectedEvent->GETHomePageUrl();
+        } else {
+            $link = $this->url(['event_uri' => $this->selectedEvent->getUri()], 'event_home');
+        }
+        ?>
+
+        <!-- Jeśli więcej niż jedna hala, zamiast logotypu pokazujemy przełącznik hal -->
+        <?php if (count($this->event_halls) > 1): ?>
+            <a href="<?= $this->url(['event_uri' => $this->selectedEvent->getUri(), 'hall_uri' => $this->active_hall['uri']], 'event_hall_change'); ?>"
+               class="hall_switcher contentLoad"><?php if ($this->active_hall): ?><?= $this->translate('You are now on'); ?>:
+                    <strong class="sunYellow"><?= $this->active_hall['name']; ?></strong><?php else: ?><?= $this->translate('Choose exhibition hall'); ?><?php endif; ?>
+            </a>
+        <?php else: ?>
+            <?php if (!empty($this->selectedEvent->replace_text) && empty($this->selectedEvent->id_image)): ?>
+                <a href="<?= $link ?>" style=""><span
+                            class="<?= $this->selectedEvent->getReplaceTextClass() ?>"><?= $this->selectedEvent->getReplaceText(); ?></span></a>
+            <?php else: ?>
+                <a href="<?= $link ?>"
+                   style="background-image: url('<?= Service_Image::getUrl($this->selectedEvent->id_image, 153, null, 'bi', 'png') ?>')"><span></span></a>
+            <?php endif; ?>
+        <?php endif; ?>
+    </li>
+
+    <?php if (!$this->hideLinkRecepion && $this->selectedEvent->getIsReceptionActive() && $this->action == 'hall'): ?>
+        <li class="iHome">
+            <a href="<?= $this->url(['event_uri' => $this->selectedEvent->getUri()], 'event_reception') ?>">
+                <span><?= $this->translate('nav_event_reception'); ?></span>
+            </a>
+        </li>
+    <?php else: ?>
+        <li class="iHome">
+            <a href="<?= $this->url(['event_uri' => $this->selectedEvent->getUri()], 'event_hall') ?>">
+                <span><?= $this->translate('nav_event_fair-hall'); ?></span>
+            </a>
+        </li>
+    <?php endif; ?>
+    
+    <!-- Webinaria zamiast wystawców dla IGD -->
+    <?php if ($this->show_gamification): ?>
+        <li class="iGamification">
+            <a class="contentLoad" href="<?= $this->url(['event_uri' => $this->selectedEvent->getUri()], 'event_gamification'); ?>">
+                <span><?= $this->translate('nav_event_gamification'); ?></span>
+            </a>
+        </li>
+    <?php else: ?>
+        <li class="iExhibitor">
+            <a class="" href="<?= $this->url(['event_uri' => $this->selectedEvent->getUri(), 'hall_uri' => $this->hall_uri], 'event_exhibitors'); ?>">
+                <span><?= $this->translate('nav_event_exhibitors'); ?></span>
+            </a>
+        </li>
+    <?php endif; ?>
+
+    <!-- Koniec podmiany wystawców -->
+    <li class="iBargains">
+        <a class="" href="<?= $this->url(['event_uri' => $this->selectedEvent->getUri(), 'hall_uri' => $this->hall_uri], 'event_offer_catalogue'); ?><?php if ($this->selectedEvent->short_name != 'promocjeDev'): ?>?is_promotion=1<?php endif; ?>">
+            <span><?= $this->translate('Oferty pracy'); ?></span>
+        </a>
+        <!--nav_event_bargains-->
+    </li>
+
+    <?php $baseUser = Zend_Registry::get('BaseUser'); ?>
+    <?php $show_webinars = Engine_Variable::getInstance()->getVariable(Variable::SHOW_WEBINARS, $baseUser->getId()); ?>
+
+    <?php if ($this->selectedEvent->is_login_required) : ?>
+        <?php if ($this->userAuth) : ?>
+            <!-- <li <?php if (!$this->userAuth->hasImage()): ?>class="iAccount"<?php endif; ?>>
+                <a href="<?= $this->url(['event_uri' => $this->selectedEvent->getUri()], 'user_account_edit'); ?>">
+                    <span>
+                        <?php if ($this->userAuth->hasImage()): ?><img class="round_avatar"
+                                                                       src="<?= Service_Image::getUrl($this->userAuth->getIdImage(), 30, 30, 'a'); ?>" /><?php endif; ?>
+                        <?= $this->translate('My account'); ?>
+                    </span>
+                </a>
+            </li> -->
+            <li class="iWebinars" style="margin-right: 10px;">
+                    <a href="<?= $this->url(['event_uri' => $this->selectedEvent->getUri(), 'site_uri' => 'szkolenia'], 'event_site'); ?>">
+                        <span><?= $this->translate('Szkolenia'); ?></span>
+                    </a>
+                </li>
+            <?php if ($this->selectedEvent->is_shop_active == 1) : ?>
+                <li class="iCart">
+                    <a href="<?= $this->url(['event_uri' => $this->selectedEvent->getUri()], 'shop_index'); ?>">
+                        <span><?= $this->translate('nav_event_my-order'); ?></span>
+                    </a>
+                </li>
+            <?php else: ?>
+                <?php if ($show_webinars): ?>
+                    <li class="iWebinars" style="margin-right: 10px;">
+                    <a href="<?= $this->url(['event_uri' => $this->selectedEvent->getUri(), 'site_uri' => 'szkolenia'], 'event_site'); ?>">
+                                
+                            <span><?= $this->translate('Szkolenia'); ?></span>
+                        </a>
+                    </li>
+                <?php else : ?>
+                    <li class="iCart">
+                        <a href="<?= $this->url(['event_uri' => $this->selectedEvent->getUri()], 'briefcase'); ?>">
+                            <span><?= $this->translate('nav_event_my-note'); ?></span>
+                        </a>
+                    </li>
+                <?php endif; ?>
+            <?php endif; ?>
+        <?php else : ?>
+            <?php if ($show_webinars): ?>
+                <li class="iWebinars" style="margin-right: 10px;">
+                    <a href="<?= $this->url(['event_uri' => $this->selectedEvent->getUri(), 'site_uri' => 'szkolenia'], 'event_site'); ?>">
+                        <span><?= $this->translate('Szkolenia'); ?></span>
+                    </a>
+                </li>
+            <?php else : ?>
+                <!-- <li class="iRegister">
+                    <a href="<?= $this->url(['event_uri' => $this->selectedEvent->getUri()], 'user_register_index'); ?>">
+                        <span><?= $this->translate('Login/Register'); ?></span>
+                    </a>
+                </li> -->
+                <li class="iWebinars" style="margin-right: 10px;">
+                    <a href="<?= $this->url(['event_uri' => $this->selectedEvent->getUri(), 'site_uri' => 'szkolenia'], 'event_site'); ?>">
+                        <span><?= $this->translate('Szkolenia'); ?></span>
+                    </a>
+                </li>
+            <?php endif; ?>
+
+            <li class="iCart">
+                <a href="<?= $this->url(['event_uri' => $this->selectedEvent->getUri()], 'briefcase'); ?>">
+                    <span><?= $this->translate('nav_event_my-note'); ?></span>
+                </a>
+            </li>
+        <?php endif; ?>
+    <?php else : ?>
+        <li class="iWebinars" style="margin-right: 10px;">
+            <a href="<?= $this->url(['event_uri' => $this->selectedEvent->getUri(), 'site_uri' => 'szkolenia'], 'event_site'); ?>">
+                <span><?= $this->translate('Szkolenia'); ?></span>
+            </a>
+        </li>
+
+        <li class="iCart">
+            <a href="<?= $this->url(['event_uri' => $this->selectedEvent->getUri()], 'briefcase'); ?>">
+                <span><?= $this->translate('nav_event_my-note'); ?></span>
+            </a>
+        </li>
+    <?php endif; ?>
+</ul>
+<div class="clr"></div>

@@ -1,0 +1,59 @@
+<?php $briefcaseService = Zend_Registry::get('BriefcaseService'); ?>
+<?php $this->placeholder('h1')->captureStart(); ?>
+    <h1 class="title"><?= $this->escape($this->selectedEvent->getTitle()) ?></h1>
+<?php $this->placeholder('h1')->captureEnd(); ?>
+
+    <h2><?php echo $this->translate('label_event_stand_files_files-for-download'); ?> <a href="<?= $_SERVER['HTTP_REFERER']; ?>" title="" class="back">← <strong><?php echo $this->translate('label_event_stand-offer_details_back'); ?></strong></a></h2>
+<?php if ($this->exhibStandFile->count() > 0) : ?>
+    <div class="mcsb">
+        <div style="min-height:<?php echo $tabH; ?>px">
+
+            <table cellspacing="0" cellpadding="0" align="center" class="grid datas" style="width:100%; text-align: left; border-spacing: 0 9px;">
+                <thead>
+                <tr class="row">
+                    <th class="head">
+
+                    </th>
+                    <th class="head">
+
+                    </th>
+                    <th class="head">
+
+                    </th>
+                    <th class="head">
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($this->exhibStandFile as $file) : ?>
+                    <tr class="row" style="background: #F6F6F6;">
+                        <td valign="top" class="col" width="160" style="padding: 5px;">
+                            <a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'hash' => $file->getHash()), 'event_download_stand_file'); ?>" target="_blank">
+                                <img src="<?= $file->getBrowserImage(); ?>" alt="">
+                            </a>
+                        </td>
+                        <td valign="top" class="col" style="padding: 5px;">
+                            <a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'hash' => $file->getHash()), 'event_download_stand_file'); ?>" target="_blank"><span style="font-size: 12px; font-weight: bold;color:#000"><?php echo $this->escape($file->getName()); ?></span></a><br />
+                            <?php echo $file->getDescription(); ?>
+                        </td>
+                        <td class="col" align="right" style="padding:5px; width:20%">
+                            <a class="btn download-btn" href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'hash' => $file->getHash()), 'event_download_stand_file'); ?>" target="_blank">
+                                <?php echo $this->translate('label_event_stand_files_download-file'); ?>
+                            </a>
+                        </td>
+                        <td class="col" align="right" style="padding:5px; width:20%">
+                            <?php if (false == $briefcaseService->checkElementExists($this->id_briefcase_type, $file->getId(), $this->selectedEvent->getId())) : ?>
+                                <a data-tooltip="addToBookmarks" class="add_element tooltipLoad briefcase" href="<?php echo $this->url(array('id_briefcase_type' => $this->id_briefcase_type, 'element' => $file->getId(), 'namespace' => $this->selectedEvent->getId()), 'briefcase_add-element') ?>?return=<?php echo $this->url(); ?>" title="<?php echo $this->translate('label_event_stand_files_briefcase-add'); ?>" style="text-align:center;"><?= $this->translate('label_briefcase_add-to-briefcase'); ?></a>
+                            <?php else : ?>
+                                <a data-tooltip="removeFromBookmarks" class="remove_element briefcase tooltipLoad" href="<?php echo $this->url(array('id_briefcase_type' => $this->id_briefcase_type, 'element' => $file->getId(), 'namespace' => $this->selectedEvent->getId()), 'briefcase_remove-element') ?>?return=<?php echo $this->url(); ?>" title="<?php echo $this->translate('label_event_stand_files_briefcase-remove'); ?>" style="text-align:center;"><?= $this->translate('label_briefcase_remove-from-briefcase'); ?></a>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+<?php else : ?>
+    <div style="width:100%; text-align: center;" class="mcsb"><?= $this->translate('label_event_stand_files_no-data'); ?></div>
+<?php endif; ?>

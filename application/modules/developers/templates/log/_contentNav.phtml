@@ -1,0 +1,10 @@
+<div class="spacerL"></div>
+<ul class="contents">
+    <?php foreach( $this->fileList as $k => $v ) : ?>
+    <li>
+        <a href="<?php echo $this->url( array(), 'developers_log_logs' ).'?file='.$v ?>">
+            <img class="mb-3" src="/_images/icon/tango_16/edit-copy.png"> <?php echo $this->translate($v); ?>
+        </a>
+    </li>
+    <?php endforeach; ?>
+</ul>

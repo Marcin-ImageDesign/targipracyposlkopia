@@ -1,0 +1,21 @@
+<ul class="contents">
+    <?php echo $this->render('_backLink.phtml');?>
+    <li>
+        <a class="contentWrap" rel="#load_content_block" href="<?=$this->url( array(), 'site_files' )?>?path=<?=$this->path?>&mode=<?=$this->mode?>">
+            <img src="/_images/icon/tango_16/edit-copy.png" class="mb-3" />
+            <?php echo $this->translate('File list'); ?>
+        </a>
+    </li>
+    <li>
+        <a class="contentWrap" rel="#load_content_block" href="<?=$this->url( array(), 'site_files_newCatalog' )?>?path=<?=$this->path?>&mode=<?=$this->mode?>">
+            <img src="/_images/icon/ico1/add-folder-green.gif" class="mb-3" />
+            <?php echo $this->translate('New folder'); ?>
+        </a>
+    </li>
+    <li>
+        <a href="<?=$this->url( array(), 'site_files_uploadFile' )?>?path=<?=$this->path?>&mode=<?=$this->mode?>">
+            <img src="/_images/icon/ico1/add-page-yellow.gif" class="mb-3" />
+            <?php echo $this->translate('Send new file'); ?>
+        </a>
+    </li>
+</ul>

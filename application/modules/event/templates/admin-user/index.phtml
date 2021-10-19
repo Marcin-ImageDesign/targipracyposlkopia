@@ -1,0 +1,121 @@
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+
+    <?php 
+    if($this->userAuth->hasAccess(AuthPermission::EVENT_HAS_USER_NEW)){
+    echo $this->partial(
+            '_headling_button.phtml',
+            array( 'title' => $this->translate('Add participation') , 'url' => $this->url(array(), 'event_admin-user_new')) ); 
+    }
+    ?>
+   
+    <h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+   
+<?php $this->placeholder('aside')->captureStart(); ?>
+    <?php echo $this->filter; ?>
+<?php $this->placeholder('aside')->captureEnd(); ?>
+
+<?php $this->placeholder('toolbar')->captureStart(); ?>
+    <?php echo $this->render('commponents/pagination.phtml'); ?>
+<?php $this->placeholder('toolbar')->captureEnd(); ?>
+
+<form id="grid-action-form" method="post" action="">
+    <div class="toolbar toolbar-top"><?php echo $this->placeholder('toolbar'); ?></div>
+    <table cellspacing="0" cellpadding="0" class="grid datas">
+        <tbody>
+            <tr>
+                <th class="head <?php if($this->orderCol == 'ehu.created_at'): ?>sorting-<?php if($this->orderDir == 'DESC'): ?>desc<?php else: ?>asc<?php endif; ?><?php endif; ?>">
+                    <a href="?order=ehu.created_at <?php if($this->orderDir == 'DESC'): ?>ASC<?php else: ?>DESC<?php endif; ?>&page=1">
+                        <span class="ui-icon"></span><?php echo $this->translate('Date'); ?>
+                    </a>
+                </th>
+                <th class="head <?php if($this->orderCol == 'u.last_name'): ?>sorting-<?php if($this->orderDir == 'DESC'): ?>desc<?php else: ?>asc<?php endif; ?><?php endif; ?>">
+                    <a href="?order=u.last_name <?php if($this->orderDir == 'DESC'): ?>ASC<?php else: ?>DESC<?php endif; ?>&page=1">
+                        <span class="ui-icon"></span><?php echo $this->translate('User'); ?>
+                    </a>
+                </th>
+                <th class="head <?php if($this->orderCol == 'e.title'): ?>sorting-<?php if($this->orderDir == 'DESC'): ?>desc<?php else: ?>asc<?php endif; ?><?php endif; ?>" >
+                    <a href="?order=e.title <?php if($this->orderDir == 'DESC'): ?>ASC<?php else: ?>DESC<?php endif; ?>&page=1">
+                        <span class="ui-icon"></span><?php echo $this->translate('Event'); ?>
+                    </a>
+                </th>
+                <th width="120px"  class="head <?php if($this->orderCol == 'ehu.is_confirm'): ?>sorting-<?php if($this->orderDir == 'DESC'): ?>desc<?php else: ?>asc<?php endif; ?><?php endif; ?>">
+                    <a href="?order=ehu.is_confirm <?php if($this->orderDir == 'DESC'): ?>ASC<?php else: ?>DESC<?php endif; ?>&page=1">
+                        <span class="ui-icon"></span><?php echo $this->translate('Is confirm'); ?>
+                    </a>
+                </th>
+                <th width="30px" class="head"></th>
+            </tr>
+            <tr class="row row-template">
+                <td valign="top" class="firstcol"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+            </tr>
+
+            <?php foreach($this->eventHasUserList as $key => $eventHasUser): ?>
+                <tr class="row <?php if(0 == ($key % 2)): ?>odd<?php else: ?>even<?php endif; ?>">
+                    <td valign="top" class="col">
+                        <?php echo date('Y-m-d H:i', strtotime($eventHasUser->created_at)); ?>
+                    </td>
+                    <td valign="top" class="col">
+                        <?php if( $this->userAuth->hasAccess( 'user_admin_edit' ) ): ?>
+                            <a href="<?php echo $this->url(array('hash' => $eventHasUser->User->getHash()), 'admin_user_edit'); ?>">
+                                <?php echo $this->escape( $eventHasUser->User->getName() ); ?>
+                            </a>
+                        <?php else: ?>
+                            <?php echo $this->escape( $eventHasUser->User->getName() ); ?>
+                        <?php endif; ?>
+                        
+                    </td>
+                    <td valign="top" class="col">
+                        <a href="<?php echo $this->url(array('hash' => $eventHasUser->Event->getHash()), 'admin_event_edit') ?>">
+                            <?php echo $this->escape( $eventHasUser->Event->getTitle() ); ?>
+                            <?php if($eventHasUser->Event->getUsersLimit()):?>
+                            ( <?php echo $eventHasUser->Event->getAsignedUsers();?> / <?php echo $eventHasUser->Event->getUsersLimit();?> )
+                            <?php endif;?>
+                        </a>
+                    </td>
+                    <td valign="top" class="col">
+                        <?php $isConfirm = (int) $eventHasUser->is_confirm; ?>
+                        <a href="<?php echo $this->url(array('hash' => $eventHasUser->getHash()), 'event_admin-user_confirm'); ?>?return=<?php echo $this->url(); ?>" class="status">
+                            <span class="switch-<?php echo $isConfirm; ?>"><?php echo $isConfirm; ?></span>
+                        </a>
+                    </td>
+                    <td valign="top" class="col">
+                        <?
+                        $style='';
+                        $width = '36px';
+                        $show = false;
+                        if($this->userAuth->hasAccess(AuthPermission::EVENT_HAS_USER_EDIT)):
+                            $style='style="width: 55px"';
+                            $width = '24px';
+                            $show = true;
+                            endif;?>
+                        <ul class="actions" <?php echo $style;?>>
+                            <?php if($show):?>
+                             <li>
+                                <a title="<?php echo $this->translate('Edit'); ?>" class="help" href="<?php echo $this->url(array('hash' => $eventHasUser->getHash()), 'event_admin-user_edit'); ?>">
+                                    <span class="ui-icon ui-icon-pencil"><?php echo $this->translate('Edit'); ?></span>
+                                    <span class="bullet" style="width:<?php echo $width;?>;"><?php echo $this->translate('Edit'); ?></span>
+                                    <span class="ui-icon ui-icon-triangle-1-s queue"></span>
+                                </a>
+                            </li>
+                            <?php endif;?>
+                            <li>
+                                <a onclick="return confirm('<?php echo $this->translate('Are you sure you want to delete this item?'); ?>');" title="<?php echo $this->translate('Delete'); ?>" class="help" href="<?php echo $this->url(array('hash' => $eventHasUser->getHash()), 'event_admin-user_delete'); ?>?return=<?php echo $this->url(); ?>">
+                                    <span class="ui-icon ui-icon-close"><?php echo $this->translate('Delete'); ?></span>
+                                    <span class="bullet" style="width:<?php echo $width;?>"><?php echo $this->translate('Delete'); ?></span>
+                                    <span class="ui-icon ui-icon-triangle-1-s queue"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+
+        </tbody>
+    </table>
+    <div class="toolbar toolbar-bottom"><?php echo $this->placeholder('toolbar'); ?></div>
+</form>

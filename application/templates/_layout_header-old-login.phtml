@@ -1,0 +1,46 @@
+
+<?php if($this->userAuth): ?>
+    <div class="line" style="padding:0px;">
+        <div class="ins">
+            <a href="<?php echo $this->url(array(), 'home');?>" class="logoMin" title="">
+                <img src="/_images/frontend/default/zumi-header-min.png" alt="" />
+            </a>
+            
+            <div class="logout">
+                <a href="<?php echo $this->url(array(),'logout'); ?>?redirect=<?php echo $this->url(array( 'event_uri'=>$this->selectedEvent->getUri()), 'event_hall')?>" title="<?php echo $this->translate('nav_label_header_logout'); ?>" onclick="return confirm('<?php echo $this->translate('nav_label_header_logout-comm1'); ?>?')">
+                    <?php echo $this->translate('nav_label_header_logout'); ?>
+                </a>
+            </div>
+            
+            <ul>
+                <li><a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'user_account_edit');?>" title="" class="lUserData"><span><?php echo $this->translate('nav_label_header_my-data'); ?></span></a></li>
+            </ul>
+            
+            <div class="user_login">
+                <p><?php echo $this->translate('nav_label_header_logged-in'); ?> — 
+                <a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'user_account_edit');?>" title="<?php echo $this->translate('nav_label_header_my-data'); ?>"> <?=$this->escape($this->userAuth->getName())?></a></p>
+            </div>
+
+        </div>
+    </div>
+<?php else: ?>
+    <div class="line">
+        <form action="<?php echo $this->url(array('event_uri'=>$this->selectedEvent->getUri()), 'login'); ?>" method="post">
+            <a href="<?php echo $this->url(array(), 'home');?>" class="logoMin" title="">
+                <img src="/_images/frontend/default/zumi-header-min.png" alt="" />
+            </a>
+            <label for="login" class="firstElem"><?php echo $this->translate('nav_label_header_email'); ?></label>
+            <input type="text" name="Login[login]" class="std login" />
+            <label for="password" style="padding-left:5px;"><?php echo $this->translate('nav_label_header_password'); ?></label>
+            <input type="password" name="Login[password]" class="std password" />
+            <input type="submit" value="<?php echo $this->translate('Zaloguj'); ?>" class="submitBtn" />
+            <a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'user_register_index');?>" title="" class="registerBtn"><?php echo $this->translate('nav_label_header_register'); ?></a>
+            <div class="clr"></div>
+        </form>
+        
+    </div>
+<?php endif; ?>
+
+<div class="ins" style="display:none;">
+    <a href="<?php echo $this->url(array(), 'home');?>" class="zumi" title="<?php echo $this->translate('nav_label_header_home-page');?>"></a>
+</div>

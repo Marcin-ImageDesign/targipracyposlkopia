@@ -1,0 +1,54 @@
+<?php if( 0 == $this->loop ): ?>
+    <div class="jstree tree tree-default" id="jstree_1" style="direction: ltr;">
+<?php endif; ?>
+
+<ul class="ltr">
+    <?php $count0 = $this->list->count(); ?>
+    <?php foreach( $this->list as $key => $item ): ?>
+	<?php if( isset( $this->child ) ): ?>
+	    <?php $count1 = $item->{$this->child}->count(); ?>
+	<?php else: ?>
+	    <?php $count1 = 0; ?>
+        <?php endif; ?>
+        <li id="page-<?php echo $item->getId(); ?>" class="<?php if( $count1 > 0 ): ?>open<?php endif; ?> <?php if( ( $key+1 ) >= $count0 ): ?>last<?php endif; ?>">
+            <a class="page " href="<?php echo $this->url( array( 'hash' => $item->hash ), $this->pre_route.'_edit' ) ?>">
+                <ins>&nbsp;</ins>
+                <?php echo $this->escape( $item->getTitle() ); ?>
+                <?php if( false === $item->languageExists( $this->selectedLanguage ) ): ?>
+                    <a href="#" title="<?php echo $this->translate('No translation'); ?>">[!]</a>
+                <?php endif; ?>
+            </a>
+            <div class="cells">
+                <div class="online">
+                    <?php $isActive = (int)$item->is_active; ?>
+                    <a href="<?php echo $this->url( array( 'hash' => $item->hash ), $this->pre_route.'_status' ); ?>" class="status"><span class="switch-<?php echo $isActive; ?>"><?php echo $isActive; ?></span></a>
+                </div>
+                <div class="actions">
+                    <a title="<?php echo $this->translate('Add'); ?>" class="help" href="<?php echo $this->url( array( 'hash_parent' => $item->hash ), $this->pre_route.'_new' ) ?>">
+                        <span class="ui-icon ui-icon-plus"><?php echo $this->translate('Add'); ?></span>
+                        <span class="bullet" style="width: 28px;"><?php echo $this->translate('Add'); ?></span>
+                        <span class="ui-icon ui-icon-triangle-1-s queue"></span>
+                    </a>
+                    <a title="<?php echo $this->translate('Edit'); ?>" class="help" href="<?php echo $this->url( array( 'hash' => $item->hash ), $this->pre_route.'_edit' ) ?>">
+                        <span class="ui-icon ui-icon-pencil"><?php echo $this->translate('Edit'); ?></span>
+                        <span class="bullet" style="width: 28px;"><?php echo $this->translate('Edit'); ?></span>
+                        <span class="ui-icon ui-icon-triangle-1-s queue"></span>
+                    </a>
+                    <a title="<?php echo $this->translate('Delete'); ?>" class="help" href="<?php echo $this->url( array( 'hash' => $item->hash ), $this->pre_route.'_delete' ) ?>" onclick="return confirm( '<?php echo $this->translate('Are you sure you want to delete the item?'); ?>' );">
+                        <span class="ui-icon ui-icon-close"><?php echo $this->translate('Delete'); ?></span>
+                        <span class="bullet" style="width: 36px;"><?php echo $this->translate('Delete'); ?></span>
+                        <span class="ui-icon ui-icon-triangle-1-s queue"></span>
+                    </a>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <?php if( $count1 > 0 ): ?>
+                <?php echo $this->partial( 'admin/_tree.phtml', array( 't' => $this->t, 'list' => $item->{$this->child}, 'child' => $this->child, 'loop' => ++$this->loop, 'pre_route' => $this->pre_route, 'selectedLanguage' => $this->selectedLanguage ) ); ?>
+            <?php endif; ?>
+        </li>
+    <?php endforeach; ?>
+</ul>
+
+<?php if( 0 == $this->loop ): ?>
+    </div>
+<?php endif; ?>

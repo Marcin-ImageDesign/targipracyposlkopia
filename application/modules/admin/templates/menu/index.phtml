@@ -1,0 +1,50 @@
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+    <?php echo $this->partial(
+            '_headling_button.phtml',
+            array( 'title' => $this->translate('Add subpage'), 'url' => $this->url( array(), 'admin_menu_new' ) )  ); ?>
+
+    <h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+<div class="pages">
+    <div class="heading">
+        <?php echo $this->translate('Title'); ?>
+        <div class="cells">
+            <div class="online"><?php echo $this->translate('Visible'); ?></div>
+            <div class="actions"><?php echo $this->translate('Action'); ?></div>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+        <?php echo $this->partial( 'menu/_tree.phtml', array( 't' => $this->t, 'list' => $this->menuList, 'child' => 'Menu', 'loop' => 0, 'pre_route' => 'admin_menu', 'selectedLanguage' => $this->selectedLanguage ) ); ?>
+</div>
+
+<?php $this->headScript()->captureStart(); ?>
+    $(function() {
+
+        var urls = {
+            "move": "<?php echo $this->url( array(), 'admin_menu_move' )?>"
+        }
+
+        var page_id_re = new RegExp("page\-(\\d+)", "");
+        function get_id(node) {
+            return page_id_re.exec( $(node).attr('id') )[1];
+        }
+
+        $(".jstree").CUI('tree', {
+            rules : {
+                max_depth: 3
+            },
+            callback: {
+                onmove: function (NODE, REF_NODE, TYPE, TREE_OBJ, RB) {
+                    $.ajax({
+                        url: urls.move+'/'+get_id(NODE)+'/'+TYPE+'/'+get_id(REF_NODE),
+                        type: 'post',
+                        data: {'type': TYPE, 'referer': get_id(REF_NODE)}
+                    });
+                } // node moved
+            }
+        })
+        .delegate("a", "click", function (event, data) { window.location = $(this).attr('href'); });
+    });
+<?php $this->headScript()->captureEnd(); ?>

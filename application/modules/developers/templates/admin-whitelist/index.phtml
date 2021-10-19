@@ -1,0 +1,49 @@
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+<?php
+echo $this->partial(
+    '_headling_button.phtml', array('title' =>'Dodaj adres', 'url' => '/admin/developers/whitelist/add'));
+?>
+<h1>IP Whitelist</h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+<table cellspacing="0" cellpadding="0" class="grid datas">
+    <tbody>
+    <tr>
+        <th class="head">
+            Adres IP / Klasa adresów IP
+        </th>
+        <th class="head">
+            Opis
+        </th>
+        <th width="60px" class="head"></th>
+    </tr>
+    <?php foreach($this->whitelist as $row):?>
+        <tr>
+            <td>
+                <?=$row->getAddress();?>
+            </td>
+            <td>
+                <?=$row->getDescription();?>
+            </td>
+            <td valign="top" class="col">
+                <ul class="actions">
+                    <li>
+                        <a class="help" href="<?php echo $this->url(array('id' => $row->getIdIpWhitelist()), 'developers_admin-whitelist-edit'); ?>">
+                            <span class="ui-icon ui-icon-pencil"><?php echo $this->translate('label_edit');?></span>
+                            <span class="bullet" style="width: 24px;"><?php echo $this->translate('label_edit');?></span>
+                            <span class="ui-icon ui-icon-triangle-1-s queue"></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a onclick="return confirm('<?php echo $this->translate('cms-label_confirm-delete-item');?>')" title="<?php echo $this->translate('label_delete');?>" class="help" href="<?php echo $this->url(array('id' => $row->getId()), 'developers_admin-whitelist-delete'); ?>">
+                            <span class="ui-icon ui-icon-close"><?php echo $this->translate('label_delete');?></span>
+                            <span class="bullet" style="width: 36px;"><?php echo $this->translate('label_delete');?></span>
+                            <span class="ui-icon ui-icon-triangle-1-s queue"></span>
+                        </a>
+                    </li>
+                </ul>
+        </tr>
+
+    <?php endforeach;?>
+    </tbody>
+</table>

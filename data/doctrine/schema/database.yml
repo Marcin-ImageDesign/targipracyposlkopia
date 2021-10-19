@@ -1,0 +1,1116 @@
+AuthPermission:
+  connection: baza
+  tableName: auth_permission
+  options:
+    sequenceName: resource
+  columns:
+    id_auth_permission:
+      type: integer
+      primary: true
+      autoincrement: true
+    is_allow:
+      type: boolean
+      default: true
+    id_auth_resource:
+      type: integer
+    id_event:
+      type: integer
+    id_user_role:
+      type: integer
+    desc: string
+  relations:
+    AuthResource:
+      local: id_auth_resource
+      foreign: id_auth_resource
+    Event:
+      local: id_event
+      foreign: id_event
+    UserRole:
+      local: id_user_role
+      foreign: id_user_role
+AuthResource:
+  connection: baza
+  tableName: auth_resource
+  columns:
+    id_auth_resource:
+      type: integer
+      primary: true
+      autoincrement: truef
+    name:
+      type: string
+      notnull: true
+    id_parent:
+      type: integer
+  indexes:
+    id_auth_resource:
+      fields: id_auth_resource
+      type: unique
+BaseUser:
+  connection: baza
+  tableName: base_user
+  columns:
+    id_base_user:
+      type: integer
+      primary: true
+      autoincrement: true
+    is_active:
+      type: boolean
+      default: true
+    is_banned:
+      type: boolean
+      default: false
+    hash: string (32)
+    created_at: timestamp
+    id_base_user_created: timestamp
+    name: string (255)
+    domain: string (255)
+    subdomain: string (255)
+    directory:
+      type: string
+      default: ''
+    metatag_title:
+      type: string
+      default: ''
+    metatag_desc:
+      type: string
+      default: ''
+    metatag_key:
+      type: string
+      default: ''
+    id_language: integer
+    own_menu: 
+      type: boolean
+      default: false
+    main_page_style: 
+      type: string
+      default: 'box'
+    id_image:
+      type: integer
+      default: null
+  relations:
+    Language:
+      local: id_language
+      foreign: id_language
+    BaseUserCreated:
+      class: BaseUser
+      foreignAlias: BaseUser      
+      local: id_base_user_created
+      foreign: id_base_user
+      onDelete: SET NULL
+      type: one
+      foreignType: many      
+
+BaseUserLanguage:
+  connection: baza
+  tableName: base_user_language
+  columns:
+    id_base_user_language:
+      type: integer
+      primary: true
+      autoincrement: true
+    id_language: integer
+    id_base_user: integer
+    hash: string (32)
+    is_active:
+      type: boolean
+      default: true
+  indexes:
+    hash:
+      fields: hash
+      type: unique
+  relations:
+    Language:
+      foreignAlias: BaseUserLanguage
+      local: id_language
+      foreign: id_language
+      type: one
+      foreignType: many
+    LanguageOne:
+      class: Language
+      foreignAlias: BaseUserLanguageOne
+      local: id_language
+      foreign: id_language
+      type: one
+      foreignType: one
+    BaseUser:
+      local: id_base_user
+      foreign: id_base_user
+      onDelete: CASCADE
+
+BaseUserModule:
+  connection: baza
+  tableName: base_user_module
+  columns:
+    id_base_user:
+      type: integer
+      primary: true
+    id_module:
+      type: integer
+      primary: true
+    is_active: integer
+  relations:
+    BaseUser:
+      local: id_base_user
+      foreign: id_base_user
+      onDelete: CASCADE
+    Module:
+      local: id_module
+      foreign: id_module
+      onDelete: CASCADE
+
+CronEmail:
+  connection: baza
+  tableName: cron_email
+  columns:
+    id_cron_email:
+      type: integer
+      primary: true
+      autoincrement: true
+    id_base_user: integer
+    hash: string (32)
+    created_at: timestamp
+    is_active:
+      type: boolean
+      default: true
+    is_sent:
+      type: boolean
+      default: false
+    subject: string
+    email_from: string (255)
+    email_to: string (255)
+    sent_time: timestamp
+    engine_mail: string
+    exception: string
+  indexes:
+    hash:
+      fields: hash
+      type: unique
+  relations:
+    BaseUser:
+      local: id_base_user
+      foreign: id_base_user
+      onDelete: CASCADE
+      
+CronRecord:
+  connection: baza
+  tableName: cron_record
+  columns: 
+    id_cron_record:
+      type: integer
+      autoincrement: true
+      primary: true
+    type: string(255)
+    id_last_record: integer(10)
+    date: datetime
+
+DatabaseChangelog:
+  connection: baza
+  tableName: database_changelog
+  columns:
+    id_database_changelog:
+      type: string (32)
+      primary: true
+    executed_at: timestamp
+
+HomePage:
+  connection: baza
+  tableName: home_page
+  columns:
+    id_home_page:
+      type: integer
+      autoincrement: true
+      primary: true
+    id_event:
+      type: integer(10)
+      notnull: true
+    hash:
+      type: string (32)
+      notnull: true
+    method:
+      type: string (32)
+      notnull: false
+      default: false
+  relations:
+    Event:
+      local: id_event
+      foreign: id_event
+      type: one
+      foreignType: one
+      onDelete: CASCADE
+    Versions:
+      class: HomePageVersion
+      foreignAlias: HomePage
+      local: id_home_page
+      foreign: id_home_page
+      type: many
+      foreignType: one
+    Version:
+      class: HomePageVersion
+      foreignAlias: HomePage
+      local: id_home_page
+      foreign: id_home_page
+      type: one
+      foreignType: one
+
+HomePageVersion:
+  connection: baza
+  tableName: home_page_version
+  columns:
+    id_home_page:
+      type: integer
+      primary: true
+    id_language:
+      type: integer
+      primary: true
+    data:
+      type: string
+      notnull: true
+  relations:
+    HomePage:
+      local: id_home_page
+      foreign: id_home_page
+      onDelete: CASCADE
+    Language:
+      local: id_language
+      foreign: id_language
+      onDelete: CASCADE
+
+Image:
+  connection: baza
+  tableName: image
+  options:
+    orderBy: order ASC
+  columns:
+    id_image:
+      type: integer
+      primary: true
+      autoincrement: true
+    file_path:
+      type: string (255)
+      notnull: true
+    object_id:
+      type: integer (10)
+      notnull: true
+    key:
+      type: string (5)
+      notnull: true
+    type:
+      type: string (255)
+      notnull: true
+    class_name:
+      type: string (255)
+      notnull: true
+    hash:
+      type: string (32)
+      notnull: true
+    name:
+      type: string (255)
+      notnull: true
+    order:
+      type: integer (11)
+      notnull: true
+    params:
+      type: string
+      notnull: true
+
+Inquiry:
+  connection: baza
+  tableName: inquiry
+  columns:
+    id_inquiry:
+      type: integer
+      primary: true
+      autoincrement: true
+    hash:
+      type: string (32)
+      notnull: true
+    id_base_user:
+      type: integer
+      notnull: true
+    id_exhib_stand:
+      type: integer
+      notnull: false
+    is_readed:
+      type: boolean
+      notnull: true
+      default: false
+    channel:
+      type: string (255)
+      notnull: true
+    created_at:
+      type: timestamp
+      notnull: true
+    subject:
+      type: string (255)
+      notnull: true
+    data:
+      type: string
+      notnull: true
+  indexes:
+    hash:
+      fields: hash
+      type: unique
+  relations:
+    BaseUser:
+      local: id_base_user
+      foreign: id_base_user
+      onDelete: CASCADE
+    ExhibStand:
+      local: id_exhib_stand
+      foreign: id_exhib_stand
+      onDelete: SET NULL
+InquiryFile:
+    connection: baza
+    tableName: inquiry_file
+    columns:
+      id_inquiry_file:
+        type: integer
+        primary: true
+        autoincrement: true
+      id_inquiry:
+        type: integer
+        notnull: true
+      hash:
+        type: string(32)
+        notnull: true
+      created_at:
+        type: timestamp
+      title:
+        type: string(255)
+        notnull: true
+      file_ext:
+        type: string(8)
+      name:
+        type: string(255)
+        notnull: true
+    relations:
+      Inquiry:
+        local: id_inquiry
+        foreign: id_inquiry
+
+Language:
+  connection: baza
+  tableName: language
+  columns:
+    id_language:
+      type: integer
+      primary: true
+      autoincrement: true
+    is_active: boolean
+    name: string (255)
+    code: string (16)
+    locale: string (16)
+    original_name: string(255)
+  relations:
+    BaseUserLanguage:
+      foreignAlias: BaseUserLanguage
+      local: id_language
+      foreign: id_language
+      type: many
+      foreignType: one
+    BaseUserLanguageOne:
+      foreignAlias: LanguageOne
+      class: BaseUserLanguage
+      local: id_language
+      foreign: id_language
+      type: one
+      foreignType: one
+
+Menu:
+  connection: baza
+  tableName: menu
+  options:
+    orderBy: order DESC
+  columns:
+    id_menu:
+      type: integer
+      primary: true
+      autoincrement: true
+    id_base_user: integer
+    id_menu_parent: integer
+    id_menu_type:
+      type: integer
+    hash: string (32)
+    created_at: timestamp
+    is_active:
+      type: boolean
+      default: true
+    order: integer
+    title: string (255)
+    uri: string (255)
+    uri_full: string
+    text:
+      type: string
+      default: ''
+    link:
+      type: string
+      default: ''
+    is_metatag:
+      type: boolean
+      default: false
+    metatag_title:
+      type: string
+      default: ''
+    metatag_desc:
+      type: string
+      default: ''
+    metatag_key:
+      type: string
+      default: ''
+    is_header:
+      type: boolean
+      default: true
+    is_footer:
+      type: boolean
+      default: false
+  indexes:
+    hash:
+      fields: hash
+      type: unique
+  relations:
+    BaseUser:
+      local: id_base_user
+      foreign: id_base_user
+      onDelete: CASCADE
+    MenuParent:
+      class: Menu
+      local: id_menu_parent
+      foreign: id_menu
+      onDelete: SET NULL
+      type: one
+      foreignType: many
+    MenuLanguage:
+      foreignAlias: Menu
+      local: id_menu
+      foreign: id_menu
+      type: many
+      foreignType: one
+    MenuLanguageOne:
+      foreignAlias: MenuOne
+      class: MenuLanguage
+      local: id_menu
+      foreign: id_menu
+      type: one
+      foreignType: one
+
+MenuLanguage:
+  connection: baza
+  tableName: menu_language
+  columns:
+    id_menu:
+      type: integer
+      primary: true
+    id_base_user_language:
+      type: integer
+      primary: true
+    title: string (255)
+    uri: string (255)
+    uri_full: string
+    text:
+      type: string
+      default: ''
+    link:
+      type: string
+      default: ''
+    metatag_title:
+      type: string
+      default: ''
+    metatag_desc:
+      type: string
+      default: ''
+    metatag_key:
+      type: string
+      default: ''
+  relations:
+    Menu:
+      foreignAlias: MenuLanguage
+      local: id_menu
+      foreign: id_menu
+      type: one
+      foreignType: many
+      onDelete: CASCADE
+    MenuOne:
+      class: Menu
+      foreignAlias: MenuLanguageOne
+      local: id_menu
+      foreign: id_menu
+      type: one
+      foreignType: one
+      onDelete: CASCADE
+    BaseUserLanguage:
+      local: id_base_user_language
+      foreign: id_base_user_language
+      onDelete: CASCADE
+
+Module:
+  connection: baza
+  tableName: module
+  columns:
+    id_module:
+      type: integer
+      primary: true
+      autoincrement: true
+    is_active: boolean
+    name: string 255
+    dir: string (32)
+    desc: string
+
+News:
+  connection: baza
+  tableName: news
+  options:
+    orderBy: created_at DESC
+  columns:
+    id_news:
+      type: integer
+      primary: true
+      autoincrement: true
+    id_base_user: integer
+    created_at: timestamp
+    hash: string (32)
+    is_active:
+      type: boolean
+      default: true
+    is_promoted:
+      type: boolean
+      default: false
+    on_homepage:
+      type: boolean
+      default: false
+    id_event:
+      type: integer
+      size: 11
+      default: null
+    publication_start: timestamp
+    publication_end: timestamp
+    id_image:
+      type: integer
+      size: 10
+      default: null
+    id_image_home:
+      type: integer
+      size: 10
+      default: null
+    is_metatag:
+      type: boolean
+      default: false
+  indexes:
+    hash:
+      fields: hash
+      type: unique
+  relations:
+    BaseUser:
+      local: id_base_user
+      foreign: id_base_user
+      onDelete: CASCADE
+    Image:
+      class: Image
+      foreignAlias: News
+      local: id_image
+      foreign: id_image
+      type: one
+      foreignType: one
+      onDelete: SET NULL
+    ImageHome:
+      class: Image
+      foreignAlias: NewsHome
+      local: id_image_home
+      foreign: id_image
+      type: one
+      foreignType: one
+      onDelete: SET NULL
+    Event:
+      foreignAlias: News
+      local: id_event
+      foreign: id_event
+      type: one
+      foreignType: many
+    Translations:
+      class: NewsTranslation
+      local: id_news
+      foreign: id_news
+      type: many
+      foreignType: one
+
+NewsTranslation:
+  connection: baza
+  tableName: news_translation
+  attributes:
+    coll_key: id_language
+  columns:
+    id_news:
+      type: integer
+      primary: true
+    id_language:
+      type: integer
+      primary: true
+    title: string
+    uri: string
+    lead:
+      type: string
+      default: ''
+    text:
+      type: string
+      default: ''
+    metatag_title:
+      type: string
+      default: ''
+    metatag_desc:
+      type: string
+      default: ''
+    metatag_key:
+      type: string
+      default: ''
+    link_outside:
+      type: string
+      default: null
+  relations:
+    Language:
+      local: id_language
+      foreign: id_language
+      onDelete: CASCADE
+
+Newsletter:
+  connection: baza
+  tableName: newsletter
+  options:
+    orderBy: created_at DESC
+  columns:
+    id_newsletter:
+      type: integer
+      primary: true
+      autoincrement: true
+    id_base_user: integer
+    created_at: timestamp
+    hash: string (32)
+    is_confirm:
+      type: boolean
+      default: false
+    is_active:
+      type: boolean
+      default: false
+    email: string (255)
+    first_name:
+      type: string
+      size: 255
+      default: ''
+    last_name:
+      type: string
+      size: 255
+      default: ''
+    company:
+      type: string
+      size: 255
+      default: ''
+  indexes:
+    hash:
+      fields: hash
+      type: unique
+  relations:
+    BaseUser:
+      local: id_base_user
+      foreign: id_base_user
+      onDelete: CASCADE
+    
+User:
+  connection: baza
+  tableName: user
+  options:
+    orderBy: created_at DESC
+  columns:
+    id_user:
+      type: integer
+      primary: true
+      autoincrement: true
+    id_base_user: integer
+    id_user_role: integer
+    id_user_created: integer
+    hash: string (32)
+    created_at: timestamp
+    is_active:
+      type: boolean
+      default: false
+    is_banned:
+      type: boolean
+      default: false
+    email:
+      type: string
+      size: 255
+      default: ''
+    email_new:
+      type: string
+      size: 255
+      default: null
+    password:
+      default: ''
+      type: string
+      size: 32
+    first_name:
+      type: string
+      size: 255
+      default: ''
+    last_name:
+      type: string
+      size: 255
+      default: ''
+    company:
+      type: string
+      size: 255
+      default: ''
+    phone:
+      type: string
+      size: 255
+      default: ''
+    mobile_phone:
+      type: string
+      size: 255
+      default: ''
+    liabilities_company:
+      type: boolean
+      default: false
+    position:
+      type: string
+      size: 255
+      default: ''
+    department:
+      type: string
+      size: 255
+      default: ''
+    email_activation:
+      type: string
+      size: 255
+      default: ''
+    email_bookkeeping:
+      type: string
+      size: 255
+      default: ''
+    nip:
+      type: string
+      size: 32
+      default: ''
+    city:
+      type: string
+      size: 255
+      default: ''
+    post_code:
+      type: string
+      size: 6
+      default: ''
+    street:
+      type: string
+      size: 255
+      default: ''
+    country:
+      type: string
+      size: 255
+      default: ''
+    email_company:
+      type: string
+      size: 255
+      default: ''
+    phone_company:
+      type: string
+      size: 255
+      default: ''
+    comments:
+      type: string
+      default: ''
+    brand: 
+      type: string(255)
+      default: ''
+    is_interested:
+      type: boolean
+      default: false
+    company_position:
+      type: integer
+    company_position_detail:
+      type: integer
+    company_street:
+      type: string
+    company_city:
+      type: string
+    company_size:
+      type: integer
+    company_post_code:
+      type: string
+    company_country:
+      type: string
+    is_full_registration:
+      type: boolean
+      default: false
+    company_id_brand:
+      type: integer
+    avatar_image:
+      type: boolean
+      default: false
+    id_image:
+      type: integer
+      default: null
+    accept_data:
+      type: boolean
+      default: false
+    accept_marketing:
+      type: boolean
+      default: false
+    external_id:
+      type: integer
+      default: null
+    is_bot:
+      type: boolean
+      default: false
+    facebook_id:
+      type: string
+      default: null
+  indexes:
+    hash:
+      fields: hash
+      type: unique
+  relations:
+    BaseUser:
+      local: id_base_user
+      foreign: id_base_user
+      onDelete: CASCADE
+    UserRole:
+      local: id_user_role
+      foreign: id_user_role
+    UserCreated:
+      class: User
+      local: id_user_created
+      foreign: id_user
+      onDelete: SET NULL
+    Brand:
+      local: company_id_brand
+      foreign: id_brand
+      type: one
+    Image:
+      local: id_image
+      foreign: id_image
+      type: one
+UserEmail:
+  connection: baza
+  tableName: user_email
+  columns:
+    id_user_email:
+      type: integer
+      primary: true
+      autoincrement: true
+    id_user:  integer(10)
+    id_recivier: integer(10)
+    title: string(100)
+    message: string(1000)
+    created_at: timestamp
+    id_base_user: integer(10)
+    hash: string(32)
+    id_event: integer
+  indexes:
+    hash:
+      fields: hash
+      type: unique
+  relations:
+    User:
+      local: id_user
+      foreign: id_user
+      type: one
+      foreignType: many
+      foreignAlias: UserSendEmails
+      onDelete: SET NULL
+    Recivier:
+      class: User
+      local: id_recivier
+      foreign: id_user
+      type: one
+      foreignType: many
+      foreignAlias: UserReciviedEmails
+      onDelete: SET NULL
+    BaseUser:
+      local: id_base_user
+      foreign: id_base_user
+      type: one
+      foreignType: many
+      foreignAlias: UserEmails
+      onDelete: CASCADE
+    Event:
+      local: id_event
+      foreign: id_event
+      type: one
+      foreignType: many
+      onDelete: SET NULL
+
+UserRole:
+  connection: baza
+  tableName: user_role
+  columns:
+    id_user_role:
+      type: integer
+      primary: true
+    role: string (32)
+    name: string (255)
+    id_base_user: integer
+  relations:
+    BaseUser:
+      local: id_base_user
+      foreign: id_base_user
+      onDelete: CASCADE
+
+Session:
+  connection: baza
+  tableName: session
+  columns:
+    id:
+      type: string(32)
+      primary: true
+    modified: integer
+    lifetime: integer
+    data: clob
+    id_user: integer
+    token: string (32)
+    ip: string (16)
+  relations:
+    User:
+      local: id_user
+      foreign: id_user
+      onDelete: CASCADE
+      
+Variable:
+  connection: baza
+  tableName: variable
+  columns:
+    id_variable:
+      type: integer
+      primary: true
+      autoincrement: true
+    id_base_user: integer
+    name: string (255)
+    value: string
+  relations:
+    BaseUser:
+      local: id_base_user
+      foreign: id_base_user
+      onDelete: CASCADE
+      
+Brand:
+  connection: baza
+  tableName: brand
+  columns:
+    id_brand:
+      type: integer
+      primary: true
+      autoincrement: true
+    hash: string(32)
+    is_active:
+      type: boolean
+      default: true
+    id_brand_parent:
+      type: integer
+      default: null
+  relations:
+    BrandParent:
+      class: Brand
+      local: id_brand_parent
+      foreign: id_brand
+      foreignAlias: ChildBrands
+      onDelete: CASCADE
+      type: one
+      foreignType: many
+    Translations:
+      class: BrandTranslation
+      local: id_brand
+      foreign: id_brand
+      type: many
+      foreignType: one
+
+BrandTranslation:
+  connection: baza
+  tableName: brand_translation
+  attributes:
+    coll_key: id_language
+  columns:
+    id_brand:
+      type: integer
+      primary: true
+    id_language:
+      type: integer
+      primary: true
+    name: string
+  relations:
+    Language:
+      local: id_language
+      foreign: id_language
+      onDelete: CASCADE
+Translation:
+  connection: baza
+  tableName: translation
+  columns:
+    id_translation:
+      type: integer
+      autoincrement: true
+      primary: true
+    hash: string(32)
+    text: string
+    translation: string
+    created_at: timestamp
+    modified_at: timestamp
+    id_base_user: integer(10)
+    id_language: integer(5)
+    is_active: 
+      type: boolean
+      default: true
+  indexes:
+      hash:
+       fields: hash
+       type: unique
+  relations:
+     BaseUser:
+       local: id_base_user
+       foreign: id_base_user
+       type: one
+       foreignType: many
+       onDelete: CASCADE
+     Language: 
+       local: id_language
+       foreign: id_language
+       type: one
+       foreignType: many
+       
+UserConfirmRequest:
+  connection: baza
+  tableName: user_confirm_request
+  columns:
+    id_confirm_request: 
+      type: integer
+      autoincrement: true
+      primary: true
+    id_user:
+      type: integer
+    created_at: timestamp
+    is_used: 
+      type: boolean
+      default: false
+    used_at: timestamp
+    hash: string (32)
+    type:
+      type: int
+      default: 1
+  relations:
+    User:
+      local: id_user
+      foreign: id_user
+      type: one
+      foreignType: many
+      onDelete: CASCADE
+IpWhitelist:
+  connection: baza
+  tableName: ip_whitelist
+  columns:
+    id_ip_whitelist:
+      type: integer
+      autoincrement: true
+      primary: true
+    address:
+      type: string
+      notnull: true
+    description:
+      type: string
+      default: null
+
+      

@@ -1,0 +1,185 @@
+<?php $this->placeholder('h1')->captureStart(); ?>
+    <h1 class="title"><?= $this->escape($this->selectedEvent->getTitle()) ?> </h1>
+<?php $this->placeholder('h1')->captureEnd(); ?>
+
+
+    <h2>
+        <?php echo $this->translate('label_event_stand-video_index_videos'); ?> <a href="<?= $_SERVER['HTTP_REFERER']; ?>" title="" class="back">← <strong><?php echo $this->translate('label_event_stand-offer_details_back'); ?></strong></a>
+    </h2>
+
+    <div class="mcsb">
+        <?php $vi = 0; ?>
+        <?php foreach ($this->standVideoList as $standVideo) : ?>
+            <?php $vi++; ?>
+            <div id="videoItemBox" class="videoItem<?php echo (($vi % 4) == 0) ? ' lastElemInLine' : '' ?>" style="position: relative;">
+                <div class="videoItemIns" style="background-image: url('<?php echo $standVideo->getVideoPhoto(); ?>');">
+                    <a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'hall_uri' => $this->hall_uri, 'stand_uri' => $this->exhibStand->getUri(), 'video_hash' => $standVideo->getHash()), 'event_stand-video_details'); ?>" class="contentLoad" title=""></a>
+                </div>
+                <a class="contentLoad" href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'hall_uri' => $this->hall_uri, 'stand_uri' => $this->exhibStand->getUri(), 'video_hash' => $standVideo->getHash()), 'event_stand-video_details'); ?>"><?php echo $standVideo->getName() ?></a>
+                <?php if (!empty($standVideo->getLead())) : ?>
+                    <div class="videoTooltipContent">
+                        <?php echo $standVideo->getLead() ?>
+                    </div>
+                <?php endif; ?>
+            </div>
+
+        <?php endforeach; ?>
+        <div class="clr"></div>
+
+    </div>
+<?php echo $this->render('pagination.phtml'); ?>
+
+<?php $this->headScript()->captureStart(); ?>
+    (function($) {
+    /*
+    * Function: fnGetColumnData
+    * Purpose: Return an array of table values from a particular column.
+    * Returns: array string: 1d data array
+    * Inputs: object:oSettings - dataTable settings object. This is always the last argument past to the function
+    * int:iColumn - the id of the column to extract the data from
+    * bool:bUnique - optional - if set to false duplicated values are not filtered out
+    * bool:bFiltered - optional - if set to false all the table data is used (not only the filtered)
+    * bool:bIgnoreEmpty - optional - if set to false empty values are not filtered from the result array
+    * Author: Benedikt Forchhammer <b.forchhammer /AT\ mind2.de>
+    */
+    $.fn.dataTableExt.oApi.fnGetColumnData = function ( oSettings, iColumn, bUnique, bFiltered, bIgnoreEmpty ) {
+    // check that we have a column id
+    if ( typeof iColumn == "undefined" ) return new Array();
+
+    // by default we only wany unique data
+    if ( typeof bUnique == "undefined" ) bUnique = true;
+
+    // by default we do want to only look at filtered data
+    if ( typeof bFiltered == "undefined" ) bFiltered = true;
+
+    // by default we do not wany to include empty values
+    if ( typeof bIgnoreEmpty == "undefined" ) bIgnoreEmpty = true;
+
+    // list of rows which we're going to loop through
+    var aiRows;
+
+    // use only filtered rows
+    if (bFiltered == true) aiRows = oSettings.aiDisplay;
+    // use all rows
+    else aiRows = oSettings.aiDisplayMaster; // all row numbers
+
+    // set up data array
+    var asResultData = new Array();
+
+    for (var i=0,c=aiRows.length; i<c; i++) { iRow=aiRows[i]; var aData=this.fnGetData(iRow); var sValue=aData[iColumn]; // ignore empty values? if (bIgnoreEmpty==true && sValue.length==0) continue; // ignore unique values? else if (bUnique==true && jQuery.inArray(sValue, asResultData)> -1) continue;
+
+    // else push the value onto the result data array
+    else asResultData.push(sValue);
+    }
+
+    return asResultData;
+    }}(jQuery));
+
+    function fnCreateSelect( aData )
+    {
+    var r='<select>
+    <option value=""></option>', i, iLen=aData.length;
+    for ( i=0 ; i<iLen ; i++ ) { r +='<option value="' +aData[i]+'">'+aData[i]+'</option>';
+    }
+    return r+'
+</select>';
+
+    }
+
+    var oTable;
+
+    $(document).ready(function() {
+    bindOverlay();
+
+    //przez kontrolki w cms zmienia się liczba kolumn, trzeba to uwzględnić przy przekazywaniu obiektów konf, zwłaszcza do sortowania
+    var logotype_column = 'true';
+    // var sort_by_col = 1;
+    // var column_conf = [ { "sType": "natural" },
+    // null,
+    // null,
+    // null,]
+    //
+    // if (logotype_column === '1'){
+    // sort_by_col = 2;
+    // column_conf = [ { "sType": "natural" },
+    // null,
+    // null,
+    // null,
+    // null,]
+    // }
+
+    oTable = $('#source').dataTable( {
+    // "iDisplayLength": 1000,
+    "oLanguage": {
+    "sSearch": "<?php echo $this->translate('label_event_stand-product_index_search'); ?>",
+    "sZeroRecords": "<?php echo $this->translate('label_event_stand-product_index_no-results'); ?>",
+    "oPaginate": {
+    "sFirst": "Pierwsza",
+    "sPrevious": "Poprzednia",
+    "sNext": "Następna",
+    "sLast": "Ostatnia"
+    }
+    },
+    "bPaginate": false,
+    "bLengthChange": false,
+    "sPaginationType": "full_numbers",
+    "sDom": '<"filter_container">tp', // '<"filter_container"f>tp' usunięty input wyszukiwarki
+    "bSort": true,
+    "bFilter": true,
+    "bInfo": false,
+    "bAutoWidth": false,
+    "aaSorting": [[ 1, "asc" ]],
+    "aoColumns": [null,
+    { "sType": "natural" },
+    null]
+    } );
+
+
+
+
+    /* Add a select menu for each TH element in the table footer */
+    $("tfoot th").each( function ( i ) {
+    if ($(this).hasClass( 'sector' )) {
+    this.innerHTML = fnCreateSelect( oTable.fnGetColumnData(i) );
+    $('select', this).change( function () {
+    oTable.fnFilter( $(this).val(), i );
+    } );
+    }
+    } );
+
+    //$('th.sector select').insertBefore('#source_filter');
+    $('<span id="clear" title="<?= $this->translate('label_event_stand-product_index_clear-search'); ?>">x</span> ').insertBefore($('#source_filter'));
+    //$('<div class="sector_label"><?php echo $this->translate('label_event_stand-product_index_choose-product'); ?></div>').insertBefore($('.filter_container select'));
+    $('.dataTableRdk select').hide();
+
+    $('#clear').click(function(){
+    $('#source_filter input').val('').trigger('keyup')
+    });
+
+    //custom scrollbar tylko dla wyników
+    $("#source_wrapper").mCustomScrollbar({
+    scrollInertia:0,
+    advanced:{
+    updateOnContentResize: true
+    }
+    });
+    //scrollbar tworzy sowje wrappery z position:relative, co powodowało zniknięcie selectów z belki - to powoduje że
+    //bez zbędnego rzeźbienia wszystko działa jak powinno
+
+
+    $('.filter_container').insertBefore('.dataTableRdk h2');
+
+    $('.dataTableRdk table tr:odd td').addClass('rdkOdd');
+    $('.dataTableRdk table tr:even td').addClass('rdkEven');
+
+    $('table tr th').click(function() {
+    $('.dataTableRdk table tr:odd td').removeClass('rdkOdd').removeClass('rdkEven').addClass('rdkOdd');
+    $('.dataTableRdk table tr:even td').removeClass('rdkOdd').removeClass('rdkEven').addClass('rdkEven');
+    });
+
+
+
+
+    });
+
+<?php $this->headScript()->captureEnd(); ?>

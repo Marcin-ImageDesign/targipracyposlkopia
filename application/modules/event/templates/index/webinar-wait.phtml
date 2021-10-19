@@ -1,0 +1,35 @@
+<div class="please_wait_wrapper">
+    <div class="please_wait_comm">
+        <span style="font-weight:bold;font-size:16px;"><?php echo $this->translate('Trwa synchronizacja danych. Proszę czekać na przekierowanie na stronę webinariów');?>.
+        </span><br />
+        <span style="font-weight:12px;"><?php echo $this->translate('W skrajnych przypadkach synchronizacja może potrwać do 2 minut. Prosimy o zachowanie cierpliwości');?>.</span>
+    </div>
+<script type="text/javascript">
+        var external_interval = setInterval(function(){
+            $.ajax({
+                type: "GET",
+                url: '<?php echo $this->url(array("event_uri" => $this->selectedEvent->getUri(), "user_hash" => $this->userAuth->getHash()), "event_check_external_id");?>',
+                success: function(data) {
+                    if (data != -1){
+                        clearInterval(external_interval);
+                        $.ajax({
+                            async: "false",
+                            type: "post",
+                            url: '<?php echo $this->url(array("event_uri" => $this->selectedEvent->getUri(), "id_webinar" => $this->id_webinar, "md5_webinar" => $this->md5_webinar), "event_webinar_view");?>?url_webinar=<?php echo $this->url_webinar;?>',
+                            success: function(data) {
+                                if(data.target){
+                                    window.location.replace(data.target);
+                                } else if(data.error){
+                                    $('.message').show();
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        }, 5000);
+        $('a.close').click(function(){
+            clearInterval(external_interval);
+        })
+</script>
+</div>

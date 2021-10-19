@@ -1,0 +1,22 @@
+<h2><?php echo $this->translate('label_user_account_edit_edit-account');?></h2>
+
+
+<div class="mcsb" style="width: 900px; margin: 0 auto;" id="userFormAccountEdit">
+    <?php echo $this->userFormAccount; ?>
+</div>
+
+
+
+<?php $this->headScript()->captureStart(); ?>
+
+$('.register-extended-header,.register-extended-title').hide();
+
+function updateScrollbar() {
+    $('.mcsb').mCustomScrollbar("update");
+}
+
+$('.register-extended-header').click(function(){
+    $('.register-extended').slideToggle(1,updateScrollbar);
+});
+
+<?php $this->headScript()->captureEnd(); ?>

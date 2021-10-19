@@ -1,0 +1,74 @@
+<?php $this->placeholder('h1')->captureStart();?>
+    <h1 class="title"><?=$this->escape($this->selectedEvent->getTitle())?></h1>bda
+<?php $this->placeholder('h1')->captureEnd();?>
+    
+
+
+<div class="dataTableRdk">
+    <div class="product_catalogue_filters" style="display:none;">
+        <?php echo $this->formProductSearch; ?>
+    </div>
+   <h2><?php echo $this->translate('nav_event_exhibitors_offers'); ?></h2>
+    <!--label_event_stand-offer_index_offers-->
+   <div id="source_wrapper" class="">
+        <table cellspacing="0" id="source_no_sort" style="width:100%" cellpadding="10" class="grid datas products_list">
+            <thead class="border_tr">
+                <tr>
+                    <th class="head" width="104">
+                        <span class="ui-icon"></span><?php echo $this->translate('label_event_stand-offer_index_logo');?>
+                    </th>
+                    <th class="head">
+                        <?php echo $this->translate('label_event_stand-offer_index_offer'); ?>
+                        /
+                        <?php echo $this->translate('label_event_stand-offer_index_description'); ?>
+                    </th>
+                    <?php if ($this->show_prices):?>
+                    <th class="head">
+                        <span class="ui-icon"></span><?php echo $this->translate('label_event_stand-offer_index_price'); ?>
+                    </th>
+                    <?php endif;?>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th colspan="1" rowspan="1"></th>
+                    <th colspan="1" rowspan="1"></th>
+                </tr>
+            </tfoot>
+            <tbody id="ajax_list">
+                <?php // cala lista zaciagana z zewnetrznego pliku ?>
+                <?php echo $this->render('event/_offerSearchResult.phtml'); ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="pagination">
+    <?php echo $this->render('commponents/pagination.phtml'); ?>
+</div>
+
+<div class="toolbar toolbar-bottom" id="toolbar"><?php echo $this->placeholder('toolbar'); ?></div>
+   
+<?php $this->headScript()->captureStart(); ?>
+
+    $('#offer_city').focus(function(){
+        $('#offer_city').val('');
+    });
+
+    $(document).ready(function() {
+        if (!$('#offer_city').val()){
+            $('#offer_city').val('Podaj miasto');
+        }
+
+        //custom scrollbar tylko dla wyników
+        $("#source_wrapper").mCustomScrollbar({
+            scrollInertia:0,
+            advanced:{
+                updateOnContentResize: true
+            }
+        });    
+    
+
+    });
+     
+<?php $this->headScript()->captureEnd(); ?>

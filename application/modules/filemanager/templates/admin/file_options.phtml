@@ -1,0 +1,110 @@
+<div class="context_menu">
+		<table cellspacing="0" cellpadding="0" border="0" width="100%" class="file_options">
+			<?php if($this->element['type']=='dir'):?>
+				<tr class="addOnMouseOver first">
+					<td valign="middle" width="25">
+						<a href="<?=$this->url()?>?path=<?=$this->path.'/'.$this->element['file']?>" title="<?php echo $this->translate('Open'); ?>">
+							<img src="/_images/icon/tango_16/go-next.png" alt=""/>
+						</a>
+					</td>
+					<td valign="middle">
+						<a href="<?=$this->url()?>?path=<?=$this->path.'/'.$this->element['file']?>" title="<?php echo $this->translate('Open'); ?>">
+							<?php echo $this->translate('Open'); ?>
+						</a>
+					</td>
+				</tr>
+			<?php else: ?>
+				<tr class="addOnMouseOver">
+					<td valign="middle" width="25">
+						<a href="<?=$this->browserPath.'/'.$this->element['file']?>?ts=<?=time()?>" target="_blank" title="<?php echo $this->translate('Open'); ?>">
+							<img src="/_images/icon/tango_16/go-next.png" alt=""/>
+						</a>
+					</td>
+					<td valign="middle">
+						<a href="<?=$this->browserPath.'/'.$this->element['file']?>?ts=<?=time()?>" target="_blank" title="<?php echo $this->translate('Open'); ?>">
+							<?php echo $this->translate('Open'); ?>
+						</a>
+					</td>
+				</tr>
+			<?php endif; ?>
+
+			<tr class="addOnMouseOver">
+				<td valign="middle" width="25">
+					<a href="<?=$this->url( array(), 'site_files_operation' ).'?selectedOption=copy&file['.$this->element['file'].']=1&path='.$this->path?>&mode=<?=$this->mode?>" title="<?php echo $this->translate('Copy'); ?>">
+						<img src="/_images/icon/tango_16/edit-copy.png" alt=""/>
+					</a>
+				</td>
+				<td valign="middle">
+					<a href="<?=$this->url( array(), 'site_files_operation' ).'?selectedOption=copy&file['.$this->element['file'].']=1&path='.$this->path?>&mode=<?=$this->mode?>" title="<?php echo $this->translate('Copy'); ?>">
+						<?php echo $this->translate('Copy'); ?>
+					</a>
+				</td>
+			</tr>
+
+			<tr class="addOnMouseOver">
+				<td valign="middle" width="25">
+					<a href="<?=$this->url( array(), 'site_files_operation' ).'?selectedOption=cut&file['.$this->element['file'].']=1&path='.$this->path?>&mode=<?=$this->mode?>" title="<?php echo $this->translate('Cut'); ?>">
+						<img src="/_images/icon/tango_16/edit-cut.png" alt=""/>
+					</a>
+				</td>
+				<td valign="middle">
+					<a href="<?=$this->url( array(), 'site_files_operation' ).'?selectedOption=cut&file['.$this->element['file'].']=1&path='.$this->path?>&mode=<?=$this->mode?>" title="<?php echo $this->translate('Cut'); ?>">
+						<?php echo $this->translate('Cut'); ?>
+					</a>
+				</td>
+			</tr>
+
+            <tr class="addOnMouseOver">
+                <td valign="middle" width="25">
+                    <a class="contentWrap" rel="#load_content_block" href="<?=$this->url( array(), 'site_files_nameEdit' )?>?element=<?=$this->path?>/<?=$this->element['file']?>&mode=<?=$this->mode?>" title="<?php echo $this->translate('Change name'); ?>">
+                        <img src="/_images/icon/edit_16.gif" alt=""/>
+                    </a>
+                </td>
+                <td valign="middle">
+                    <a class="contentWrap" rel="#load_content_block" href="<?=$this->url( array(), 'site_files_nameEdit' )?>?element=<?=$this->path?>/<?=$this->element['file']?>&mode=<?=$this->mode?>" title="<?php echo $this->translate('Change name'); ?>">
+                        <?php echo $this->translate('Change name'); ?>
+                    </a>
+                </td>
+            </tr>
+
+            <?php if( $this->element['is_image'] ): ?>
+				<tr class="addOnMouseOver">
+					<td valign="middle" width="25">
+						<a class="contentWrap" rel="#load_content_block" href="<?=$this->url( array(), 'site_files_editImage' )?>?path=<?=$this->path?>&filename=<?=$this->element['file']?>&mode=<?=$this->mode?>" title="<?php echo $this->translate('Edit image'); ?>">
+							<img src="/_images/icon/tango_16/image-x-generic.png" alt=""/>
+						</a>
+					</td>
+					<td valign="middle">
+						<a class="contentWrap" rel="#load_content_block" href="<?=$this->url( array(), 'site_files_editImage' )?>?path=<?=$this->path?>&filename=<?=$this->element['file']?>&mode=<?=$this->mode?>" title="<?php echo $this->translate('Edit image'); ?>">
+							<?php echo $this->translate('Edit image'); ?>
+						</a>
+					</td>
+				</tr>
+            <?php endif; ?>
+
+            <tr class="addOnMouseOver">
+                <td valign="middle" width="25">
+                    <a href="<?=$this->url( array(), 'site_files_operation' ).'?selectedOption=delete&file['.$this->element['file'].']=1&path='.$this->path?>&mode=<?=$this->mode?>" id="delete_dir" onClick="if( confirm('<?php echo $this->translate('Are you sure you want to delete this item?'); ?>') ) return true; else return false;" title="<?php echo $this->translate('Delete'); ?>">
+                        <img src="/_images/icon/close_16.png"/>
+                    </a>
+                </td>
+                <td valign="middle">
+                    <a href="<?=$this->url( array(), 'site_files_operation' ).'?selectedOption=delete&file['.$this->element['file'].']=1&path='.$this->path?>&mode=<?=$this->mode?>" id="delete_dir" onClick="if( confirm('<?php echo $this->translate('Are you sure you want to delete this item?'); ?>') ) return true; else return false;" title="<?php echo $this->translate('Delete'); ?>">
+                        <?php echo $this->translate('Delete'); ?>
+                    </a>
+                </td>
+            </tr>
+            <tr class="addOnMouseOver">
+                <td valign="middle" width="25">
+                    <a class="contentWrap" rel="#load_content_block" href="<?=$this->url( array(), 'site_files_fileInfo' )?>?path=<?=$this->path?>&file=<?=$this->element['file']?>&mode=<?=$this->mode?>" title="<?php echo $this->translate('Properties'); ?>">
+                        <img src="/_images/icon/tango_16/preferences-desktop.png"/>
+                    </a>
+                </td>
+                <td valign="middle">
+                    <a class="contentWrap" rel="#load_content_block" href="<?=$this->url( array(), 'site_files_fileInfo' )?>?path=<?=$this->path?>&file=<?=$this->element['file']?>&mode=<?=$this->mode?>" title="<?php echo $this->translate('Properties'); ?>">
+                        <?php echo $this->translate('Properties'); ?>
+                    </a>
+                </td>
+            </tr>
+        </table>
+</div>

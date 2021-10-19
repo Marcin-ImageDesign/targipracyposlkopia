@@ -1,0 +1,11 @@
+    <div class="spacerL"></div>
+    <ul class="contents">
+        <?php foreach ($this->groupList as $group):?>
+            <li>
+                <a href="<?php echo $this->url( array( 'group' => $group ), 'admin_banner_management' ); ?>">
+                    <img class="mb-3" src="/_images/icon/bullet_go.png"> 
+                    <?php echo $this->translate($group);?>
+                </a>
+            </li>
+        <?php endforeach;?>
+    </ul>

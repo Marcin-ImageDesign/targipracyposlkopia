@@ -1,0 +1,107 @@
+<h2><?= $this->translate('label_order-title'); ?></h2>
+
+<div class="mcsb">
+    <?php if( count($this->briefcaseList) > 0 ): ?>
+        <?php $i = 0; $totalPrice = 0.00; ?>
+        <div class="dataTableRdk">
+            <table class="order-table">
+                <thead>
+                <tr>
+                    <th style="width:500px;"><?= $this->translate('label_order-stand'); ?></th>
+                    <th><?= $this->translate('label_order-count'); ?></th>
+                    <th class="price"><?= $this->translate('label_order-price'); ?></th>
+                    <th class="value"><?= $this->translate('label_order-price-sum'); ?></th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($this->briefcaseList as $key => $briefcase): ?>
+                    <tr>
+                        <?php if (false && $briefcase->imageExists()): ?>
+                            <td class="name_stand">
+                                <a href="<?= $this->url(['event_uri' => $briefcase->ExhibStand->Event->getUri(), 'stand_uri' => $briefcase->ExhibStand->getUri(), 'product_hash' => $briefcase->getHash()], 'event_stand-offer_details'); ?>"
+                                   title="<?= $this->escape($briefcase->getName()) ?>">
+                                    <img width="100"
+                                         src="<?= Service_Image::getUrl($briefcase->id_image, 100); ?>"
+                                         alt="<?= $this->escape($briefcase->getName()) ?>"/>
+                                </a>
+                            </td>
+                        <?php endif; ?>
+                        <td class="name">
+                            <a href="<?= $this->url(['event_uri' => $briefcase->ExhibStand->Event->getUri(), 'stand_uri' => $briefcase->ExhibStand->getUri(), 'hall_uri' => $briefcase->ExhibStand->EventStandNumber->EventHallMap->uri, 'product_hash' => $briefcase->getHash()], 'event_stand-offer_details'); ?>"
+                               title="<?= $this->escape($briefcase->getName()) ?>" class="product-name">
+                                <?= $this->escape($briefcase->ExhibStand->getName()) . ' / <strong>' . $this->escape($briefcase->getName()); ?></strong>
+                            </a>
+                        </td>
+                        <td class="count">
+                            <form action="<?= $this->url(['event_uri' => $this->selectedEvent->getUri()], 'shop_add'); ?>">
+                                <input type="hidden" name="element" value="<?= $briefcase->getId() ?>"/>
+                                <input type="text" class="spinner" name="value"
+                                       value="<?=  1 // $this->briefcaseIdCount[$briefcase->getId()] ?>" style="width:27px;"/>
+                                <input type="submit" class="cartBtn save"
+                                       value="<?= $this->translate('label_order-save') ?>"/>
+                                <a class="rem_element cartBtn delete"
+                                   title="<?= $this->escape($this->translate('label_order-delete')); ?>"
+                                   href="<?= $this->url(['event_uri' => $briefcase->ExhibStand->Event->getUri(), 'element' => $briefcase->getId()], 'shop_remove') ?>?return=<?= $this->url(); ?>"
+                                   class="contentLoad"
+                                   onclick="return confirm('<?= $this->translate('label_briefcase_remove-from-briefcase-comm1'); ?>')">
+                                    <?= $this->escape($this->translate('label_order-delete')); ?>
+                                </a>
+
+                            </form>
+
+                        </td>
+
+
+                        <td class="price" style="text-align:right">
+                            <?= $this->currency($briefcase->getPrice()); ?>
+                        </td>
+
+                        <td class="value" style="text-align:right">
+                            <?php   $value = 1 * $briefcase->getPrice(); ?>
+                            <?= $this->currency($value) ?>
+                        </td>
+                    </tr>
+                    <?php
+                    $i++;
+                    $totalPrice += $value;
+                    ?>
+                <?php endforeach; ?>
+                <?= $this->form('next_step_order_summary',array( 'method' => 'post', 'action' => $this->url( array('event_uri' =>  $this->selectedEvent->getUri()), 'shop_order-summary' ) ) ); ?>
+                <tr>
+                    <td colspan="" style="text-align:left !important; background-color:transparent">
+                        <p class="cart-summary"><?= $this->translate('label_choose_shop-location_from_list'); ?><br>
+                            <?php $selected = ($this->choosenLocation) ? $this->choosenLocation->getId() : ''; ?>
+                            <?= $this->formSelect('id_shop_location', $selected, null, $this->shopLocationOptions) ?>
+                        </p>
+                    </td>
+                    <td colspan="7" style="text-align:right !important; background-color:transparent">
+                        <p class="cart-summary"><?= $this->translate('label_order-summary-text'); ?><br>
+                        <span class="cart-price">
+                            <?=$this->currency($totalPrice)?>
+                            </span>
+                        </p>
+                    </td>
+                </tr>
+                </tbody>
+
+            </table>
+                <?= $this->formSubmit( 'shop_order-summary-submit', $this->translate('label_cart-order-now'), array('class' => 'cart-order-now submit-to-summary') ) ?>
+<!--                <a href="--><?php //echo $this->url( array('event_uri' => $this->selectedEvent->getUri() ), 'shop_order-summary') ?><!--" class="cart-order-now">-->
+<!--                    --><?php //echo $this->translate('label_cart-order-now'); ?>
+<!--                </a>-->
+            </form>
+        </div>
+    <?php else :?>
+        <?= $this->translate( 'label_briefcase_index_index_order-empty' ); ?>
+    <?php endif; ?>
+</div>
+
+
+<?php $this->headScript()->captureStart(); ?>
+function changeTab(current, i) {
+$('.tabs a').removeClass('active');
+$(current).addClass('active');
+$('.tabsCont .tabCont').hide();
+$('#'+i).show();
+}
+<?php $this->headScript()->captureEnd(); ?>

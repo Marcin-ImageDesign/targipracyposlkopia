@@ -1,0 +1,38 @@
+<?php
+$this->headLink()->appendStylesheet('/_css/admin/form.css');
+?>
+
+<h1><?php echo $this->translate('Hallmap'); ?></h1>
+
+<?php echo $this->formHallmap; ?>
+
+<script>
+<?php $this->headScript()->captureStart();?>
+
+$(function() {
+    $('body').on('click', ".hallMapAddBanner", hallMapAddBanner);
+});
+
+
+var hallMapAddBanner = function (){
+    var _this = $(this);
+    var value = _this.html();
+    
+    $.ajax({
+        url:'<?=$this->url(array(), 'event_admin-hall-map_get-banner')?>'
+        ,type: 'post'
+        ,dataType: 'json'
+        ,beforeSend:function(){
+            _this.html('<?=$this->translate('label_loading_please_wait')?>');
+        }
+        ,success: function(data){
+            _this.html(value);
+            $('#hallMapAddBanner').append(data.html);
+        }
+    });
+
+    return false;
+}
+
+<?php $this->headScript()->captureEnd(); ?>
+</script>

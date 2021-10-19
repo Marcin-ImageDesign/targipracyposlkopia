@@ -1,0 +1,61 @@
+<?=$this->doctype()?>
+<html>
+<head>
+    <?=$this->headTitle()->toString()."\n" ?>
+    <!--[if IE]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <link href="/_css/admin/login.css" media="screen" rel="stylesheet" type="text/css" >
+    <?=$this->headMeta()->toString()."\n" ?>
+    <?=$this->headLink()?>
+    <?=$this->headScript()?>
+</head>
+<!-- ONET_BODYTAG_BEGIN --><body><!-- ONET_BODYTAG_END -->
+<section class="login-box" style="">
+
+    <div class="inner">
+        <header class="left">
+            <img src="/_images/frontend/default/voxexpo-whitebg.png" />
+        </header>
+        <div class="right">
+            <form id="loginform" action="" method="post" class="form ">
+                <?=$this->formHidden('redirect', $this->url())?>
+                <fieldset id="_main" class="form-main">
+                    <fieldset id="logintoyourcenturionaccount_group" class="form-group">
+                        <legend><?php echo $this->translate('log_in_to_account');?></legend>
+
+                        <div class="form-item form-item-large form-item-required">
+                            <?php echo $this->form->login->getLabel(); ?>         
+                            <div class="field-wrapper">
+                                <?= $this->form->login->setDecorators(array('ViewHelper', 'HtmlTag', 'Errors')); ?>                       
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+
+                        <div class="form-item form-item-large form-item-required">
+                            <?php echo $this->form->password->getLabel(); ?>       
+                            <div class="field-wrapper">
+                                <?= $this->form->password->setDecorators(array('ViewHelper', 'HtmlTag', 'Errors')); ?>                 
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+
+
+                    </fieldset>
+                    <div class="form-submit">
+                        <?= $this->form->submit->setDecorators(array('ViewHelper', 'HtmlTag', 'Errors')); ?>     
+                    </div>
+                    <div class="form-submit">
+                        <a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'password-recover') ?>" class="button_link admin_forgot_pass"><?php echo $this->translate('I forgot my password'); ?></a>
+                    </div>
+                </fieldset></form>
+        </div>
+        <div class="clear">&nbsp;</div
+
+
+
+    </div>
+    <div class="clear"></div></section>
+</body>
+</html>

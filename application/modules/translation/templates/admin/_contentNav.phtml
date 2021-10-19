@@ -1,0 +1,29 @@
+<ul class="contents">
+    <?php echo $this->render('_backLink.phtml');?>
+    <li>
+        <a href="<?php echo $this->url( array(), 'admin_translation' ); ?>">
+            <?php echo $this->translate('List of translations'); ?>
+        </a>
+    </li>
+    <li>
+        <a href="<?php echo $this->url( array(), 'admin_translation_new' ); ?>">
+            <?php echo $this->translate('Add new translation'); ?>
+        </a>
+    </li>
+    <li>
+        <a href="<?php echo $this->url( array(), 'admin_translation_export' ); ?>">
+            <?php echo $this->translate('Export current translations'); ?>
+        </a>
+    </li>
+    <li>
+        <a href="<?php echo $this->url( array(), 'admin_translation_export_list' ); ?>">
+            <?php echo $this->translate('Export from list'); ?>
+        </a>
+    </li>
+    <li>
+        <a href="<?php echo $this->url( array(), 'admin_translation_import' ); ?>">
+            <?php echo $this->translate('Import translations'); ?>
+        </a>
+    </li>
+    
+</ul>

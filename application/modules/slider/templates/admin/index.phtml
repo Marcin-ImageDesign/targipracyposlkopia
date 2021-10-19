@@ -1,0 +1,66 @@
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+<?php
+if ($this->sliderCategory) {
+    echo $this->partial(
+	    '_headling_button.phtml', array('title' => $this->translate('Add new slider'), 'url' => $this->url(array('hash' => $this->sliderCategory->getHash()), 'admin_slider_new')));
+} else {
+    echo $this->partial(
+	    '_headling_button.phtml', array('title' => $this->translate('Add new slider'), 'url' => $this->url(array(), 'admin_slider_new')));
+}
+?>
+
+<h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+<?php $this->placeholder('aside')->captureStart(); ?>
+<?php echo $this->filter; ?>
+<script type="text/javascript">
+    $(document).ready(function(){
+	changeFilterSelect('select-slider-filter');
+    });
+    
+</script>
+<?php $this->placeholder('aside')->captureEnd(); ?>
+<div class="pages">
+    <div class="heading">
+        <?php echo $this->translate('Title'); ?>
+        <div class="cells">
+            <div class="online"><?php echo $this->translate('Visible'); ?></div>
+            <div class="actions"><?php echo $this->translate('Action'); ?></div>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+        <?php echo $this->partial( 'admin/_tree.phtml', array( 't' => $this->t, 'list' => $this->sliderList, 'loop' => 0, 'pre_route' => 'admin_slider', 'selectedLanguage' => $this->selectedLanguage ) ); ?>
+</div>
+
+<?php $this->headScript()->captureStart(); ?>
+    $(function() {
+
+        var urls = {
+            "move": "<?php echo $this->url( array(), 'admin_slider_move' )?>"
+        }
+
+        //var page_id_re = new RegExp("page\-(\\d+)", "");
+        function get_id(node) {
+            hash = $(node).attr('id').split('-');
+            return hash[1];
+        }
+
+        $(".jstree").CUI('tree', {
+            rules : {
+                max_depth: 1
+            },
+            callback: {
+                onmove: function (NODE, REF_NODE, TYPE, TREE_OBJ, RB) {
+                    $.ajax({
+                        url: urls.move+'/'+get_id(NODE)+'/'+TYPE+'/'+get_id(REF_NODE),
+                        type: 'post',
+                        data: {'type': TYPE, 'referer': get_id(REF_NODE)}
+                    });
+                } // node moved
+            }
+        })
+        .delegate("a", "click", function (event, data) { window.location = $(this).attr('href'); });
+    });
+<?php $this->headScript()->captureEnd(); ?>

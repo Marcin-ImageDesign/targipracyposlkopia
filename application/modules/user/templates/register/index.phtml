@@ -1,0 +1,23 @@
+<h2><?php echo $this->escape( $this->translate( 'label_user_register_index_register' ) ); ?></h2>
+<style type="text/css">
+    .register-extended-header {clear:left;}
+    .group-main.register-extended {clear:left;}
+    .form .group-main .field-wrapper select {width:372px !important;}
+    .group-wrapper.group-aside {float:left;clear:left;}
+</style>
+<div class="mcsb">
+	<?php echo $this->formRegister; ?>
+<div class="registerReqInfo">
+    <div style="text-align:right;">
+        <a href="<?php echo $this->url( array('event_uri' => $this->selectedEvent->getUri()), 'user_register_send-activate-link' ); ?>"><?php echo $this->translate('label_user_register_index_send-active-link'); ?></a>
+    </div>
+    <p><em class="required">*</em> – <?php echo $this->translate('label_user_register_index_required-field'); ?></p>
+</div>
+</div>
+
+<?php $this->headScript()->captureStart(); ?>
+    $('.register-extended').hide();
+    $('.register-extended-header').click(function(){
+        $('.register-extended').toggle();
+    });
+<?php $this->headScript()->captureEnd(); ?>

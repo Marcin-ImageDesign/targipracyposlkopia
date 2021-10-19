@@ -1,0 +1,11 @@
+<p>
+    <?php echo $this->translate('Welcome');?>,
+</p>
+<p>
+    <?php echo $this->translate('You just received an inquiry concerning your offer');?>:<br /><br />
+    <?php echo $this->translate('From');?>: <?php echo $this->data['name'];?><br />
+    <?php echo $this->translate('Email');?>: <a href="mailto:<?php echo $this->data['email'];?>"><?php echo $this->data['email'];?></a><br />
+    <?php echo $this->translate('Phone');?>: <?php echo $this->data['phone'];?><br />
+    <?php echo $this->translate('City');?>: <?php echo $this->data['city'];?><br />
+    <?php echo $this->translate('Message');?>: <?php echo $this->data['message'];?>
+</p>

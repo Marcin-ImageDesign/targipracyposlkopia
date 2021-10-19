@@ -1,0 +1,286 @@
+<?php
+    $briefcaseService = Zend_Registry::get('BriefcaseService');
+    $data_banner = $this->exhibStand->ExhibStandViewImage->getDataBanner();
+    $stand_data_banner = $this->exhibStand->getDataBanner();
+    $data_icon = $this->exhibStand->ExhibStandViewImage->getDataIcon();
+?>
+
+<div
+    class="standCont stand stand_level_<?=$this->exhibStand->id_stand_level?>"
+    style="
+        <?php if(!empty($this->exhibStand->ExhibStandViewImage->id_image)): ?>
+            background-image: url('<?=Service_Image::getUrl($this->exhibStand->ExhibStandViewImage->id_image, array('resize' => Image::RESIZE_ORYGINAL));?>');
+        <?php else: ?>
+            background-image: url('<?= $this->exhibStand->ExhibStandViewImage->getBrowseStandImageView()?>');
+        <?php endif; ?>
+        <?php if($this->selectedAction == 'preview'):?>visibility:visible<?php endif;?>
+    "
+>   
+    <?php if ($this->exhibStand->relatedExists('ExhibStandHostess') && $this->exhibStand->ExhibStandHostess->getIsAnimated()):?>
+    <!--bubble-->
+        <div class="transparent" style="<?php echo isset($this->data_stand['transparent']['style'])?$this->data_stand['transparent']['style']:'';?>" onclick="$('.toggleChat').click()"></div>
+        <div class="talk" style="<?php echo isset($this->data_stand['talk']['style'])?$this->data_stand['talk']['style']:'';?>"></div>
+    <?php endif;?>
+    <!-- Info -->
+    <div class="iconCont" style="margin-top:<?= $data_icon['info']['y'];?>px;margin-left:<?= $data_icon['info']['x'];?>px;">
+        <a data-tooltip="<?= $data_icon['info']['name'];?>" href="<?php echo $this->url(array('hall_uri'=>$this->hall_uri,'event_uri' => $this->selectedEvent->getUri(), 'stand_uri' => $this->exhibStand->getUri()), $data_icon['info']['route']);?>" title="" class="add_token presentationIcon tooltipLoad <?= $data_icon['info']['class'];?>"></a>
+        <div class="tooltipContent" id="<?= $data_icon['info']['name'];?>"><?php echo $this->translate($data_icon['info']['name']);?></div>
+    </div>
+    <!-- Kontakt -->
+    <?php if ($this->exhibStand->getIsContactActive()):?>
+        <div class="iconCont" style="margin-top:<?= $data_icon['contact']['y'];?>px;margin-left:<?= $data_icon['contact']['x'];?>px;">
+            <a data-tooltip="<?= $data_icon['contact']['name'];?>" href="<?php echo $this->url(array('hall_uri'=>$this->hall_uri,'event_uri' => $this->selectedEvent->getUri(), 'stand_uri' => $this->exhibStand->getUri()), $data_icon['contact']['route']);?>" title="" class="add_token presentationIcon tooltipLoad <?= $data_icon['contact']['class'];?>"></a>
+            <div class="tooltipContent" id="<?= $data_icon['contact']['name'];?>"><?php echo $this->translate($data_icon['contact']['name']);?></div>
+        </div>
+    <?php endif;?>
+    <!-- Promocje -->
+    <?php if ($this->exhibStand->getCountBargains() > 0):?>
+        <div class="iconCont" style="margin-top:<?= $data_icon['bargains']['y'];?>px;margin-left:<?= $data_icon['bargains']['x'];?>px;">
+            <a data-tooltip="<?= $data_icon['bargains']['name'];?>" href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'stand_uri' => $this->exhibStand->getUri(),'hall_uri'=>$this->exhibStand->EventStandNumber->EventHallMap->uri, 'promoted' => 1), $data_icon['bargains']['route']);?>" title="" class="add_token presentationIcon tooltipLoad <?= $data_icon['bargains']['class'];?>"></a>
+            <div class="tooltipContent" id="<?= $data_icon['bargains']['name'];?>"><?php echo $this->translate($data_icon['bargains']['name']);?></div>
+        </div>
+    <?php endif;?>
+    <!-- site www -->
+    <?php $www_adress = $this->exhibStand->getWwwAdress(); ?>
+    <?php if ( isset( $data_icon['site-www'] ) && !empty($www_adress)) : ?>
+    <div class="iconCont" style="margin-top:<?= $data_icon['site-www']['y'];?>px;margin-left:<?= $data_icon['site-www']['x'];?>px;">
+        <a data-tooltip="<?= $data_icon['site-www']['name'];?>" href="<?php echo $this->url(array('hall_uri'=>$this->hall_uri,'event_uri' => $this->selectedEvent->getUri(), 'stand_uri' => $this->exhibStand->getUri() ), $data_icon['site-www']['route']);?>" target="_blank" class="add_token presentationIcon tooltipLoad pWww"></a>
+        <div class="tooltipContent" id="<?= $data_icon['site-www']['name'];?>"><?php echo $this->translate($data_icon['site-www']['name']);?></div>
+    </div>
+    <?php endif; ?>
+     <!-- Produkty -->
+    <?php if ($this->exhibStand->getCountProducts() > 0):?>
+        <div class="iconCont" style="margin-top:<?= $data_icon['products']['y'];?>px;margin-left:<?= $data_icon['products']['x'];?>px;">
+            <a data-tooltip="<?= $data_icon['products']['name'];?>" href="<?php echo $this->url(array('hall_uri'=>$this->hall_uri,'event_uri' => $this->selectedEvent->getUri(), 'stand_uri' => $this->exhibStand->getUri()), $data_icon['products']['route']);?>" title="" class="add_token presentationIcon tooltipLoad <?= $data_icon['products']['class'];?>"></a>
+            <div class="tooltipContent" id="<?= $data_icon['products']['name'];?>"><?php echo $this->translate($data_icon['products']['name']);?></div>
+        </div>
+    <?php endif;?>
+    <!-- Video -->
+    <?php if ($this->exhibStand->getCountVideos() > 0):?>
+        <div class="iconCont" style="margin-top:<?= $data_icon['video']['y'];?>px;margin-left:<?= $data_icon['video']['x'];?>px;">
+            <a data-tooltip="<?= $data_icon['video']['name'];?>" href="<?php echo $this->url(array('hall_uri'=>$this->hall_uri,'event_uri' => $this->selectedEvent->getUri(), 'stand_uri' => $this->exhibStand->getUri()), $data_icon['video']['route']);?>" title="" class="add_token presentationIcon tooltipLoad <?= $data_icon['video']['class'];?>"></a>
+            <div class="tooltipContent" id="<?= $data_icon['video']['name'];?>"><?php echo $this->translate($data_icon['video']['name']);?></div>
+        </div>
+    <?php endif;?>
+    <!-- Katalogi -->
+    <?php if ($this->exhibStand->getCountFiles() > 0):?>
+        <div class="iconCont" style="margin-top:<?= $data_icon['catalogue']['y'];?>px;margin-left:<?= $data_icon['catalogue']['x'];?>px;">
+            <a data-tooltip="<?= $data_icon['catalogue']['name'];?>" href="<?php echo $this->url(array('hall_uri'=>$this->hall_uri,'event_uri' => $this->selectedEvent->getUri(), 'stand_uri' => $this->exhibStand->getUri()), $data_icon['catalogue']['route']);?>" title="" class="add_token presentationIcon tooltipLoad <?= $data_icon['catalogue']['class'];?>"></a>
+            <div class="tooltipContent" id="<?= $data_icon['catalogue']['name'];?>"><?php echo $this->translate($data_icon['catalogue']['name']);?></div>
+        </div>
+    <?php endif;?>
+    <!-- Wyjście -->
+   <div class="iconCont" style="margin-top:485px;margin-left:20px;">
+        <a data-tooltip="standExit" href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'hall_uri' => $this->active_hall['uri']), 'event_hall_uri');?>" title="" class="add_token presentationIcon tooltipLoad pExit"></a>
+        <div class="tooltipContent" id="standExit"><?php echo $this->translate('label_event_stand_index_exit');?></div>
+    </div>
+
+    <!-- Aktówka -->
+    <div class="iconCont" style="margin-top:20px;margin-left:20px;">
+        <?php if(false == $briefcaseService->checkElementExists($this->id_briefcase_type, $this->exhibStand->getId(), $this->selectedEvent->getId())):?>
+        <a data-tooltip="addToBookmarks" class="add_token add_element tooltipLoad briefcase" href="<?php echo $this->url(array('id_briefcase_type'=>$this->id_briefcase_type,'element'=>$this->exhibStand->getId(),'namespace'=>$this->selectedEvent->getId()),'briefcase_add-element')?>?return=<?php echo $this->url();?>"><?= $this->translate('label_event_stand_index_add-to-briefcase'); ?></a>
+    <?php else:?>
+        <a data-tooltip="removeFromBookmarks" class="add_token remove_element briefcase tooltipLoad" href="<?php echo $this->url(array('id_briefcase_type'=>$this->id_briefcase_type,'element'=>$this->exhibStand->getId(),'namespace'=>$this->selectedEvent->getId()),'briefcase_remove-element')?>?return=<?php echo $this->url();?>"><?= $this->translate('label_event_stand_index_remove-from-briefcase'); ?></a>
+    <?php endif;?>
+    </div>
+    <!-- Hostessa -->
+    <?php if ($this->exhibStand->relatedExists('ExhibStandHostess')):?>
+        <?php if (!$this->exhibStand->ExhibStandHostess->getIsAnimated()):?>
+            <div class="iconCont iconHostess" style="margin-top:<?php echo $this->data_stand['hostess']['y'];?>px;margin-left:<?php echo  $this->data_stand['hostess']['x'];?>px;<?php echo isset($this->data_stand['hostess']['container_style'])? $this->data_stand['hostess']['container_style']:'';?>">
+                <?php if($this->exhibStand->ExhibStandHostess->getBrowseHostess()): ?>
+                <img style="<?= $this->data_stand['hostess']['style'];?>" src="<?php echo $this->exhibStand->ExhibStandHostess->getBrowseHostess()?>" alt="" />
+                <?php endif; ?>
+            </div>
+        <?php else:?>
+            <?php
+                // bardzo brzydki, jednak skuteczny hack rozwiązujący problem zmiany rozmiaru 
+                // animowanych hostess. Bez przerobienia całej funkcjonalności inaczej się nie dało...
+                $ugly_array = array(
+                    '25' => '40',
+                    '24' => '48',
+                    '23' => '48',
+                    '22' => '39',
+                    '21' => '62',
+                    '20' => '44',
+                    '12' => '49',
+                    '11' => '45',
+                    '10' => '47',
+                    '9' => '61',
+                    '8' => '44'
+                );
+            ?>
+            <?php $this->headStyle()->captureStart(); ?>
+                .nivoSlider img {
+                    <?php echo @$this->data_stand['hostess']['style']; ?>
+                }
+                .nivo-main-image {width: <?php echo @$ugly_array[$this->exhibStand->ExhibStandHostess->getId()]?>px !important;}
+            <?php $this->headStyle()->captureEnd(); ?>
+            <div class="iconCont iconHostess person" style="margin-top:<?php echo $this->data_stand['hostess']['y'];?>px;margin-left:<?php echo $this->data_stand['hostess']['x'];?>px;<?php echo isset($this->data_stand['hostess']['container_style'])? $this->data_stand['hostess']['container_style']:'';?>">
+                    <div class="slider-wrapper theme-default">
+                        <div id="slider" class="nivoSlider">
+                            <?php
+                                for ($i = 0; $i<$this->hostess_data_map['animate']['frames']; $i++) {
+                                    if((int)$i) echo '<img src="/private/base_user/_expo/_db/exhib_stand_hostess/'.$this->exhibStand->ExhibStandHostess->getId().'/anim'.$i.'.png" alt="" style="" />';
+                                }
+                            ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="iconCont iconHostess personTalk" style="margin-top:<?php echo $this->data_stand['hostess']['y'];?>px;margin-left:<?php echo $this->data_stand['hostess']['x'];?>px;<?php echo isset($this->data_stand['hostess']['container_style'])? $this->data_stand['hostess']['container_style']:'';?>">
+                    <div class="slider-wrapper theme-default">
+                        <div id="sliderTalk" class="nivoSlider">
+                            <?php
+                                for ($i = 0; $i<$this->hostess_data_map['talk']['frames']; $i++) {
+                                    if((int)$i) echo '<img src="/private/base_user/_expo/_db/exhib_stand_hostess/'.$this->exhibStand->ExhibStandHostess->getId().'/talk'.$i.'.png" alt="" style="" />';
+                                }
+                            ?>
+                        </div>
+                    </div>
+                </div>
+            <?php endif;?>
+    <?php endif;?>
+    <!-- Biurko -->
+    <div class="iconCont" style="margin-top:<?= $this->data_stand['desk']['y'];?>px;margin-left:<?= $this->data_stand['desk']['x'];?>px;background-image: url('<?= $this->data_stand['desk']['src'];?>');<?= $this->data_stand['desk']['style'];?>"></div>
+    <?php if ($this->exhibStand->id_stand_level == StandLevel::LEVEL_MAIN):?>
+        <div class="iconCont" style="margin-left:<?= $this->data_stand['tv_desk']['x'];?>px;margin-top:<?=$this->data_stand['tv_desk']['y'];?>px;background-image: url('<?= $this->data_stand['tv_desk']['src'];?>');<?=$this->data_stand['tv_desk']['style'];?>"></div>
+    <?php endif;?>
+
+    <!-- video w telewizorze -->
+    <div class="iconCont" style="margin-top:<?= $this->data_stand['tv']['y'];?>px;margin-left:<?= $this->data_stand['tv']['x'];?>px;<?= $this->data_stand['tv']['style'];?>">
+        <?php if ($this->exhibStand->getStandVideos()):?>
+            <?php $shuffled_video = StandVideo::findOneByYtKey($this->exhibStand->getStandVideos());?>
+            <a data-tooltip="standFullscreen" class="add_token fullscreen tooltipLoad" href="javascript:;" onclick="akaFullscreen('<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(),'hall_uri'=>$this->hall_uri,  'stand_uri' => $this->exhibStand->getUri(), 'video_hash' => $shuffled_video->getHash()), 'event_stand-video_details'); ?>')"></a>
+            <div class="tooltipContent" id="standFullscreen">Fullscreen</div>
+            <div id="player"></div>
+            <?php if(isset($stand_data_banner['tv'])){ unset($stand_data_banner['tv']); } ?>
+        <?php endif;?>
+    </div>
+
+    <!-- Logotypy -->
+    <?php foreach($data_banner as $k => $v): ?>
+        <?php if(isset($stand_data_banner[$k]) && !empty($stand_data_banner[$k]['id_image'])): ?>
+            <div class="iconCont" style="margin-left:<?=$v['x'];?>px;margin-top:<?= $v['y'];?>px;<?=$v['style']?>">
+                <?php
+                    $image_params = array('width' => $v['width'], 'height' => $v['height'], 'format' => 'png' );
+                    if(!empty($v['perspective'])){
+                        $image_params[Image::PARAM_PERSPECTIVE] = $v['perspective'];
+                    }
+                ?>
+                <img src="<?=Service_Image::getUrl($stand_data_banner[$k]['id_image'], $image_params)?>" alt="" />
+            </div>
+        <?php endif; ?>
+    <?php endforeach; ?>
+
+
+    <?php if($this->exhibStand->getBrowserMainSignboard()): ?>
+        <div class="iconCont" style="margin-left:<?= $data_banner['top']['x'];?>px; margin-top:<?= $data_banner['top']['y'];?>px;">
+            <img src="<?php echo $this->exhibStand->getBrowserMainSignboard();?>" alt="" />
+        </div>
+    <?php endif; ?>
+
+    <?php if($this->exhibStand->getBrowserDescSignboard()): ?>
+        <div class="iconCont" style="margin-left:<?= $data_banner['desk']['x'];?>px;margin-top:<?= $data_banner['desk']['y'];?>px;<?= $data_banner['desk']['style'];?>">
+            <img src="<?php echo $this->exhibStand->getBrowserDescSignboard();?>" alt="" />
+        </div>
+    <?php endif; ?>
+    <!-- Koniec -->
+
+</div>
+<?php if ($this->exhibStand->relatedExists('ExhibStandHostess') && $this->exhibStand->ExhibStandHostess->getIsAnimated()):?>
+    <!-- gadająca hostessa js -->
+
+    <?php
+                $this->headScript()->prependFile('/_js/buzz.js')
+                                   ->prependFile('/_js/nivo/jquery.nivo.slider.js');
+                $this->headLink()->prependStylesheet( '/_js/nivo/nivo-slider.css' )
+                                 ->prependStylesheet( '/_js/nivo/themes/default/default.css' );
+    ?>
+
+    <?php $this->headScript()->captureStart(); ?>
+     /* -- sound -- */
+        
+        function startTalk() {
+            $('.person').css({visibility:'hidden'});
+            $('.personTalk').css({visibility:'visible'});
+            $('#sliderTalk').data('nivoslider').start();
+        }
+        function stopTalk() {
+            $('.person').css({visibility:'visible'});
+            $('.personTalk').css({visibility:'hidden'});
+            $('#sliderTalk').data('nivoslider').stop();
+        }
+        //dzwieki tymczasowo wylaczone
+        //var mySound1 = new buzz.sound( "/_sounds/zapraszamy1", {
+        //    formats: [ "ogg", "mp3", "wav" ]
+        //});
+        
+        //var mySound3 = new buzz.sound( "/_sounds/witamy1", {
+        //    formats: [ "ogg", "mp3", "wav" ]
+        //});
+        
+        $(window).load(function() {
+            $('.loading').hide();
+            $('#wrapper2').fadeIn(500);
+            $('#slider, #sliderTalk').css('width', '62px !important');
+            $('#slider').nivoSlider({
+                effect: 'fade',
+                animSpeed: 1000,
+                pauseTime: 300, 
+                startSlide: 0, 
+                directionNav: false, 
+                controlNav: false,
+                pauseOnHover: false
+            });
+            $('#sliderTalk').nivoSlider({
+                effect: 'fade',
+                animSpeed: 800,
+                pauseTime: 125, 
+                startSlide: 0, 
+                directionNav: false, 
+                controlNav: false,
+                pauseOnHover: false
+            });
+
+            $('#sliderTalk').data('nivoslider').stop();
+            
+            //mySound3.play();
+            startTalk();
+            
+            
+            $.doTimeout( 'someid', 2000, function(){
+                        stopTalk();
+            });
+            
+            var defaultPosBubble = parseInt($('.talk').css('marginTop'));
+            $('.transparent').bind('mouseenter', function() {
+                    <?php if ($this->exhibStand->isActiveChat() && !$this->isOperatorOnline && !$this->selectedEvent->getIsArchive()):?>
+                        $('.talk').css({display: 'block', opacity:0, marginTop: defaultPosBubble}).stop(true,true).animate({opacity:1, marginTop: (defaultPosBubble+40)},500, 'easeOutBack');
+                    <?php endif;?>
+                        //mySound3.stop();
+                        //mySound1.play();
+                    <?php if ($this->exhibStand->isActiveChat() && !$this->selectedEvent->getIsArchive()):?>
+                        startTalk();
+                    <?php endif;?>
+                
+                        $.doTimeout( 'someid', 2100, function(){
+                            stopTalk();
+                        });
+                
+            }).bind('mouseout', function() {
+                    <?php if ($this->exhibStand->isActiveChat() && !$this->isOperatorOnline && !$this->selectedEvent->getIsArchive()):?>
+                        $('.talk').css({opacity:0, display: 'none', marginTop:defaultPosBubble});
+                    <?php endif;?>
+                        stopTalk();
+            });
+
+                <?php if (!$this->exhibStand->isActiveChat() || $this->selectedEvent->getIsArchive()):?>
+                    $('.transparent').css('cursor', 'default');
+                <?php endif;?>
+
+                <?php if ($this->isOperatorOnline && $this->exhibStand->isActiveChat() && !$this->selectedEvent->getIsArchive()):?>
+                    $('.talk').css({display: 'block', opacity:0, marginTop: defaultPosBubble}).stop(true,true).animate({opacity:1, marginTop: (defaultPosBubble+40)},500, 'easeOutBack');
+                <?php endif;?>
+            });
+
+    <?php $this->headScript()->captureEnd(); ?>
+<?php endif;?>

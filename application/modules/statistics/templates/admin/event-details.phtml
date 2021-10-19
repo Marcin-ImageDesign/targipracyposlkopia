@@ -1,0 +1,58 @@
+<script type="text/javascript" src="//www.google.com/jsapi"></script>
+<script type="text/javascript" src="<?= $this->BaseUserUri(); ?>/_js/statistics_chart_functions.js"></script>
+
+
+<script type="text/javascript">
+      google.load("visualization", "1", {packages:["imagebarchart", "annotatedtimeline"]});
+      google.setOnLoadCallback(showGraphs);
+	  function showGraphs() {
+              $.getJSON("<?= $this->url(array('type' => 'event_reception_tv_movie','hash' => $this->event->getHash()), 'statistics_admin-history'); ?>?date_from=<?php echo $this->search['date_from'];?>&date_to=<?php echo $this->search['date_to'];?>", statistics_data_handler);
+	  }
+      
+</script>
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+
+<h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+<?php if(!empty($this->statisticsList)) : ?>
+<form id="grid-action-form" method="post" action="">
+    <div class="toolbar toolbar-top"><?php echo $this->placeholder('toolbar'); ?></div>
+    <table cellspacing="0" cellpadding="0" class="grid datas">
+        <tbody>
+            <tr>
+                <th class="head <?php if ($this->orderCol == 'id_user'): ?>sorting-<?php if ($this->orderDir == 'DESC'): ?>desc<?php else: ?>asc<?php endif; ?><?php endif; ?>">
+                    <?php echo $this->translate('TV name'); ?>
+                </th>
+                <th class="head <?php if ($this->orderCol == 'is_active'): ?>sorting-<?php if ($this->orderDir == 'DESC'): ?>desc<?php else: ?>asc<?php endif; ?><?php endif; ?>">
+                    </span><?php echo $this->translate('TV banner click'); ?>
+                </th>
+                <th class="head <?php if ($this->orderCol == 'is_active'): ?>sorting-<?php if ($this->orderDir == 'DESC'): ?>desc<?php else: ?>asc<?php endif; ?><?php endif; ?>">
+                    <?php echo $this->translate('Show TV movie'); ?>
+                </th>
+            </tr>
+            <tr class="row row-template">
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+            </tr>
+            <?php foreach ($this->exhib_event_tv_movies as $key => $tv_movie): ?>
+                <tr class="row <?php if (0 == ($key % 2)): ?>odd<?php else: ?>even<?php endif; ?>">
+                    <td valign="top" class="col">
+                        <?php echo $this->escape($this->translate('Tv '.$tv_movie->tv_number.' movie')); ?>
+                    </td>
+                    <td valign="top" class="col">
+                        <?//= isset($this->statisticsList[$tv_movie->getId()][ExhibStatisticsType::RECEPTION_FLASH_TV_IMAGE_CLICK]) ?  $this->escape($this->statisticsList[$tv_movie->getId()][ExhibStatisticsType::RECEPTION_FLASH_TV_IMAGE_CLICK]) : 0; ?>
+                    </td>
+                    <td valign="top" class="col">
+                        <?//= isset($this->statisticsList[$tv_movie->getId()][ExhibStatisticsType::RECEPTION_FLASH_TV_MOVIE_SHOW]) ?  $this->escape($this->statisticsList[$tv_movie->getId()][ExhibStatisticsType::RECEPTION_FLASH_TV_MOVIE_SHOW]) : 0; ?>                       
+                    </td>
+                </tr>                
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</form>
+<?php endif; ?>
+<div id="time_line" style="height: 300px; margin-left: auto; margin-right: auto;">
+    &nbsp;
+</div>
+

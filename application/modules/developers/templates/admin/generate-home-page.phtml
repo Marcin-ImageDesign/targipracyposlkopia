@@ -1,0 +1,12 @@
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+    <h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+<?php if ($this->page_save):?>
+    <h2><?=$this->translate('label_developers_page_save-has-been-saved')?></h2>
+<?php else:?>
+    <h2><?=$this->translate('label_developers_page_save_json')?></h2>
+    <?php echo json_encode($this->home_page);?><br /><br />
+    <h2><?=$this->translate('label_developers_page_save')?></h2>
+    <?php Zend_Debug::dump($this->home_page);?>
+<?php endif;?>

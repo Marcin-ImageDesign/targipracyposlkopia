@@ -1,0 +1,100 @@
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+<?php
+    echo $this->partial(
+            '_headling_button.phtml', array('title' => $this->translate('label_cms_add-new-offer'), 'url' => $this->url(array( 'stand_hash' => $this->exhibStand->getHash()), 'admin_stand-offer_new')));
+?>
+    <h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+<?php $this->placeholder('aside')->captureStart(); ?>
+<?php echo $this->filter; ?>
+<script type="text/javascript">
+    $(document).ready(function(){
+        changeFilterSelect('select-active-filter');
+    });
+    
+</script>
+<?php $this->placeholder('aside')->captureEnd(); ?>
+
+<?php $this->placeholder('toolbar')->captureStart(); ?>
+<?php echo $this->render('commponents/pagination.phtml'); ?>
+<?php $this->placeholder('toolbar')->captureEnd(); ?>
+
+<form id="grid-action-form" method="post" action="">
+    <div class="toolbar toolbar-top"><?php echo $this->placeholder('toolbar'); ?></div>
+    <table cellspacing="0" cellpadding="0" class="grid datas">
+        <tbody>
+            <tr>
+                <th class="head" style="width:120px">
+                    <?php echo $this->translate('label_cms_admin-stand-offer_creation_date'); ?>    
+                </th>
+                <th class="head">
+                   <?php echo $this->translate('label_cms_admin-stand-offer_name'); ?>
+                </th>
+                <th class="head">
+                   <?php echo $this->translate('label_cms_admin-stand-offer_creation_price'); ?>
+                </th>
+                <th class="head" style="width:120px">
+                    <?php echo $this->translate('label_cms_admin-stand-offer_creation_active'); ?>
+                </th>
+                
+            </tr>
+            <tr class="row row-template">
+                <td valign="top" class="first col"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+            </tr>
+
+
+            <?php foreach ($this->standProductList as $key => $product): /** @var $product StandProduct */?>
+                <tr class="row <?php if (0 == ($key % 2)): ?>odd<?php else: ?>even<?php endif; ?>">
+                    <td valign="top" class="col">
+                        <a class="edit" href="<?php echo $this->url(array('stand_hash' => $this->exhibStand->getHash(), 'product_hash' => $product->getHash()), 'admin_stand-offer_edit');?>">
+                            <?php echo date('Y-m-d H:i',strtotime($product->getCreatedAt()));?>
+                        </a>
+                    </td>
+                    <td valign="top" class="col">
+                        <a class="edit" href="<?php echo $this->url(array('stand_hash' => $this->exhibStand->getHash(), 'product_hash' => $product->getHash()), 'admin_stand-offer_edit');?>">
+                            <?php echo $this->escape( $product->getName() );?>
+                            <?php if(false === $product->translationExists()): ?>
+                                <a href="#" title="<?=$this->translate('label_translation_not_exists')?>">[!]</a>
+                            <?php endif; ?>
+                        </a>
+                    </td>
+                    
+                    <td valign="top" class="col">
+                            <?php echo ($product->priceExists()) ? $product->getPrice() : '';?>
+                    </td>
+                    
+                    <td valign="top" class="col">
+                        <div class="online">
+                            <?php $isActive = (int)$product->getIsActive(); ?>
+                            <a href="<?php echo $this->url( array( 'stand_hash' => $this->exhibStand->getHash(), 'product_hash' => $product->getHash() ), 'admin_stand-offer_status' ); ?>" class="status"><span class="switch-<?php echo $isActive; ?>"><?php echo $isActive; ?></span></a>
+                        </div>
+                    </td>
+                    <td valign="top" class="col" nowrap>
+                        <ul class="actions">
+                            <li>
+                                <a title="<?php echo $this->translate('Edit'); ?>" class="help" href="<?php echo $this->url(array('stand_hash' => $this->exhibStand->getHash(), 'product_hash' => $product->getHash()), 'admin_stand-offer_edit');?>">
+                                    <span class="ui-icon ui-icon-pencil"><?php echo $this->translate('Edit'); ?></span>
+                                    <span class="bullet" style="width: 24px;"><?php echo $this->translate('Edit'); ?></span>
+                                    <span class="ui-icon ui-icon-triangle-1-s queue"></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a onclick="return confirm('<?php echo $this->translate('Are you sure you want to delete this item?'); ?>');" title="<?php echo $this->translate('Delete'); ?>" class="help" href="<?php echo $this->url(array('stand_hash' => $this->exhibStand->getHash(), 'product_hash' => $product->getHash()), 'admin_stand-offer_delete');?>">
+                                    <span class="ui-icon ui-icon-close"><?php echo $this->translate('Delete'); ?></span>
+                                    <span class="bullet" style="width: 36px;"><?php echo $this->translate('Delete'); ?></span>
+                                    <span class="ui-icon ui-icon-triangle-1-s queue"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>                
+            <?php endforeach; ?>
+
+        </tbody>
+    </table>
+
+</form>
+<div class="toolbar toolbar-bottom"><?php echo $this->placeholder('toolbar'); ?></div>

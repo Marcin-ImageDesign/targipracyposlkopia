@@ -1,0 +1,34 @@
+
+
+<?php if( $this->lastNewsList->count() > 0 ): ?>
+	<aside class="content_news_left">
+	<h2>Aktualności</h2>
+	<?php foreach( $this->lastNewsList as $news ) : ?>
+
+		<div class="news">
+			<div class="news_title">
+				<a href="<?=$this->url(array('uri' => $news->getUri()), 'news') ?>">
+					<?= mb_substr( $news->getTitle(), 0, 40, "UTF8" ); ?>
+					<?php if ( mb_strlen( $news->getTitle() > 40 ) ) : ?>
+					... <?php endif; ?>
+				</a>
+			</div>
+			<div class="news_desc">
+				<?php if ( $news->imageThumbExists() ) : ?>
+					<img src="<?=$news->getBrowseImageThumb(); ?>" alt="News" />
+				<?php endif; ?>
+				<?= mb_substr( $this->escape( $news->getLead() ), 0, 110, "UTF8" ) ?>
+				<?php if ( mb_strlen($news->getLead() > 110 ) ) : ?>
+					<span>&nbsp;&raquo;</span>
+				<?php endif; ?>
+
+			</div>
+		</div>
+
+	<?php endforeach; ?>
+	<div class="read_more_news">
+		<a href="#">Czytaj wszystkie</a>
+	</div>				
+</aside>
+<?php endif; ?>
+

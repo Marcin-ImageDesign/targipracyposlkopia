@@ -1,0 +1,53 @@
+<?php $this->placeholder('h1')->captureStart();?>
+    <h1 class="title"><?=$this->escape($this->selectedEvent->getTitle())?></h1>
+<?php $this->placeholder('h1')->captureEnd();?>
+
+<h2><?php echo $this->translate( 'label_news_index_news' ); ?></h2>
+<div class="mcsb news_list">
+
+
+    <?php if ( isset( $this->newsList) && $this->newsList->count() > 0 ) : ?>
+        <ul class="news-list">
+            <?php foreach( $this->newsList as $key => $news ) : ?>
+
+                <li class="<?php if (0 != $key % 2):?>rdkOdd<?php endif;?>">
+                    <?php $news->id_image?$image = Image::find($news->id_image):$image = '';?>
+                    <div class="image">
+                        <?php if ( $image ) : ?>
+                                <a href="<?=$this->url(array('news_uri' => $news->getUri(), 'event_uri' => $this->selectedEvent->getUri()), 'event_news' ) ?>">
+                                        <img src="<?= $image->getUrl(array('width' => 200, 'height' => 100, 'resize' => 'c'));?>" alt="<?= $news->getTitle() ?>" />
+                                </a>
+                        <?php else:?>
+                            <a href="<?=$this->url(array('news_uri' => $news->getUri(), 'event_uri' => $this->selectedEvent->getUri()), 'event_news' ) ?>">
+                                    <img class="" src="/_images/frontend/default/no-image-pl.png" alt="<?php echo $this->translate('label_news_index_no-photo');?>" />
+                            </a>
+                        <?php endif;?>
+
+                    </div>
+
+                        <div class="title">
+                            <a href="<?=$this->url(array('news_uri' => $news->getUri(), 'event_uri' => $this->selectedEvent->getUri()), 'event_news' ) ?>">
+                                <?= $news->getTitle() ?>
+                            </a>
+                        </div>
+                        <br />
+                        <div class="lead">
+                            <?= $this->escape( $this->LimitText($news->getLead(), 40) ); ?>
+
+                        </div>
+                </li>
+                <div class="clr"></div>
+            <?php endforeach; ?>
+        </ul>
+    <?php else: ?>
+        <h4 style="text-align:center">
+        <?php echo $this->translate('Sorry no articles available yet');?>
+        </h4>
+    <?php endif; ?>
+</div>
+<?php echo $this->render('pagination.phtml'); ?>
+<?php $this->headScript()->captureStart(); ?>
+    $(window).load(function() {
+        $('.news_list').mCustomScrollbar("update");
+    });
+<?php $this->headScript()->captureEnd(); ?>

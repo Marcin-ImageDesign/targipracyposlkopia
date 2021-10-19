@@ -1,0 +1,66 @@
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+<?php
+echo $this->partial(
+	'_headling_button.phtml', array('title' => $this->translate('Add brand'), 'url' => $this->url(array(), 'brand_admin_new')));
+?>
+
+<h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+<div class="pages">
+    <div class="heading">
+        <?php echo $this->translate('Title'); ?>
+        <div class="cells">
+            <div class="online"><?php echo $this->translate('Active'); ?></div>
+            <div class="actions"><?php echo $this->translate('Action'); ?></div>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <?php if($this->brandsList->count() > 0):?>
+    
+ <?php echo $this->partial( 'brand_tree.phtml', array('list' => $this->brandsList, 'loop' => 0, 'pre_route' => 'brand_admin' ) ); ?>
+    <?php endif;?>
+</div>
+<?php $this->headScript()->captureStart(); ?>
+    $(function() {
+
+        var urls = {
+            "move": "<?php echo $this->url( array(), 'admin_menu_move' )?>"
+        }
+
+        var page_id_re = new RegExp("page\-(\\d+)", "");
+        function get_id(node) {
+            return page_id_re.exec( $(node).attr('id') )[1];
+        }
+
+        $(".jstree").CUI('tree', {
+            rules : {
+                max_depth: -1,
+                
+            },
+            types:{
+                "default":{
+                    draggable : false
+                }
+            },
+            callback: {
+//                onmove: function (NODE, REF_NODE, TYPE, TREE_OBJ, RB) {
+//                  $.ajax({
+//                        url: urls.move+'/'+get_id(NODE)+'/'+TYPE+'/'+get_id(REF_NODE),
+//                        type: 'post',
+//                        data: {'type': TYPE, 'referer': get_id(REF_NODE)}
+//                    });
+//                } // node moved
+            }
+        })
+        .delegate("a", "click", function (event, data) {if(!event){
+        window.event.cancelBubble = true;
+        event = window.event;
+        }
+        event.stopPropagation(); 
+        if(!$(this).hasClass('status')){
+        window.location = $(this).attr('href');
+        }
+         });
+    });
+<?php $this->headScript()->captureEnd(); ?>

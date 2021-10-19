@@ -1,0 +1,16 @@
+<div class="carousel touchcarousel black-and-white" id="carousel">
+    <ul class="touchcarousel-container">
+    <!-- Ucinanie słów w leadzie <p> dokładnie na tyle znaków ile teraz jest! -->
+    <?php foreach ($this->boxList as $key => $value): ?>
+    <li class="touchcarousel-item">
+        <div class="content_one" href="<?= $value->getUriFull(); ?>">
+        <div class="title_container">
+            <span class="box_tit"><?= $value->getTitle(); ?></span>
+        </div>
+        <p><?= $value->getLead() ?></p>
+        <div class="read_more_box">Czytaj więcej</div>
+        </div>
+    </li>
+    <?php endforeach; ?>
+    </ul>
+</div>

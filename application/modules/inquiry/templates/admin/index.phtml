@@ -1,0 +1,95 @@
+<?php //$this->headLink()->appendStylesheet('/_css/admin/realestate.css') ?>
+
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+<h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+
+<?php $this->placeholder('aside')->captureStart(); ?>
+<?php echo $this->filter; ?>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('form .clear').click(function(){
+            var me = $(this).parents('form');
+            $.each($(this).parents('form').serializeArray(), function(){
+                $('*[name="'+this.name+'"]', me).val('');
+            });
+        });
+    });
+</script>
+<?php $this->placeholder('aside')->captureEnd(); ?>
+
+
+<?php $this->placeholder('toolbar')->captureStart(); ?>
+    <?php echo $this->render('admin/pagination.phtml'); ?>
+<?php $this->placeholder('toolbar')->captureEnd(); ?>
+
+<?php $isSuperAdmin = Zend_Auth::getInstance()->getIdentity()->BaseUser->isSuperAdmin(); ?>
+
+    <div class="toolbar toolbar-top"><?php echo $this->placeholder('toolbar'); ?></div>
+
+
+    <table cellspacing="0" cellpadding="0" class="grid datas">
+        <tbody>
+            <tr>
+                <th width="10" class="head first"></th>
+                <th class="head">
+                    <a href="javascript:void(0);">
+                        <span class="ui-icon"></span><?php echo $this->translate('Date')?>
+                    </a>
+                </th>
+                <th class="head">
+                    <a href="javascript:void(0);">
+                        <span class="ui-icon"></span><?php echo $this->translate('Client')?>
+                    </a>
+                </th>
+                <th class="head">
+                    <a href="javascript:void(0);">
+                        <span class="ui-icon"></span><?php echo $this->translate('Subject');?>
+                    </a>
+                </th>
+
+                <th width="60px" class="head"></th>
+            </tr>
+            <tr class="row row-template">
+                <td valign="top" class="first col"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+            </tr>
+            <?php foreach( $this->list as $key => $item ): ?>
+                <tr class="row <?php if( 0 == ($key%2) ): ?>odd<?php else: ?>even<?php endif; ?>">
+                    <td></td>
+                    <td valign="top" class="col">
+                        <?php echo date('Y-m-d H:i', strtotime($item->getCreatedAt())); ?>
+                    </td>
+                    <td valign="top" class="col">
+                        <a title="View" href="<?php echo $this->url( array( 'id' => $item->getId() ), 'inquiry_admin_view' ); ?>"><?php echo $this->clientArray[$item->getHash()]['name']; echo " (".$this->clientArray[$item->getHash()]['email'].")"; ?></a>
+                    </td>
+                    <td valign="top" class="col">
+                        <a title="View" href="<?php echo $this->url( array( 'id' => $item->getId() ), 'inquiry_admin_view' ); ?>"><?php echo $this->escape($item->getSubject()); ?></a>
+                    </td>
+
+                    <td valign="top" class="col">
+                        <ul class="actions">
+
+                            <li>
+                                <a onclick="return confirm('<?php echo $this->translate('Are you sure you want to delete this item?')?>');" title="<?php echo $this->translate('Delete');?>"
+                                   class="help" href="<?php echo $this->url( array( 'id' => $item->getId() ), 'inquiry_admin_delete' ); ?>">
+                                    <span class="ui-icon ui-icon-close"><?php  echo $this->translate('Delete');?></span>
+                                    <span class="bullet" style="width: 36px;"><?php  echo $this->translate('Delete');?></span>
+                                    <span class="ui-icon ui-icon-triangle-1-s queue"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+
+        </tbody>
+    </table>
+
+
+    <div class="toolbar toolbar-bottom"><?php echo $this->placeholder('toolbar'); ?></div>
+
+

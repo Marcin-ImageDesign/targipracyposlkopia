@@ -1,0 +1,43 @@
+<?php
+    $this->headLink()->appendStylesheet('/_css/admin/form.css');
+?>
+
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+    <h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+<div>
+    <?php echo $this->form; ?>
+</div>
+
+
+<script>
+<?php $this->headScript()->captureStart();?>
+
+$(function() {
+    $('body').on('click', ".imageStandViewAddBanner", imageStandViewAddBanner);
+});
+
+
+var imageStandViewAddBanner = function (){
+    var _this = $(this);
+    var value = _this.html();
+
+    $.ajax({
+        url:'<?=$this->url(array(), 'event_admin-stand-view-image_get-banner')?>'
+        ,type: 'post'
+        ,dataType: 'json'
+        ,beforeSend:function(){
+            _this.html('<?=$this->translate('label_loading_please_wait')?>');
+        }
+        ,success: function(data){
+            _this.html(value);
+            $('#imageStandViewAddBanner').append(data.html);
+        }
+    });
+
+    return false;
+}
+
+<?php $this->headScript()->captureEnd(); ?>
+</script>

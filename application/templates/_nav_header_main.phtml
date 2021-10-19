@@ -1,0 +1,13 @@
+<?php
+    $pages = $this->container->findAllBy('is_header', true);
+?>
+
+<?php if( count( $pages ) > 0 ): ?>
+    <ul class="<?php echo $this->menu()->getUlClass(); ?>">
+        <?php foreach( $pages as $key => $page ): ?>
+            <?php $isActive = $page->isActive(false); ?>
+            <?php $liClass = $isActive ? ' class="active item_'.$key.'"' : 'class="item_'.$key.'"'; ?>
+            <li <?php echo $liClass; ?>><?php echo $this->menu()->htmlify($page); ?></li><?php echo PHP_EOL ?>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>

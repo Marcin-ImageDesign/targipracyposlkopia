@@ -1,0 +1,16 @@
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+    <h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+<?php if ($this->map_saved):?>
+	<h2><?=$this->translate('label_developers_map-has-been-saved')?></h2>
+<?php else:?>
+	<?php if ($this->error):?>
+		<h2><?=$this->translate('label_developers_wrong_id')?>!</h2>
+	<?php else:?>
+		<h2><?=$this->translate('label_developers_json-type')?></h2>
+		<?php echo $this->json_hall_map;?><br /><br />
+		<h2><?=$this->translate('label_developers_array-type')?></h2>
+		<?php Zend_Debug::dump($this->hall_map);?>
+	<?php endif;?>
+<?php endif;?>

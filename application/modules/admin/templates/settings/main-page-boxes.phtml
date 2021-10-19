@@ -1,0 +1,9 @@
+<?php $this->headLink()->appendStylesheet('/_css/admin/form.css'); ?>
+
+<?php if ($this->event): ?>
+<h1><?php echo $this->translate('h1_main_page_boxes'); ?></h1>
+
+    <?php echo $this->homePageBoxesForm; ?>
+<?php else: ?>
+    <h1><?php echo $this->translate('no_event_selected'); ?></h1>
+<?php endif; ?>

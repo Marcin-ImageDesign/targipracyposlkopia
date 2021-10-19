@@ -1,0 +1,30 @@
+<div id="top" style=" <?php if($this->selectedEvent->bg_id_image) echo 'background-image: url(\''.Service_Image::getUrl($this->selectedEvent->bg_id_image, null, null, 'n').'\'); '?>">
+    <a href="/" class="logo" style="background-image: url('<?php echo Service_Image::getUrl($this->selectedBaseUser->getIdImage(), 202, 60, 'b')?>'); margin-left:30px;">
+    </a>
+    <section id="form">
+        <div class="box half center_halfbox">
+            <div class="round art" style=" margin:4px; height:250px; position:relative;">
+
+                <h1 class="main" style="margin-bottom:10px; font-weight:600; line-height:0.9;color:#212121;">Już <?php echo $this->selectedEvent->getDateStartNice(); ?> największe<br>Wirtualne <?php echo $this->selectedEvent->getTitle(); ?></h1>
+                <div style=" font-size:22px; line-height:1.2; font-family:'Dosis';font-weight:600">Bądź tam gdzie Twoi klienci,<br>dotrzyj do 60 000 użytkowników.</div>
+                <img src="<?php echo Service_Image::getUrl(
+                    $this->selectedEvent->getImageLight(),
+                    276,
+                    97,
+                    'bi'
+                )?>" alt="" style="position:absolute; left:0px; bottom:10px;">
+                <button class="WspolpracaBtn checkOfferNow" style="">Sprawdź ofertę teraz!</button>
+            </div>
+        </div>
+        <div class="box half center_halfbox">
+            <div class="round art contactFormBg" style="text-align:center">
+
+                <h2 style="margin-bottom:10px;">Formularz</h2>
+                <?php if (isset($this->contactForm)):?>
+                    <?php echo $this->contactForm;?>
+                <?php endif;?>
+            </div>
+        </div>
+
+    </section>
+</div>

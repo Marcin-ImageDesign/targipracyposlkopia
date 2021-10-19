@@ -1,0 +1,364 @@
+<?php
+    $is_login_required = false;
+    if($this->selectedEvent->is_login_required && !$this->userAuth){
+        $is_login_required = true;
+        $event_uri = $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'default_login-register_index');
+    }else{
+        if ($this->selectedEvent->getIsReceptionActive() && !$this->is_skip_reception){
+            $event_uri =  $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'event_reception');
+        }else{
+            $event_uri =  $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'event_hall');
+        }
+    }
+?>
+
+<div id="top"
+     style="<?php if(!empty($this->selectedEvent->bg_color)) echo 'background-color:'.$this->selectedEvent->bg_color.'; '; ?>
+        <?php if($this->selectedEvent->bg_id_image) echo 'background-image: url(\''.Service_Image::getUrl($this->selectedEvent->bg_id_image, null, null, 'n').'\'); '?>
+ ">
+<div class="container">
+<header>
+    <a href="/" class="logo" style="background-image: url('<?php echo Service_Image::getUrl($this->selectedBaseUser->getIdImage(), 202, 60, 'b')?>')">
+    </a>
+</header>
+
+<section style="padding:0" class="row-fluid">
+    <ul class="hallPageBtn">
+        <?php if($this->selectedEvent->is_login_required && !$this->userAuth): ?>
+            <li><a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'default_login-register_index');?>" id="WystawcyBtn" class="round contentLoad"><?=$this->translate('nav_home-page_exhibitor')?></a><li>
+        <?php else: ?>
+            <li><a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'event_exhibitors');?>" id="WystawcyBtn" class="round"><?=$this->translate('nav_home-page_exhibitor')?></a><li>
+        <?php endif; ?>
+        <li><a href="#Wspolpraca" class="WspolpracaBtn round"><?=$this->translate('nav_home-page_cooperation')?></a><li>
+       <!--  <li><a href="#Poprzednie" class="round" id="PoprzednieBtn"><?//=$this->translate('nav_home-page_prev-editions')?></a><li>
+        <li><a href="#Edycje" class="round" id="EdycjeBtn"><?//=$this->translate('nav_home-page_next-editions')?></a><li> -->
+        <li><a href="http://reklama.zumi.pl/6,kontakt.html" target="_blank" id="KontaktBtn" class="round"><?=$this->translate('nav_home-page_contact')?></a><li>
+    </ul>
+</section>
+
+<section id="Wspolpraca" class="row-fluid" style="display:none; line-height:20px;">
+    <div class="round art" style="position:relative; padding:40px;">
+
+
+         <h2>Dlaczego Wirtualne Targi z Zumi??</h2>
+
+        <div class="iblead">
+            <div style="padding-right:10px;" class="ib1">
+                <div class="icon b1"></div>
+                <div class="icon-text">
+                    <h3>RELACJE</h3>
+                    To jedyna możliwość, aby wejść w bezpośrednią relację z klientem za pośrednictwem Internetu
+                </div>
+            </div>
+        </div>
+        <div class="iblead">
+            <div style="padding:0px 5px;" class="ib2">
+                <div class="icon b2"></div>
+                <div class="icon-text">
+                    <h3>INNOWACYJNOŚĆ</h3>
+                    Zadbaj o swój wizerunek i pokaż się jako firma korzystająca z nowoczesnych rozwiązań sprzedaży i promocji
+                </div>
+            </div>
+        </div>
+        <div class="iblead">
+            <div style="padding-left:10px;" class="ib3">
+                <div class="icon b3"></div>
+                <div class="icon-text">
+                    <h3>EFEKTYWNOŚĆ KOSZTOWA</h3>
+                    Dotrzyj do grona 100 000 klientów, inwestując mniejsze pieniądze niż na targach stacjonarnych
+                </div>
+            </div>
+        </div>
+<br clear="all">
+<br>
+<br>
+<br>
+
+<h2>Wybierz rozwiązanie dopasowane do Twoich potrzeb:</h2>
+ <div class="w-spec first">
+
+        <div class="round">
+                 <h2 style="font-weight:700; margin-bottom:5px; padding:0; text-transform:uppercase;">Stoisko,</h2>
+                <h3 style="text-transform:uppercase; font-weight:700; letter-spacing:normal;"> dzięki któremu zyskujesz: </h3>
+                <ul class="miniicon">
+                    <li class="livechat"><strong>Live Chat</strong>
+                  Komunikujesz się z klientami w czasie rzeczywistym</li>
+                <li class="custom"><strong> Personalizacja stoiska
+                </strong>
+                   Zyskujesz unikalny wygląd stoiska</li>
+                <li class="stats"><strong> Dostęp do statystyk online
+                </strong>
+                  W każdym momencie możesz sprawdzić ruch na stoisku</li>
+                <li class="social">
+                    <strong> Integracja z serwisami społecznościowymi</strong>
+                    Docierasz do potencjalnych klientów</li>
+                <li class="contact">
+                    <strong>Formularz kontaktowy</strong>
+                   Jesteś w  stałym kontakcie ze swoimi klientami</li>
+                <li class="video"><strong> Wideo </strong>
+
+                   Prezentujesz swoją ofertę w nowoczesny sposób </li>
+
+                  </ul>
+                  <div style="text-align: center;">
+                        <h3 style="text-transform:uppercase; font-weight:700; letter-spacing:normal;">Za jedyne </h3>
+                        <h2 style="font-weight:700; padding:0; margin:0; font-size:50px;">1 5OO zł</h2>
+
+                   </div>
+                   <br>
+                    <br>
+                    <button class="button" style=" padding:10px 40px; font-size:31px; margin:0 auto; display:block;" onclick="window.open('http://reklama.zumi.pl/6,kontakt.html')">Zamów</button>
+            </div>
+</div>
+ <div class="w-spec last">
+
+             <div class="round">
+                     <h2 style="font-weight:700; margin-bottom:5px; padding:0; text-transform:uppercase;">Sponsor regionalny</h2>
+                    <h3 style="text-transform:uppercase; font-weight:700; letter-spacing:normal;"> - jeszcze więcej możliwości:</h3>
+                    <ul class="miniicon">
+                        <li class="center"><strong>Stoisko w centralnym miejscu hali</strong> Zapewniasz swojej firmie najlepszą widoczność</li>
+                        <li class="promo"><strong>Promocja w Zumi i Onecie</strong>  Dzięki reklamie docierasz do większej liczby potencjalnych klientów</li>
+                    </ul>
+                    <div style="text-align: center;">
+                        <h3 style="text-transform:uppercase; font-weight:700; letter-spacing:normal;">Za jedyne </h3>
+                        <h2 style="font-weight:700;padding:0; margin:0; font-size:50px;">4 OOO zł</h2>
+                    </div>
+                    <br>
+                    <br>
+                    <button class="button" style=" padding:10px 40px; font-size:31px; margin:0 auto; display:block;" onclick="window.open('http://reklama.zumi.pl/6,kontakt.html')">Zamów</button>
+
+              </div>
+     </div>
+
+
+<br>
+
+
+  <div style="clear:both"></div>
+    <a href="/_media/specyfikacja_stoiska.pdf" target="_blank" class="spec_button" style="padding:10px 20px; font-size:16px; margin:0 auto; display:block;">Specyfikacja do stoiska</a>
+
+</div>
+
+</section>
+
+
+<section id="Edycje" class="row-fluid" style="display:none;">
+    <ul class="kolejneedycje">
+        <?php foreach ($this->futureEvents as $event): /** @var $event Event */ ?>
+            <li>
+                <?php
+                    $link = '#';
+                    if($event->hasHomePageUrl()){ $link = $event->getHomePageUrl(); }
+                    elseif($event->getIsScheduled()){ $link = $this->url(array('event_uri' => $event->getField('uri')), 'event_home'); }
+                ?>
+
+                <a href="<?=$link?>" class="round">
+                    <span>
+                        <?php
+                        // bardzo brzydkie rozwiązanie z miesiacami
+                        // jest jakiś problem z lokalizacją
+                        $month = $this->getMonthName($event->getDateStartFormat('m'));
+                        ?>
+                        <?=$month?> <?=$event->getDateStartFormat('Y')?>
+                    </span>
+                    <img src="<?php echo Service_Image::getUrl(
+                        $event->getImageLight(),
+                        276,
+                        97,
+                        'bi'
+                    )?>" alt="<?php echo $event->getField('uri'); ?>"><h2><?php echo $event->getTitle(); ?></h2>
+                </a>
+            <li>
+        <?php endforeach; ?>
+    </ul>
+</section>
+
+
+
+<section id="Poprzednie" class="row-fluid" style="display:none;">
+    <ul class="kolejneedycje">
+        <?php foreach ($this->pastEvents as $event): /** @var $event Event */ ?>
+            <li>
+                <?php
+                    $link = '#';
+                    if($event->hasHomePageUrl()){ $link = $event->getHomePageUrl(); }
+                    elseif($event->getIsScheduled()){ $link = $this->url(array('event_uri' => $event->getField('uri')), 'event_home'); }
+                ?>
+
+                <a href="<?=$link?>" class="round">
+                    <span>
+                        <?php
+                            // bardzo brzydkie rozwiązanie z miesiacami
+                            // jest jakiś problem z lokalizacją
+                            $month = $this->getMonthName($event->getDateStartFormat('m'));
+                        ?>
+                        <?=$month?> <?=$event->getDateStartFormat('Y')?>
+                    </span>
+                    <img src="<?php echo Service_Image::getUrl(
+                        $event->getImageLight(),
+                        276,
+                        97,
+                        'bi'
+                    )?>" alt="<?php echo $event->getField('uri'); ?>"><h2><?php echo $event->getTitle(); ?></h2>
+                </a>
+            <li>
+        <?php endforeach; ?>
+    </ul>
+</section>
+<section style="padding:10px 0;" id="Section" class="row-fluid">
+<div id="left_box_hall" class="left_box_hall round test2">
+    
+	<div id="nt-example1-container">
+        <ul id="nt-example1"> 
+            <?php if (!empty($this->sideBanners)):?>   
+            <?php foreach($this->sideBanners as $key => $banner):?>
+                <li>
+                    <a style="<?php echo $banner['style'];?>" href="<?php echo $banner['link'];?>" class="side_box_link dimm" target="<?php echo $banner['target'];?>">
+                        <img src="<?php echo Service_Image::getUrl($banner['image'.$key], array('height'=>65, 'width'=>210, 'resize' => 'b')); ?>" alt="<?php echo $banner['name'];?>" />
+                    </a> 
+                </li>
+            <?php endforeach;?>
+            <?php endif;?>
+        </ul>
+    </div>
+    
+</div>
+
+<?php if ($this->selectedEvent->getIsSliderOn()):?>  
+    <?php $this->headScript()->appendFile('/_js/jquery.newsTicker.min.js');?> 
+    
+    <script type="text/javascript">
+    <?php $this->headScript()->captureStart(); ?>   
+    $(document).ready(function(){
+        var nt_example1 = $('#nt-example1').newsTicker({ 
+            row_height: 85, 
+            max_rows: 6, 
+            duration: 2000, 
+        });
+    });
+    <?php $this->headScript()->captureEnd(); ?>
+    </script>
+<?php endif;?>
+
+<div class="hall_outside" style="">
+
+    <div id="introFlashIns"></div>
+    <img id="hall_pic" style="max-width: 100%;border-radius:4px" src="<?php echo $this->background_data->getUri()?>" />
+
+    <a href="<?=$event_uri?>" class="yellow_button">
+        <span class="text1">Wejście</span>
+        <span class="text2">Enter</span>
+    </a>
+
+
+    
+    <?php if (!empty($this->data_banner)):?>
+        <?php foreach($this->data_banner as $key => $banner ) : ?> 
+            <?php if (!empty($banner['banners'][0]['img'])):?>
+                <a href="<?php echo $banner['banners'][0]['link'];?>" target="<?php echo $banner['banners'][0]['target'];?>" class="side_banner" id="ban_<?=$banner['name'];?>" style="top:<?=$banner['top'];?>px; left:<?=$banner['left'];?>px; width:<?=$banner['width'];?>px; height:<?=$banner['height'];?>px;
+                    background-image: url('<?php echo Service_Image::getUrl($banner['banners'][0]['img'], array('width'=>$banner['width'], 'height'=>$banner['height'], 'resize' => 'b')); ?>');
+                    background-repeat:no-repeat;
+                    background-position:center center; 
+                "></a>
+            <?php endif;?>                      
+        <?php endforeach;?>
+            
+            <script type="text/javascript">
+            <?php $this->headScript()->captureStart(); ?>            
+                var data_banner=<?= json_encode($this->data_banner); ?>; 
+                // mniejszy rozmiar :: 968x547
+                // większy rozmiar :: 1038x587
+                // współczynnik :: 1.07232
+                var ratio = 1.0724; //1.07232
+
+				$(window).resize(function(){resizeBanner();});
+				$(window).load(function(){resizeBanner();});
+
+                function resizeBanner(){                        
+                    if (parseInt($('.container').width())==1310){
+                        for (var i=0; i<data_banner.length; i++){
+                            $('#ban_'+data_banner[i]['name']).css({height:(parseInt(data_banner[i]['height']*ratio))});
+                            $('#ban_'+data_banner[i]['name']).css({width:(parseInt(data_banner[i]['width']*ratio))});
+                            $('#ban_'+data_banner[i]['name']).css({top:(parseInt(data_banner[i]['top']*ratio))});
+                            $('#ban_'+data_banner[i]['name']).css({left:(parseInt(data_banner[i]['left']*ratio))});
+                        }
+                    }else{
+                        for (var i=0; i<data_banner.length; i++){
+                            $('#ban_'+data_banner[i]['name']).css({height:data_banner[i]['height']});
+                            $('#ban_'+data_banner[i]['name']).css({width:data_banner[i]['width']});
+                            $('#ban_'+data_banner[i]['name']).css({top:data_banner[i]['top']});
+                            $('#ban_'+data_banner[i]['name']).css({left:data_banner[i]['left']});
+                        }
+                    }
+                }                    
+            <?php $this->headScript()->captureEnd(); ?>
+            </script>
+            
+    <?php endif;?>
+    
+    
+    
+</div>
+
+
+
+<div style="clear:both"></div>
+</section>
+</div>
+<!--[if IE 8]>
+    <style type="text/css">
+    .homePageBtn li a, .hallPageBtn li a, footer {background-image:url('/_images/frontend/default/black50.png');}
+    </style>
+<![endif]-->
+<?php $this->headScript()->captureStart(); ?>
+    $(window).load(function(){
+        var set_height = $('#hall_pic').height();
+        var set_width = $('.hall_outside').width();
+        $('#left_box_hall').height(set_height);
+        $('.left_box_hall img, .hall_outside .yellow_button').show();
+        $('.side_banner').show();
+        
+
+        <?php if ($this->background_data->getIsAnimationOn()):?>
+        
+            var iOS = ( navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false );
+
+            var flashvars = {
+                URL_RECEPTION: "<?php echo $event_uri ?>"
+            },
+            params = {
+                wmode:"transparent"
+            },
+            attributes = {
+                 id: "introSwf",
+                 style: 'display:none;position:absolute;top:0;left:0;z-index:10',
+                 scale: 'exactfit'
+            };
+
+            swfobject.embedSWF("/_externals/intro/<?php echo Engine_I18n::getLangCode();?>/hala.swf?t=<?php echo time() ?>", "introFlashIns", set_width, set_height , "9.0.0","expressInstall.swf", flashvars, params, attributes);
+            
+            if(!iOS) {
+                $('.hall_outside .yellow_button').bind('click', function() {
+                    startAnim();
+                    return false;
+                });
+            }
+        <?php endif;?>
+    })
+    //wygląda na to że swf się odwołuje do tej funkcji. Lepiej żeby była. Nawet pusta
+    function changeBgIntro(){
+
+    }
+
+    function startAnim() {
+        $('#introSwf').show();
+        setTimeout(function(){
+            $('.hall_outside .yellow_button').hide();
+            $('.side_banner').fadeOut();
+            var obj = swfobject.getObjectById("introSwf");
+            if(obj) obj.startAnim(); // e.g. an external interface call
+        }, 400)
+    }
+    
+
+<?php $this->headScript()->captureEnd(); ?>

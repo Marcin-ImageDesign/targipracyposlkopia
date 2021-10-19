@@ -1,0 +1,13 @@
+<div class="whiteBg">
+		<p class="navTitle"><?php echo $this->translate('pages_label_nav_current_edition');?></p>
+		<img src="/_images/frontend/default/logo-targi.png" alt="" />
+	</div>
+	<div class="greyBg">
+		<h3>Wirtualne targi z Zumi...</h3>
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ac purus odio, eu convallis nunc. Integer condimentum porta erat, vitae ssem. Integer bibendum vestibulum dignissim.</p>
+		<ul class="submenu">
+			<li class="<?php if ($this->selectedAction == 'index'):?>active<?php endif;?>"><a href="<?php echo $this->url(array(), 'pages_index');?>" title="<?php echo $this->translate('pages_label_nav_why-zumi');?>"><?php echo $this->translate('pages_label_nav_why-zumi');?></a></li>
+			<li class="<?php if ($this->selectedAction == 'stand-desc'):?>active<?php endif;?>"><a href="<?php echo $this->url(array(), 'pages_stand-desc');?>" title="<?php echo $this->translate('pages_label_nav_stand-description');?>"><?php echo $this->translate('pages_label_nav_stand-description');?></a></li>
+			<li class="<?php if ($this->selectedAction == 'sponsoring'):?>active<?php endif;?>"><a href="<?php echo $this->url(array(), 'pages_sponsoring');?>" title="<?php echo $this->translate('pages_label_nav_sponsoring');?>"><?php echo $this->translate('pages_label_nav_sponsoring');?></a></li>
+		</ul>
+</div>

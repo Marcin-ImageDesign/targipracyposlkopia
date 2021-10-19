@@ -1,0 +1,173 @@
+<script type="text/javascript">
+	$(document).ready(function(){
+//		var optionsFileUpload = {beforeSubmit: defaultShowRequest, success: defaultShowResponse, dataType: 'json'};
+//		$('#resizeImageForm').ajaxForm(optionsFileUpload);
+//		$('#cropImageForm').ajaxForm(optionsFileUpload);
+
+		// Jcrop
+		 if( $('#cropbox').length > 0 ){
+			$('#cropbox').Jcrop({
+				onSelect:    updateCoordsFromSelection,
+				onChange:		 updateCoordsFromSelection,
+				bgColor:     'white',
+				bgOpacity:   .8,
+				boxWidth:		 300,
+				boxHeight:   300,
+				borderOpacity: 1,
+				drawBorders: true,
+				setSelect: [0,0,9999,9999]
+			});
+		 }
+
+	});
+
+	function updateCoordsFromSelection(c){
+		$('#selectionX').val(c.x);
+		$('#selectionY').val(c.y);
+		$('#selectionX2').val(c.x2);
+		$('#selectionY2').val(c.y2);
+		$('#selectionWidth').val(c.w);
+		$('#selectionHeight').val(c.h);
+		$('#selectionXShow').val(c.x);
+		$('#selectionYShow').val(c.y);
+		$('#selectionX2Show').val(c.x2);
+		$('#selectionY2Show').val(c.y2);
+		$('#selectionWidthShow').val(c.w);
+		$('#selectionHeightShow').val(c.h);
+	}
+
+	function recountSize(param){
+		if( $('#keepRatio').attr('checked') ){
+			if( param == 1 ){
+				var width = Math.round( $('#resizeHeight').val()*$('#sizeRatio').val() );
+				$('#resizeWidth').val( width );
+			}
+			if( param == 0 ){
+				var height = Math.round( $('#resizeWidth').val()/$('#sizeRatio').val() );
+				$('#resizeHeight').val( height );
+			}
+		}
+	}
+
+</script>
+<?php
+    $this->headLink()->appendStylesheet('/_css/admin/form.css');
+?>
+
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+    <h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+<div class="paM">
+	<form action="<?=$this->url( array(), 'site_files_editImage' )?>?path=<?=$this->path?>&filename=<?=$this->filename?>" method="POST" class="form" id="resizeImageForm">
+		<input type="hidden" id="sizeRatio" name="sizeRatio" value="<?=number_format(@($this->imageInfo[0] / $this->imageInfo[1]),3, '.', '')?>"/>
+		<?=$this->formHidden('resize', 1 )?>
+		<?=$this->formHidden('mode', $this->mode )?>
+
+        <fieldset class="form-header" id="fieldset-header"></fieldset>
+
+        <fieldset class="form-main" id="fieldset-main">
+            <fieldset class="form-group" id="fieldset-box_plugin_form">
+                <legend>Zmień wymiary obrazu</legend>
+
+                <div class="form-item">
+                    <label class="optional" for="box_plugin_form-box">Szerokość [px]<span class="duty">*</span>:</label>
+                    <div class="field-wrapper">
+                        <?=$this->formText('resizeWidth',$this->imageInfo[0],array('class' => 'field-text '.( $this->error->isError('resizeWidth') ? 'error' : '' ), 'onkeyup' => 'recountSize(0)') )?>
+                        <div class="field_error" id="error_resizeWidth"><?=$this->error->getError('resizeWidth', false)?></div>
+                    </div>
+                </div>
+
+                <div class="form-item">
+                    <label class="optional" for="box_plugin_form-box">Wysokość [px]<span class="duty">*</span>:</label>
+                    <div class="field-wrapper">
+                        <?=$this->formText('resizeHeight',$this->imageInfo[1],array('class' => 'field-text '.( $this->error->isError('resizeHeight') ? 'error' : '' ), 'onkeyup' => 'recountSize(0)') )?>
+                        <div class="field_error" id="error_resizeWidth"><?=$this->error->getError('resizeHeight', false)?></div>
+                    </div>
+                </div>
+
+                <div class="form-item form-checkbox">
+                    <label class="optional" for="box_plugin_form-box">Zachowaj proporcje:</label>
+                    <div class="field-wrapper">
+                        <input type="hidden" name="keepRatio" value="0"/>
+                        <input type="checkbox" name="keepRatio" id="keepRatio" value="1" checked="checked"/>
+                    </div>
+                </div>
+
+
+            </fieldset>
+            <fieldset class="form-submit">
+                <input type="submit" class="ui-button ui-button-bg-white ui-button-text-red ui-button-text-only ui-button ui-button-nicy ui-button-text" value="Zmień rozmiar" id="header-submit" name="resize">
+            </fieldset>
+        </fieldset>
+
+
+	</form>
+
+
+	<form action="<?=$this->url( array(), 'site_files_editImage' )?>?path=<?=$this->path?>&filename=<?=$this->filename?>" method="POST" class="form" id="cropImageForm">
+		<?=$this->formHidden('crop', 1 )?>
+		<?=$this->formHidden('mode', $this->mode )?>
+		<?=$this->formHidden('selectionX', '')?>
+		<?=$this->formHidden('selectionY', '')?>
+		<?=$this->formHidden('selectionX2', '')?>
+		<?=$this->formHidden('selectionY2', '')?>
+		<?=$this->formHidden('selectionWidth', '')?>
+		<?=$this->formHidden('selectionHeight', '')?>
+
+        <fieldset class="form-header" id="fieldset-header"></fieldset>
+
+        <fieldset class="form-main" id="fieldset-main">
+            <fieldset class="form-group" id="fieldset-box_plugin_form">
+                <legend>Przytnij obraz</legend>
+
+                <img src="<?=$this->pathBrowser?>/<?=$this->filename?>?ts=<?=time()?>" id="cropbox"/>
+                <div class="spacerL"></div>
+
+                <div class="onLeft">
+                    <div class="label labelL">Szerokość zaznaczenia [px]:</div>
+                    <div class="field">
+                        <?=$this->formText('selectionWidthShow', '', array( 'disable' => true, 'class' => 'text textS') )?>
+                    </div>
+                    <div class="spacerM"></div>
+
+                    <div class="label labelL">Wysokość zaznaczenia [px]:</div>
+                    <div class="field">
+                        <?=$this->formText('selectionHeightShow', '', array( 'disable' => true, 'class' => 'text textS' ) )?>
+                    </div>
+
+                </div>
+
+                <div class="onLeft" style="margin-left: 40px;">
+                    <div>Położenie górnego lewego narożnika zaznaczenia [px]:</div>
+
+                    <div class="row">
+                        <div class="label labelL"></div>
+                        <div class="field">
+                            X - <?=$this->formText('selectionXShow', '', array( 'disable' => true, 'class' => 'text textS' ) )?>
+                            Y - <?=$this->formText('selectionYShow', '', array( 'disable' => true, 'class' => 'text textS' ) )?>
+                        </div>
+                    </div>
+                    <div class="spacerM"></div>
+
+                    <div>Położenie dolnego prawego narożnika zaznaczenia [px]:</div>
+                    <div class="row">
+                        <div class="label labelL"></div>
+                        <div class="field">
+                            X - <?=$this->formText('selectionX2Show', '', array( 'disable' => true, 'class' => 'text textS' ) )?>
+                            Y -  <?=$this->formText('selectionY2Show', '', array( 'disable' => true, 'class' => 'text textS' ) )?>
+                        </div>
+                    </div>
+                </div>
+                <div class="spacerL"></div>
+
+
+            </fieldset>
+            <fieldset class="form-submit">
+                <input type="submit" class="ui-button ui-button-bg-white ui-button-text-red ui-button-text-only ui-button ui-button-nicy ui-button-text" value="Obetnij obraz" id="header-submit" name="crop">
+            </fieldset>
+        </fieldset>
+
+
+	</form>
+</div>

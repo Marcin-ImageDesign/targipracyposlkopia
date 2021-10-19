@@ -1,0 +1,11 @@
+<?php
+
+return [
+    'database_host' => '',
+    'database_user' => '',
+    'database_password' => '',
+    'database_name' => '',
+    'session_cookie_domain' => '',
+    'cdn_domain' => '',
+    'chat_url' => '',
+];

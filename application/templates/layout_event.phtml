@@ -1,0 +1,236 @@
+<?php echo $this->doctype() ?>
+<html>
+<head>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-startup-image" href="/apple-touch-icon.png" />
+    <?php $this->headMeta()->setHttpEquiv('Content-Type', 'text/html;charset=utf-8'); ?>
+    <?php $this->headLink()
+            ->prependStylesheet( '/_css/frontend/default/pnotify.custom.min.css' )
+            ->prependStylesheet( '/_css/frontend/default/social.css' )
+            ->prependStylesheet( '/_css/frontend/default/style.css' )
+            ->prependStylesheet( '/_css/frontend/default/jquery.mCustomScrollbar.css' )
+            ->prependStylesheet( '/_css/frontend/default/overlay_element.css' )
+            ->prependStylesheet( '/_css/frontend/default/lightbox.css' )
+            ->prependStylesheet( '/_css/frontend/default/jquery-ui.theme.min.css' )
+            ->prependStylesheet( '/_css/frontend/default/jquery-ui.min.css' )
+    ?>
+
+
+    <script type="text/javascript">var cookie_voxexpo="CookiesPolicyAccepted-VoxExpo";</script>
+    <?php
+            $this->headScript()
+                ->prependFile('/_js/mccookies.js')
+                ->prependFile('/_js/pnotify.custom.min.js')
+                ->prependFile('/_js/sortable.js')
+                ->prependFile('/_js/jquery/jquery.social.min.js')
+                ->prependFile('/_js/default.js')
+                ->prependFile('/_js/scripts.js')
+                ->prependFile('/_js/forms.js')
+                ->prependFile('/_js/jquery/jquery.form-3.18.js')
+                ->prependFile('/_js/natural-sort-plugin.js')
+                ->prependFile('/_js/jquery.dataTables.min.js')
+                ->prependFile('/_js/jquery.dotimeout.js')
+                ->prependFile('/_js/jquery/scrollbar/jquery.mCustomScrollbar.js')
+                ->prependFile('/_js/jquery/jquery.mousewheel.min.js')
+                ->prependFile('/_js/jquery/jquery-ui-1.10.0.custom.min.js')
+                ->prependFile('/_js/lightbox.js')
+                ->prependFile('/_js/jquery.shorten.js')
+                ->prependFile('/_js/jquery/jquery.tools.min.js')
+                ->prependFile('/_js/jquery/jquery-1.8.1.min.js', 'text/javascript', array('data-hash'=>1));
+    ?>
+    <?php $this->selectedEvent->getStyle() ? $this->headStyle()->appendStyle($this->selectedEvent->getStyle()):'';?>
+    <?php if(!empty($this->selectedEvent->bg_color)): ?>
+        <?php $this->headStyle()->appendStyle('body{ background-color:'.$this->selectedEvent->bg_color.'; }')?>
+    <?php endif; ?>
+    <?php if($this->selectedEvent->bg_id_image): ?>
+        <?php $this->headStyle()->appendStyle("body{ background-image: url('".Service_Image::getUrl($this->selectedEvent->bg_id_image, null, null, 'n')."'); } ")?>
+    <?php endif; ?>
+
+    <?php echo $this->headTitle(); ?>
+    <?php echo $this->headMeta()->toString()."\r\n" ?>
+    <?php echo $this->headLink()->toString()."\r\n" ?>
+    <?php echo $this->headStyle()->toString()."\r\n" ?>
+    <meta name="viewport" content="width=1260, user-scalable=no" />
+    <script type="text/javascript" src="/_js/modernizr.custom.55919.js"></script>
+</head>
+
+<!-- ONET_BODYTAG_BEGIN --><body><!-- ONET_BODYTAG_END -->
+
+
+
+<div id="fb-root"></div>
+<?php if ($this->selectedEvent->fb_app_id):?>
+<script>
+   window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '<?php echo $this->selectedEvent->fb_app_id;?>',
+      xfbml      : true,
+      version    : 'v2.2'
+    });
+  };
+   (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/pl_PL/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+<?php endif;?>
+
+
+
+
+<div id="eventLayout">
+
+    <?php if ($this->selectedEvent->getIsArchive()):?>
+        <div class="archiveEventWatermark"></div>
+    <?php endif;?>
+
+        <header><?php echo $this->placeholder('header-content')?></header>
+
+        <nav><?php echo $this->placeholder('nav-content')?></nav>
+
+        <div class="breadcrumb clearfix">
+            <?php echo $this->placeholder('breadcrumb-content')?>
+            <?php if ($this->selectedEvent->getIsArchive()):?>
+                <p class="archiveEvent blink"><?=$this->translate('label_event-closed')?></p>
+            <?php endif;?>
+        </div>
+
+        <section class="content <?php echo $this->placeholder('section-class');?>">
+            <nav>
+                <?php echo $this->placeholder('section-nav-content')?>
+            </nav>
+            <section class="<?php echo $this->placeholder('section-section-class');?>">
+                <div class="message"><?php echo $this->flash->getMessages(); ?></div>
+
+                <?php echo $this->layout()->content?>
+            </section>
+            <div class="clr"></div>
+        </section>
+
+        <footer>
+            <?php echo $this->placeholder('footer-content')?>
+        </footer>
+
+        <?php echo $this->render('_init-overlay.phtml'); ?>
+        <script type="text/javascript">
+            //tłumaczenie do dymka od czatu
+            var chat_trans = '<?php echo $this->translate('Ask me');?>';
+            var trans_show_filter = '<?php echo $this->translate('Show filter');?>';
+            var trans_hide_filter = '<?php echo $this->translate('Hide filter');?>';
+            //koniec
+        </script>
+        <?php $this->headScript()->captureStart(); ?>
+            var touchEvent = $('html').hasClass('touch') ? true : false;
+
+            var tooltip = function(e) {
+                var thiss = $(this);
+                if(touchEvent) {
+                    thiss.mouseover( function(e){
+                        //$('#'+$(this).attr('data-tooltip')).css('left', e.pageX + 14).css('top', (e.pageY + 14) - $(document).scrollTop()).css('display', 'block').show();
+                    });
+                } else {
+                    thiss.mousemove(function(e){
+                        $('#'+$(this).attr('data-tooltip')).css('left', e.pageX + 20).css('top', (e.pageY + 20) - $(document).scrollTop()).css('display', 'block').show();
+                    });
+                }
+
+               thiss.mouseout( function(){
+                    $('#'+$(this).attr('data-tooltip')).hide();
+                });;
+            }
+
+            $().ready(function () {
+                $('body').on('loaded', '.tooltipLoad', tooltip);
+                $('.tooltipLoad').trigger('loaded');
+                <?php if (!$this->cookieChatAllow):?>
+                    clearStandCookies()
+                <?php endif;?>
+
+            });
+
+            $(window).load(function(){
+                //powiadomienia
+                var notifications = $.parseJSON(<?php echo $this->notifications_to_show;?>);
+                    i = 0;
+                if (notifications && notifications.length > 0){
+                    for (i; i < notifications.length; i++){
+                        var showNotification = function(notification, interval){
+                            setTimeout(function(){
+                                new PNotify({
+                                    title: notification['name'],
+                                    text: notification['notification_text'],
+                                    type: 'success',
+                                    styling: 'jqueryui',
+                                    icon: false,
+                                    animate_speed: 700,
+                                    delay: 60000,
+                                    animation: {
+                                        effect_in: 'show',
+                                        effect_out: 'slide'
+                                    },
+                                    history: {
+                                        history: false
+                                    },
+                                    mouse_reset: false
+                                });                                
+                            }, interval);
+                        }
+                        showNotification(notifications[i], i*700);
+                    }
+                }
+            });
+            function event_share(){
+                FB.ui(
+                {
+                    method: 'feed',
+                    name: '<?php echo $this->translate('Wirtualne Targi');?> <?php echo $this->selectedEvent->getTitle();?>',
+                    link: '<?php echo $this->protocol . '://' . DOMAIN; ?>',
+                    caption: '<?php echo $this->selectedEvent->getDateStart()?> - <?php echo $this->selectedEvent->getDateEnd();?>',
+                    description: '<?php echo strip_tags(preg_replace( "/\r|\n/", "", $this->selectedEvent->getLead()));?>'
+                },
+                function(response) {
+                    if (response && response.post_id) {
+                        $.get( "<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'event_share_facebook');?>", function( data ) {});
+                    } else {
+                        //alert('Post was not published.');
+                    }
+                }
+                );
+            }
+
+
+        <?php $this->headScript()->captureEnd(); ?>
+
+        <?php if (!empty($this->googleAnalytics) && trim($this->googleAnalytics) != '') : ?>
+            <script async src="https://www.googletagmanager.com/gtag/js?id=<?= trim($this->googleAnalytics); ?>"></script>
+            <script>
+                window.dataLayer = window.dataLayer || [];
+
+                function gtag() {
+                    dataLayer.push(arguments);
+                }
+                gtag('js', new Date());
+
+                gtag('config', '<?= trim($this->googleAnalytics); ?>');
+            </script>
+        <?php endif; ?>
+
+        <?php echo $this->headScript()->toString()."\r\n" ?>
+</div>
+</body>
+<script type="text/javascript">
+    var url_string = window.location.href;
+    var url = new URL(url_string);
+    var token = url.searchParams.get("token");
+    if (token) {
+        document.querySelectorAll('a.add_token').forEach(function(node) {
+            node.href = node.href + '?token=' + token;
+        });
+    }
+</script>
+</html>

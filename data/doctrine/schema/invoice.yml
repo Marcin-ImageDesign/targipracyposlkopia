@@ -1,0 +1,66 @@
+InvoiceStatus:
+  connection: baza
+  tableName: invoice_status
+  columns:    
+    id:
+      type: integer(10)
+      notnull: true
+      autoincrement: true
+      primary: true
+    name:
+        type: varchar(64)
+        default: null
+
+Invoice:
+  connection: baza
+  tableName: invoice
+  columns:
+    id:
+      type: integer(10)
+      notnull: true
+      autoincrement: true
+      primary: true
+    hash:
+      type: string(32)
+      notnull: true
+    number:
+        type: string(128)
+        default: null
+    price_net:
+        type: decimal(11,2)
+        default: null
+    price_gross:
+        type: decimal(11,2)
+        default: null
+    price_vat:
+        type: decimal(11,2)
+        default: null
+    title:
+        type: string(32)
+        default: null
+    status_id:
+        type: integer(10)
+    file_name:
+        type: string(256)
+        default: null
+    file_path:
+        type: text
+        default: null
+    file_ext:
+        type: string(10)
+        default: null
+    date_created:
+        type: date
+        default: null
+    id_exhib_participation:
+        type: integer(10)
+        notnull: true
+  relations:
+    ExhibParticipation:
+      local: id_exhib_participation
+      foreign: id_exhib_participation
+      onDelete: CASCADE
+    InvoiceStatus:
+      local: status_id
+      foreign: id
+      onDelete: CASCADE

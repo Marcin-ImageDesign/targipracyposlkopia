@@ -1,0 +1,103 @@
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+    <?php echo $this->partial(
+            '_headling_button.phtml',
+            array( 'title' => 'Dodaj użytkownika', 'url' => $this->url( array(), 'base_user_new' ) )  ); ?>
+
+    <h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+<?php $this->placeholder('aside')->captureStart(); ?>
+    <?php echo $this->filter; ?>
+<?php $this->placeholder('aside')->captureEnd(); ?>
+
+<?php $this->placeholder('toolbar')->captureStart(); ?>
+    <?php echo $this->render('admin/pagination.phtml'); ?>
+    <div class="select ui-button-tiny-squared">
+        Select: <a class="select-all" href="#">All</a>,
+        <a class="select-none" href="#">None</a> &nbsp;&nbsp;
+        <span class="buttonset ui-buttonset">
+            <input type="radio" id="input-top 1" value="Activate" name="event" class="ui-helper-hidden-accessible"><label for="input-top 1" aria-pressed="false" class="ui-button ui-widget ui-state-default ui-button-text-only ui-corner-left" role="button" aria-disabled="false"><span class="ui-button-text">Activate</span></label>
+            <input type="radio" id="input-top 2" value="Desactivate" name="event" class="ui-helper-hidden-accessible"><label for="input-top 2" aria-pressed="false" class="ui-button ui-widget ui-state-default ui-button-text-only" role="button" aria-disabled="false"><span class="ui-button-text">Desactivate</span></label>
+            <input type="radio" id="input-top 3" value="delete" name="event" class="ui-helper-hidden-accessible"><label for="input-top 3" aria-pressed="false" class="ui-button ui-widget ui-state-default ui-button-text-only ui-corner-right" role="button" aria-disabled="false"><span class="ui-button-text">Delete</span></label>
+        </span>
+    </div>
+<?php $this->placeholder('toolbar')->captureEnd(); ?>
+
+<form id="grid-action-form" method="post" action="">
+    <div class="toolbar toolbar-top"><?php echo $this->placeholder('toolbar'); ?></div>
+    <table cellspacing="0" cellpadding="0" class="grid datas">
+        <tbody>
+            <tr>
+                <th width="10" class="head first"></th>
+                <th class="head <?php if( $this->orderCol == 'created_at' ): ?>sorting-<?php if( $this->orderDir == 'DESC' ): ?>desc<?php else:?>asc<?php endif; ?><?php endif; ?>">
+                    <a href="?order=created_at <?php if( $this->orderDir == 'DESC' ): ?>ASC<?php else: ?>DESC<?php endif; ?>&page=1">
+                        <span class="ui-icon"></span>Założony
+                    </a>
+                </th>
+                <th class="head <?php if( $this->orderCol == 'name' ): ?>sorting-<?php if( $this->orderDir == 'DESC' ): ?>desc<?php else:?>asc<?php endif; ?><?php endif; ?>">
+                    <a href="?order=name <?php if( $this->orderDir == 'DESC' ): ?>ASC<?php else: ?>DESC<?php endif; ?>&page=1">
+                        <span class="ui-icon"></span>Użytkownik
+                    </a>
+                </th>
+                <th class="head <?php if( $this->orderCol == 'domain' ): ?>sorting-<?php if( $this->orderDir == 'DESC' ): ?>desc<?php else:?>asc<?php endif; ?><?php endif; ?>">
+                    <a href="?order=domain <?php if( $this->orderDir == 'DESC' ): ?>ASC<?php else: ?>DESC<?php endif; ?>&page=1">
+                        <span class="ui-icon"></span>Domena
+                    </a>
+                </th>
+                <th class="head <?php if( $this->orderCol == 'is_active' ): ?>sorting-<?php if( $this->orderDir == 'DESC' ): ?>desc<?php else:?>asc<?php endif; ?><?php endif; ?>">
+                    <a href="?order=is_active <?php if( $this->orderDir == 'DESC' ): ?>ASC<?php else: ?>DESC<?php endif; ?>&page=1">
+                        <span class="ui-icon"></span>Czy aktywny
+                    </a>
+                </th>
+                <th width="60px" class="head"></th>
+            </tr>
+            <tr class="row row-template">
+                <td valign="top" class="first col"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+            </tr>
+
+            <?php foreach( $this->baseUserList as $key => $baseUser ): ?>
+                <tr class="row <?php if( 0 == ($key%2) ): ?>odd<?php else: ?>even<?php endif; ?>">
+                    <td valign="top" class="col"><input type="checkbox" name="rowId[]" value="1"></td>
+                    <td valign="top" class="col"><?php echo date( 'Y-m-d H:i', strtotime( $baseUser->created_at ) ); ?></td>
+                    <td valign="top" class="col">
+                        <a class="edit" href="<?php echo $this->url( array( 'id_base_user' => $baseUser->getId() ), 'base_user_edit' ); ?>">
+                            <?php echo $this->escape( $baseUser->getName() ); ?>
+                        </a>
+                    </td>
+                    <td valign="top" class="col"><?php echo $this->escape( $baseUser->getDomain() ); ?></td>
+                    <td valign="top" class="col">
+                        <?php $isActive = (int)$baseUser->is_active; ?>
+                        <a href="<?php echo $this->url( array( 'id_base_user' => $baseUser->getId() ), 'base_user_status' ); ?>" class="status">
+                            <span class="switch-<?php echo $isActive; ?>"><?php echo $isActive; ?></span>
+                        </a>
+                    </td>
+                    <td valign="top" class="col">
+                        <ul class="actions">
+                            <li>
+                                <a title="Edit" class="help" href="<?php echo $this->url( array( 'id_base_user' => $baseUser->getId() ), 'base_user_edit' ); ?>">
+                                    <span class="ui-icon ui-icon-pencil">Edit</span>
+                                    <span class="bullet" style="width: 24px;">Edit</span>
+                                    <span class="ui-icon ui-icon-triangle-1-s queue"></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a onclick="return confirm('Czy na pewno usunąć użytkowika?');" title="Delete" class="help" href="<?php echo $this->url( array( 'id_base_user' => $baseUser->getId() ), 'base_user_delete' ); ?>">
+                                    <span class="ui-icon ui-icon-close">Delete</span>
+                                    <span class="bullet" style="width: 36px;">Delete</span>
+                                    <span class="ui-icon ui-icon-triangle-1-s queue"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+
+        </tbody>
+    </table>
+    <div class="toolbar toolbar-bottom"><?php echo $this->placeholder('toolbar'); ?></div>
+</form>

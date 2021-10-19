@@ -1,0 +1,25 @@
+<?php
+$this->headLink()->appendStylesheet('/_css/admin/form.css');
+?>
+
+<h1><?php echo $this->translate('Hallmap'); ?></h1>
+
+<?php echo $this->formHallmap; ?>
+
+<script type="text/javascript">
+    var hlUrls;
+    $(document).ready(function(){
+        hlUrls = $('#EventFormAdminHallmapNew-hall_template').data('urls');
+        $('body').on('change', '#EventFormAdminHallmapNew-hall_template', changeEventHallMap);
+        changeEventHallMap();
+    });
+
+
+    var changeEventHallMap = function(){
+        var selected_hall = $('#EventFormAdminHallmapNew-hall_template option:selected').val();
+        if (typeof selected_hall != 'undefined'){
+            var prev_link = $('a.hallPreview');
+            prev_link.attr('href', hlUrls[selected_hall]);
+        }
+    }
+</script>

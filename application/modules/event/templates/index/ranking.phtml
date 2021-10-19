@@ -1,0 +1,52 @@
+ <?php if ($this->participantsList && $this->participantsList->count() > 0 && $this->userAuth): ?>
+        <table cellspacing="0" cellpadding="0" class="gam_tab">
+            <tbody>
+
+            <?php foreach ($this->participantsList as $key => $participant): ?>
+                <?php $actualRank=$key+1; ?>
+                <tr class="row <?php if (0 == ($key % 2)): ?>odd<?php else: ?>even<?php endif; ?> <?php if($participant->User->getId()==$this->userAuth->getId()): ?> highlight <?php endif;?>">
+                    <td valign="middle" width="2%"><?php echo $key+1; ?>.</td>
+                    <td valign="middle" width="2%">
+                        <?php if($participant->User->getId()==$this->userAuth->getId()): ?>
+                            <?php if($this->userAuth->hasImage()):?>
+                                <img src="<?php echo Service_Image::getUrl($this->userAuth->getIdImage(), 40, 40, 'a');?>" />
+                            <?php else:?>
+                                <img src="/_images/frontend/default/people_grey.png"/>
+                            <?php endif;?>
+                        <?php else: ?>
+                            <?php if($participant->User->hasImage()):?>
+                                <img src="<?php echo Service_Image::getUrl($participant->User->getIdImage(), 40, 40, 'a');?>" />
+                            <?php else:?>
+                                <img src="/_images/frontend/default/people_blue.png"/>
+                            <?php endif;?>
+                        <?php endif; ?>
+                    </td>
+                    <td valign="middle" width="2%">
+                        <?php if($participant->User->getId()==$this->userAuth->getId()): ?>
+                            TY
+                        <?php else: ?>
+                            <?php echo mb_strtoupper(mb_substr($participant->User->getFirstName(), 0, 1, 'utf-8'), 'utf-8'); ?>.<?php echo mb_strtoupper(mb_substr($participant->User->getLastName(), 0, 1, 'utf-8'), 'utf-8'); ?>.
+                        <?php endif; ?>
+                    </td>
+                    <td valign="middle" width="2%"><?php echo $participant->getPoints(); ?> pkt</td>
+                    <td>
+                        <?php if($participant->GamificationUserHistoryPoints AND $actualRank==$participant->GamificationUserHistoryPoints->getRank()): ?>
+                            <img src="/_images/frontend/default/trend_equal.png"/>
+                        <?php elseif($participant->GamificationUserHistoryPoints AND $actualRank<$participant->GamificationUserHistoryPoints->getRank()): ?>
+                            <img src="/_images/frontend/default/trend_up.png"/>
+                        <?php elseif($participant->GamificationUserHistoryPoints AND $actualRank>$participant->GamificationUserHistoryPoints->getRank()): ?>
+                            <img src="/_images/frontend/default/trend_down.png"/>
+                        <?php else: ?>
+                            &nbsp;
+                        <?php endif; ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+
+            </tbody>
+        </table>
+<?php elseif(!$this->userAuth):?>
+    <?php echo $this->translate('Zaloguj się aby zobaczyć ranking');?>
+<?php else:?>
+   <?php echo $this->translate('Brak uczestników gry');?>
+<?php endif; ?>

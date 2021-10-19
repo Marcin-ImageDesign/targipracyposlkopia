@@ -1,0 +1,60 @@
+<?php echo $this->doctype() ?>
+<html>
+<head>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-startup-image" href="/apple-touch-icon.png" />
+
+
+    <?php 
+
+    	$this->headLink()->prependStylesheet('/_css/frontend/default/style_pages.css');
+    	$this->headScript()->prependFile('/_js/jquery/jquery-1.8.1.min.js');
+    ?>
+
+
+    <?php echo $this->headTitle(); ?>
+    <?php echo $this->headMeta()->toString()."\r\n" ?>
+    <?php echo $this->headLink()->toString()."\r\n" ?>
+
+    <meta name="viewport" content="width=1260, user-scalable=no" />
+    <script type="text/javascript" src="/_js/modernizr.custom.55919.js"></script>
+
+</head>
+<body>
+<!-- ONET_BODYTAG_BEGIN --><body id="intro"><!-- ONET_BODYTAG_END -->
+	<header>
+		<nav>
+			<ul class="menu">
+                <?php
+                    if($this->selectedEvent->hasHomePageUrl()){
+                        $link = $this->selectedEvent->GETHomePageUrl();
+                    }else{
+                        $link = $this->url(array(), 'home');
+                    }
+                ?>
+				<li class="companyBg"><a href="<?php echo $link?>"><span></span></a></li>
+				<li class="active"><a href="#"><span><?php echo $this->translate('pages_label_nav_offer');?></span></a></li>
+				<li><a target="_blank" href="http://reklama.zumi.pl/6,kontakt.html" class=""><span><?php echo $this->translate('pages_label_nav_contact');?></span></a></li>
+				<li class="lastElem"><a href="#"><span><?php echo $this->translate('pages_label_nav_future-editions');?></span></a></li>
+			</ul>
+			<div class="clr"></div>
+		</nav>
+	</header>
+
+	<section class="content">
+		<nav>
+			<?php echo $this->placeholder('nav-content')?>
+		</nav>
+		<section>
+			<?php echo $this->layout()->content?>
+		</section>
+		<div class="clr"></div>
+	</section>
+	
+	<footer>
+		<?php echo $this->placeholder('footer-content')?>
+	</footer>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<?php
+
+$isLoginRequired = $this->selectedEvent->is_login_required && !$this->userAuth;
+
+if ($isLoginRequired) {
+    $event_uri = $this->url(['event_uri' => $this->selectedEvent->getUri()], 'default_login-register_index');
+} else {
+    if ($this->selectedEvent->getIsReceptionActive()) {
+        $event_uri = $this->url(['event_uri' => $this->selectedEvent->getUri()], 'event_reception');
+    } else {
+        $event_uri = $this->url(['event_uri' => $this->selectedEvent->getUri()], 'event_hall');
+    }
+}
+
+?>
+
+<div id="top" style="<?php
+    if(!empty($this->selectedEvent->bg_color)) echo 'background-color:'.$this->selectedEvent->bg_color.'; ';
+    if($this->selectedEvent->bg_id_image) echo 'background-image: url(\''.Service_Image::getUrl($this->selectedEvent->bg_id_image, null, null, 'n').'\'); '?>">
+<div class="container">
+    <header>
+        <a href="/" class="logo">Zumi.pl</a>
+    </header>
+
+<section id="Section" class="row-fluid">
+    <h1 class="homePageName">
+        <a href="<?= $event_uri ?>" class="<?php if($isLoginRequired): ?>contentLoad<?php endif; ?>">
+            <?=$this->escape($this->selectedEvent->getTitle())?>
+        </a>
+        <small>
+            <a href="<?= $event_uri ?>" class="<?php if($isLoginRequired): ?>contentLoad<?php endif; ?>"><?=$this->translate('nav_home-page_enter')?></a>
+        </small>
+        <span class="arrow"></span>
+    </h1>
+
+    <br>
+
+    <?php if(isset($this->pageData['box'][1])): ?>
+        <?php $box = $this->pageData['box'][1]; ?>
+        <div class="box <?=$box['class']?>" <?php foreach($box['attr'] as $k => $v): ?>"<?=$k?>"="<?=$v?>"<?php endforeach; ?>>
+            <a href="<?=$this->escape($box['link'])?>" class="round" title="<?=$this->escape($box['title'])?>"
+                <?php foreach($box['attr_a'] as $k => $v)  echo $k . '="'. $v . '"';  ?>
+                <?php if(!empty($box['target'])): ?>target="<?=$box['target']?>"<?php endif; ?>>
+                <?= $box['html'] ?>
+                <?php if(!empty($box['desc'])) echo '<h1>'.$box['desc'].'</h1>'; ?>
+                <?php if(!empty($box['image']['id'])): ?>
+                    <img
+                        alt="<?=$this->escape($box['title'])?>"
+                        src="<?=Service_Image::getUrl($box['image']['id'], $box['image']['width'], $box['image']['height']);?>"
+                    />
+                <?php endif; ?>
+            </a>
+        </div>
+    <?php else: ?>
+        <div class="box">
+            <a href="<?=$event_uri?>" class="round <?php if($isLoginRequired): ?>contentLoad<?php endif; ?>">
+                <div class="enter" style="position:relative">
+                    <span><?php echo $this->translate('label_homepage_enter-to-event'); ?></span>
+                </div>
+            </a>
+        </div>
+    <?php endif; ?>
+
+     <!--jeśli news to go wyświetlamy-->
+    <?php if ( $this->newsHomePage ) : ?>
+        <div class="box">
+            <a
+                class="round <?php if($isLoginRequired): ?>contentLoad<?php endif; ?>"
+                <?php if ( $this->newsHomePage->getLinkOutside() ) : ?>
+                    target="_blank"
+                    href="<?php echo $this->newsHomePage->getLinkOutside(); ?>"
+                <?php elseif($isLoginRequired): ?>
+                    href="<?=$event_uri?>"
+                <?php else: ?>
+                    href="<?=$this->url(array('event_uri' => $this->selectedEvent->getUri(), 'news_uri'=>$this->newsHomePage->getUri()), 'event_news') ?>"
+                <?php endif; ?>
+            >
+                <div class="article" style="background:url(<?php echo Service_Image::getUrl($this->newsHomePage->id_image_home, 304, 300, 'h' ); ?>);">
+                    <h1><?php echo $this->newsHomePage->getTitle(); ?></h1>
+                </div>
+            </a>
+        </div>
+    <!-- jeśli nie news to wyświetlamy box z konfigiem -->
+    <?php elseif(isset($this->pageData['box'][2])): ?>
+    <?php $box = $this->pageData['box'][2]; ?>
+    <div class="box <?=$box['class']?>" <?php foreach($box['attr'] as $k => $v): ?>"<?=$k?>"="<?=$v?>"<?php endforeach; ?>>
+            <a
+                href="<?=$this->escape($box['link'])?>"
+                class="round"
+                title="<?=$this->escape($box['title'])?>"
+                <?php foreach($box['attr_a'] as $k => $v): ?><?=$k?>="<?=$v?>"<?php endforeach; ?>
+                <?php if(!empty($box['target'])): ?>target="<?=$box['target']?>"<?php endif; ?>
+            >
+           <?php if (isset($box['html_wrap']) && $box['html_wrap']):?>
+                <<?=$box['html_wrap']['tag'];?>
+                    <?php foreach($box['html_wrap']['attr'] as $key => $val):?><?=$key.'="'.$val.'"';?><?php endforeach;?>
+                >
+            <?php endif;?>
+                <?=$box['html']?>
+                <?php if(!empty($box['desc'])) echo '<h1>'.$box['desc'].'</h1>'; ?>
+                <?php if(!empty($box['image']['id'])): ?>
+                    <img
+                        alt="<?=$this->escape($box['title'])?>"
+                        src="<?=Service_Image::getUrl($box['image']['id'], $box['image']['width'], $box['image']['height']);?>"
+                    />
+                <?php endif; ?>
+            <?php if (isset($box['html_wrap']) && $box['html_wrap']):?>
+                </<?= $box['html_wrap']['tag'];?>>
+            <?php endif;?>
+            </a>
+    </div>
+    <?php endif; ?>
+
+    <div class="box half">
+        <ul class="sponsors ">
+
+            <?php foreach($this->pageData['sponsors'] as $key2 => $box): ?>
+                <li class="<?=$box['class']?>" <?php foreach($box['attr'] as $k => $v): ?>"<?=$k?>"="<?=$v?>"<?php endforeach; ?>>
+                <?php if ( '' !== $box['link']):?>
+                    <a
+                        href="<?=$this->escape($box['link'])?>"
+                        title="<?=$this->escape($box['title'])?>"
+                        <?php foreach($box['attr_a'] as $k => $v): ?><?=$k?>="<?=$v?>"<?php endforeach; ?>
+                        <?php if(!empty($box['target'])): ?>target="<?=$box['target']?>"<?php endif; ?>
+                    >
+                <?php endif;?>
+                        <?php if ('' !== $box['html_wrap']['tag'] && $box['html_wrap']):?>
+                            <<?=$box['html_wrap']['tag'];?>
+                                <?php foreach($box['html_wrap']['attr'] as $key => $val):?><?=$key.'="'.$val.'"';?><?php endforeach;?>
+                            >
+                        <?php endif;?>
+                        <?=$box['html']?>
+                        <?php if(!empty($box['desc'])) echo '<h1>'.$box['desc'].'</h1>'; ?>
+                        <?php if(!empty($box['image'.$key2])): ?>
+                            <img
+                                alt="<?=$this->escape($box['title'])?>"
+                                src="<?=Service_Image::getUrl($box['image'.$key2], $box['img_width'], $box['img_height'], 'w');?>"
+                            />
+                        <?php endif; ?>
+                        <?php if (!empty($box['html_wrap']) && $box['html_wrap']):?>
+                            </<?= $box['html_wrap']['tag'];?>>
+                        <?php endif;?>
+                    <?php if ( false !== $box['link']):?>
+                        </a>
+                    <?php endif;?>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+</section>
+
+<section class="row-fluid">
+            <ul class="homePageBtn">
+                <?php if($this->selectedEvent->is_login_required && !$this->userAuth): ?>
+                    <li><a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'default_login-register_index');?>" id="WystawcyBtn" class="round contentLoad"><?=$this->translate('nav_home-page_exhibitor')?></a><li>
+                <?php else: ?>
+                    <li><a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'event_exhibitors');?>" id="WystawcyBtn" class="round"><?=$this->translate('nav_home-page_exhibitor')?></a><li>
+                <?php endif; ?>
+                <li><a href="#Wspolpraca" class="WspolpracaBtn round"><?=$this->translate('nav_home-page_cooperation')?></a><li>
+                <li><a href="#Poprzednie" class="round" id="PoprzednieBtn"><?=$this->translate('nav_home-page_prev-editions')?></a><li>
+                <li><a href="#Edycje" class="round" id="EdycjeBtn"><?=$this->translate('nav_home-page_next-editions')?></a><li>
+                <li><a href="http://reklama.zumi.pl/6,kontakt.html" target="_blank" id="KontaktBtn" class="round"><?=$this->translate('nav_home-page_contact')?></a><li>
+            </ul>
+        </section>
+
+<section id="Wspolpraca" class="row-fluid" style="display:none; line-height:20px;">
+    <div class="round art" style="position:relative; padding:40px;">
+
+
+         <h2>Dlaczego Wirtualne Targi z Zumi?</h2>
+
+        <div class="iblead">
+            <div style="padding-right:10px;" class="ib1">
+                <div class="icon b1"></div>
+                <div class="icon-text">
+                    <h3>RELACJE</h3>
+                    To jedyna możliwość, aby wejść w bezpośrednią relację z klientem za pośrednictwem Internetu
+                </div>
+            </div>
+        </div>
+        <div class="iblead">
+            <div style="padding:0px 5px;" class="ib2">
+                <div class="icon b2"></div>
+                <div class="icon-text">
+                    <h3>INNOWACYJNOŚĆ</h3>
+                    Zadbaj o swój wizerunek i pokaż się jako firma korzystająca z nowoczesnych rozwiązań sprzedaży i promocji
+                </div>
+            </div>
+        </div>
+        <div class="iblead">
+            <div style="padding-left:10px;" class="ib3">
+                <div class="icon b3"></div>
+                <div class="icon-text">
+                    <h3>EFEKTYWNOŚĆ KOSZTOWA</h3>
+                    Dotrzyj do grona 100 000 klientów, inwestując mniejsze pieniądze niż na targach stacjonarnych
+                </div>
+            </div>
+        </div>
+<br clear="all">
+<br>
+<br>
+<br>
+
+<h2>Wybierz rozwiązanie dopasowane do Twoich potrzeb:</h2>
+ <div class="w-spec first">
+
+        <div class="round">
+                 <h2 style="font-weight:700; margin-bottom:5px; padding:0; text-transform:uppercase;">Stoisko,</h2>
+                <h3 style="text-transform:uppercase; font-weight:700; letter-spacing:normal;"> dzięki któremu zyskujesz: </h3>
+                <ul class="miniicon">
+                    <li class="livechat"><strong>Live Chat</strong>
+                  Komunikujesz się z klientami w czasie rzeczywistym</li>
+                <li class="custom"><strong> Personalizacja stoiska
+                </strong>
+                   Zyskujesz unikalny wygląd stoiska</li>
+                <li class="stats"><strong> Dostęp do statystyk online
+                </strong>
+                  W każdym momencie możesz sprawdzić ruch na stoisku</li>
+                <li class="social">
+                    <strong> Integracja z serwisami społecznościowymi</strong>
+                    Docierasz do potencjalnych klientów</li>
+                <li class="contact">
+                    <strong>Formularz kontaktowy</strong>
+                   Jesteś w  stałym kontakcie ze swoimi klientami</li>
+                <li class="video"><strong> Wideo </strong>
+
+                   Prezentujesz swoją ofertę w nowoczesny sposób </li>
+
+                  </ul>
+                  <div style="text-align: center;">
+                        <h3 style="text-transform:uppercase; font-weight:700; letter-spacing:normal;">Za jedyne </h3>
+                        <h2 style="font-weight:700; padding:0; margin:0; font-size:50px;">1 5OO zł</h2>
+
+                   </div>
+                   <br>
+                    <br>
+                    <button class="button" style=" padding:10px 40px; font-size:31px; margin:0 auto; display:block;" onclick="window.open('http://reklama.zumi.pl/6,kontakt.html')">Zamów</button>
+            </div>
+</div>
+ <div class="w-spec last">
+
+             <div class="round">
+                     <h2 style="font-weight:700; margin-bottom:5px; padding:0; text-transform:uppercase;">Sponsor regionalny</h2>
+                    <h3 style="text-transform:uppercase; font-weight:700; letter-spacing:normal;"> - jeszcze więcej możliwości:</h3>
+                    <ul class="miniicon">
+                        <li class="center"><strong>Stoisko w centralnym miejscu hali</strong> Zapewniasz swojej firmie najlepszą widoczność</li>
+                        <li class="promo"><strong>Promocja w Zumi i Onecie</strong>  Dzięki reklamie docierasz do większej liczby potencjalnych klientów</li>
+                    </ul>
+                    <div style="text-align: center;">
+                        <h3 style="text-transform:uppercase; font-weight:700; letter-spacing:normal;">Za jedyne </h3>
+                        <h2 style="font-weight:700;padding:0; margin:0; font-size:50px;">4 OOO zł</h2>
+                    </div>
+                    <br>
+                    <br>
+                    <button class="button" style=" padding:10px 40px; font-size:31px; margin:0 auto; display:block;" onclick="window.open('http://reklama.zumi.pl/6,kontakt.html')">Zamów</button>
+
+              </div>
+     </div>
+
+
+<br>
+
+
+  <div style="clear:both"></div>
+    <button onclick="location.href='/_media/specyfikacja_stoiska.pdf';" class="button" style="padding:10px 20px; font-size:16px; margin:0 auto; display:block;">Specyfikacja do stoiska</button>
+
+</div>
+
+</section>
+
+
+<section id="Edycje" class="row-fluid" style="display:none;">
+    <ul class="kolejneedycje">
+        <?php foreach ($this->futureEvents as $event): /** @var $event Event */ ?>
+            <li>
+                <?php
+                    $link = '#';
+                    if($event->hasHomePageUrl()){ $link = $event->getHomePageUrl(); }
+                    elseif($event->getIsScheduled()){ $link = $this->url(array('event_uri' => $event->getField('uri')), 'event_home'); }
+                ?>
+
+                <a href="<?=$link?>" class="round">
+                    <span>
+                        <?php
+                        // bardzo brzydkie rozwiązanie z miesiacami
+                        // jest jakiś problem z lokalizacją
+                        $month = $this->getMonthName($event->getDateStartFormat('m'));
+                        ?>
+                        <?=$month?> <?=$event->getDateStartFormat('Y')?>
+                    </span>
+                    <img src="<?php echo Service_Image::getUrl(
+                        $event->getImageLight(),
+                        276,
+                        97,
+                        'bi'
+                    )?>" alt="<?php echo $event->getField('uri'); ?>"><h2><?php echo $event->getTitle(); ?></h2>
+                </a>
+            <li>
+        <?php endforeach; ?>
+    </ul>
+</section>
+
+
+
+<section id="Poprzednie" class="row-fluid" style="display:none;">
+    <ul class="kolejneedycje">
+        <?php foreach ($this->pastEvents as $event): /** @var $event Event */ ?>
+            <li>
+                <?php
+                    $link = '#';
+                    if($event->hasHomePageUrl()){ $link = $event->getHomePageUrl(); }
+                    elseif($event->getIsScheduled()){ $link = $this->url(array('event_uri' => $event->getField('uri')), 'event_home'); }
+                ?>
+
+                <a href="<?=$link?>" class="round">
+                    <span>
+                        <?php
+                            // bardzo brzydkie rozwiązanie z miesiacami
+                            // jest jakiś problem z lokalizacją
+                            $month = $this->getMonthName($event->getDateStartFormat('m'));
+                        ?>
+                        <?=$month?> <?=$event->getDateStartFormat('Y')?>
+                    </span>
+                    <img src="<?php echo Service_Image::getUrl(
+                        $event->getImageLight(),
+                        276,
+                        97,
+                        'bi'
+                    )?>" alt="<?php echo $event->getField('uri'); ?>"><h2><?php echo $event->getTitle(); ?></h2>
+                </a>
+            <li>
+        <?php endforeach; ?>
+    </ul>
+</section>
+
+
+
+   </div>

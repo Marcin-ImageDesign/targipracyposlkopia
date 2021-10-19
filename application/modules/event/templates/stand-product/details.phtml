@@ -1,0 +1,124 @@
+<?php $briefcaseService = Zend_Registry::get('BriefcaseService'); ?>
+<?php
+    $urlApply =  $this->url(
+    array(
+    'event_uri' => $this->selectedEvent->getUri(),
+    'stand_uri' => $this->exhibStand->getUri(),
+    'product_hash' => $this->standProduct->getHash(),
+    'hall_uri'=>$this->exhibStand->EventStandNumber->EventHallMap->uri
+    ),
+    'event_stand-offer_apply');
+?>
+<?php if($this->backTo == 'catalogue'):?>
+    <a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'event_offer_catalogue');?>" title="" class="back">← <strong><?php echo $this->translate('label_event_stand-offer_details_back');?></strong> <?php echo $this->translate('label_event_stand-offer_details_to-offer-list');?></a>
+<?php else:?>
+    <a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'stand_uri' => $this->exhibStand->getUri(),'hall_uri'=>$this->exhibStand->EventStandNumber->EventHallMap->uri), 'event_stand-offer_index');?>" title="" class="back">← <strong><?php echo $this->translate('label_event_stand-offer_details_back');?></strong> <?php echo $this->translate('label_event_stand-offer_details_to-offer-list');?></a>
+<?php endif;?>
+<h2 <?php if ($this->standProduct->is_promotion):?>class="promo_head"<?php endif;?>>
+    <?php if ($this->standProduct->is_promotion):?>
+        <div class='promo_box' style="margin-left:0"><?php echo $this->translate('Wyróżniona oferta');?></div>
+        <div class="clr"></div>
+    <?php endif;?>
+    <?php echo $this->standProduct->getName();?> <span style="color:#c2c2c2;">(<?php echo $this->translate('label_event_stand-offer_offers');?>)</span>
+</h2>
+<div class="clr"></div>
+<div class="mcsb">
+
+    <div class="pdfloatR">
+        <?php if ($this->standProduct->imageExists()):?>
+    	    <a href="<?php echo Service_Image::getUrl($this->standProduct->id_image, 750, 550);?>" rel="lightbox">
+                <img class="pdImage" src="<?php echo Service_Image::getUrl($this->standProduct->id_image, 474, 247);?>"
+                alt="<?=$this->escape($this->standProduct->getName())?>" style="float:right" />
+            </a>
+        <?php endif;?>
+            <div class="clr"></div>
+            <div class="pdPrice" style="margin-bottom:10px;">
+                <span class="price" style="text-align:right;">
+                <?php if($this->standProduct->priceExists()): ?>
+                    <?php if($this->standProduct->originalPriceExists()): ?>
+                        <span class="lineThrough red fontNormal fontSize24"><?php echo $this->currency($this->standProduct->getOriginalPrice()); ?></span>
+                        <br />
+                    <?php endif;?>                    
+                    <?php echo $this->currency($this->standProduct->getPrice()); ?>
+                <?php endif;?>
+                    <?php // jednostka czyli np.: szt. paleta, krata browarów czy coś takiego... ?>
+                    <span style="display:block; font-size:14px; line-height:14px; color:#000;"><?php echo $this->standProduct->getUnit(); ?></span>
+                </span>
+            </div>
+
+        <?php if ($this->selectedEvent->is_shop_active == 1 ) : ?>
+            <div class="clr"></div>
+            <form action="<?php echo $this->url( array('event_uri' => $this->selectedEvent->getUri()), 'shop_add' ) ?>">
+                <!--                                <input type="hidden" class="spinner floatL"/>-->
+                <input type="hidden" name="element" value="<?php echo $this->standProduct->getId() ?>" />
+                <input type="submit" class="add2Cart floatR" style="float: right !important;" value="<?= $this->translate('label_briefcase_add-to-shop'); ?>" />
+                <input type="text" name="value" class="spinner" value="1" style="margin-top:10px; margin-right:10px; margin-bottom:10px;" />
+            </form>
+        <?php else: ?>
+            <div class="clr"></div>
+            <?php if(false == $briefcaseService->checkElementExists($this->id_briefcase_type, $this->standProduct->getId(), $this->selectedEvent->getId())):?>
+                <a class="productBriefcaseAdd add_element tooltipLoad briefcase" style="width:115px;float:right" href="<?php echo $this->url(array('id_briefcase_type'=>$this->id_briefcase_type,'element'=>$this->standProduct->getId(),'namespace'=>$this->selectedEvent->getId()),'briefcase_add-element')?>?return=<?php echo $this->url();?>">
+                    <?= $this->translate('label_briefcase_add-to-briefcase'); ?>
+                </a>
+                <div class="tooltipContent" id="addToBookmarks"><?= $this->translate('label_briefcase_add-to-briefcase'); ?></div>
+            <?php else:?>
+                <a class="productBriefcaseDel remove_element briefcase tooltipLoad" style="width:116px;float:right" href="<?php echo $this->url(array('id_briefcase_type'=>$this->id_briefcase_type,'element'=>$this->standProduct->getId(),'namespace'=>$this->selectedEvent->getId()),'briefcase_remove-element')?>?return=<?php echo $this->url();?>">
+                    <?= $this->translate('label_briefcase_remove-from-briefcase'); ?>
+                </a>
+                <div class="tooltipContent" id="removeFromBookmarks"><?= $this->translate('label_briefcase_remove-from-briefcase'); ?></div>
+            <?php endif;?>
+            <?php if ($this->standProduct->isFormTarget()):?>
+            <a class="btnYellow" style="float:right;margin-top:10px;margin-right:20px;width:116px;padding:0 20px;" href="<?php echo $urlApply; ?>" target="_blank"><?php echo $this->translate('Zobacz więcej');?></a>
+            <?php endif;?>
+            <div class="pdLinkShop" style="display:none;"><a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'stand_uri' => $this->exhibStand->getUri(), 'product_hash' => $this->standProduct->getHash()), 'event_stand-offer_shop');?>" target="_blank"></a></div>
+        <?php endif; ?>
+
+
+    </div>
+
+    <div class="pdfloatL">
+        <p class="pdTitle"><?php echo $this->translate('label_event_stand-offer_offer-description');?></p>
+        <div class="pdDesc"><strong><?php echo $this->standProduct->getLead() ;?></strong></div>
+        <?php echo $this->standProduct->getDescription();?>
+        <div class="clr"></div>
+    </div>
+    <div class="clr"></div>
+
+    <?php if($this->standProduct->hasFile()):?>
+        <div style="text-align: center">
+            <a style="color:#000000;" target="_blank" href="<?=$this->url(array('event_uri' => $this->selectedEvent->getUri(),'hall_uri'=>$this->exhibStand->EventStandNumber->EventHallMap->uri, 'stand_uri' => $this->exhibStand->getUri(),'hash'=>$this->standProduct->getFile()->getHash()),'event_stand-product-files_download')?>">
+                <img class="mb-3" src="/_images/icon/ico1/pdf.gif"> <b>
+                    <?=$this->translate('label_event_stand-offer_offer-get_file');?>
+                </b>
+            </a>
+        </div>
+    <?php endif;?>
+    <?php if($this->selectedEventArchive):?>
+        <div class="message-archived" style="padding-top: 25px;">
+            <?=$this->translate('label_event_archived');?>
+        </div>
+    <?php else:?>
+        <?php if ($this->standProduct->isFormTarget()):?>
+
+            <div style="clear:both;text-align:center">
+                <a class="btnYellow" style="display:inline-block;margin-top:40px;" href="<?php echo $urlApply; ?>" target="_blank"><?php echo $this->translate('Zobacz więcej');?></a>
+            </div>
+        <?php elseif ($this->exhibStand->getIsContactActive()):?>
+            <?php if(isset($this->formProductContact)): ?>
+                <div style="clear:both" class="mcsbContact">
+                    <?php echo $this->formProductContact;?>
+                </div>
+            <?php endif; ?>
+        <?php endif;?>
+<?php endif;?>
+</div>
+
+<?php $this->headScript()->captureStart(); ?>
+    $('img.pdImage').load(function() {
+        if($('img.pdImage').size() > 0 && parseInt($('img.pdImage').outerWidth(true)) > 0 && parseInt($('img.pdImage').outerWidth(true)) > 200) {
+            $('.pdfloatR').css({width: $('img.pdImage').outerWidth(true)});
+        }else{
+            $('.pdfloatR').css({width: 200});
+        }
+    });
+<?php $this->headScript()->captureEnd(); ?>

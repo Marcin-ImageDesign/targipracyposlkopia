@@ -1,0 +1,17 @@
+<table border="0" cellpadding="5" cellspacing="5" width="600"  style="font-size: 12px; font-family: Tahoma;">
+    <tr>
+        <th colspan="2" align="left"><b><?php echo $this->translate('label_user_register_mail_title'); ?> <?php echo DOMAIN; ?></b></th>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+            <?php echo $this->translate('label_user_register_mail_content'); ?>
+            <br/><br/>
+            <a href="<?=$this->protocol?>://<?=DOMAIN?><?=$this->url( array('event_uri' => $this->selectedEvent->getUri(),'userConfirmRequestHash'=>$this->userConfirmRequest->getHash()), 'user_register_activate-account' )?>">
+                <?php echo $this->translate('label_user_register_mail_link'); ?>
+            </a>
+            
+        </td>
+    </tr>
+
+</table>

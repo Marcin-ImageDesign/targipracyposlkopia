@@ -1,0 +1,56 @@
+<h2><?php echo $this->translate('label_user_account_rank');?></h2>
+
+<div id="gam_buttons">
+    <a class="gam_buttons active" data-href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'site_uri' => 'gamification_rules', 'hide_title' => true), 'event_site');?>" onclick="changeTabAjax_acc(this)"><?php echo $this->translate('label_event_index_gamification_regulations');?></a>
+    <a class="gam_buttons" data-href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'user_account_your-place');?>" onclick="changeTabAjax_acc(this)"><?php echo $this->translate('label_event_index_gamification_yourplace');?></a>
+    <a class="gam_buttons day_ranking" data-href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'user_account_day-ranking');?>" onclick="changeTabAjax_acc(this)"><?php echo $this->translate('label_event_index_gamification_dayranking');?></a>
+    <a class="gam_buttons" data-href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'user_account_top-ten');?>" onclick="changeTabAjax_acc(this)"><?php echo $this->translate('label_event_index_gamification_top10');?></a>
+    <a class="gam_buttons" data-href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'site_uri' => 'prizes', 'hide_title' => true), 'event_site');?>" onclick="changeTabAjax_acc(this)"><?php echo $this->translate('label_event_index_gamification_awards');?></a>
+    <a class="gam_buttons" data-href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'site_uri' => 'zwyciezcy', 'hide_title' => true), 'event_site');?>" onclick="changeTabAjax_acc(this)"><?php echo $this->translate('Zwycięzcy');?></a>
+</div>
+
+<div id="wrap_acc" class="mcsb con">
+    <?php echo $this->eventSite->getContent();?>
+</div>
+
+
+<?php $this->headScript()->captureStart(); ?>
+$(window).load(function() {
+    $('.mcsb').height('-=25px');
+    $('.mcsb').mCustomScrollbar("update");
+});
+<?php $this->headScript()->captureEnd(); ?>
+
+
+
+<script type="text/javascript">
+    function changeTabAjax_acc(target){
+    var that = $(target);
+    var wrap = $('#wrap_acc');
+
+    $.ajax({
+        async: "false",
+        type: "GET",
+        url: that.data('href'),
+        success: function(data) {
+            wrap.html(data);
+            if ($('.standard_content').hasClass('mcsb'))
+                    $('.standard_content').removeClass('mcsb');
+            $('.gam_buttons').removeClass('active');
+            that.addClass('active');
+
+            wrap.mCustomScrollbar({
+                autoDraggerLength:true,
+                scrollButtons:{
+                    enable:false
+                },
+                advanced:{
+                    updateOnContentResize: true
+                }
+            });
+        }
+    });
+}
+</script>
+
+<div style="clear: both;"></div>

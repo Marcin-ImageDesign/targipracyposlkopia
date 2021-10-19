@@ -1,0 +1,994 @@
+<style>
+    @charset "utf-8";
+
+    :root {
+        --szary: #747474;
+    }
+
+    html {
+        overflow: scroll;
+        overflow-x: auto;
+        height: 100%;
+    }
+
+    html,
+    body,
+    form,
+    img {
+        margin: 0;
+        padding: 0;
+        border: none;
+    }
+
+    body {
+        height: 100%;
+    }
+
+    body * {
+        outline: none;
+    }
+
+    #top {
+        width: 100%;
+        position: relative;
+        min-height: 100%;
+        height: auto !important;
+        height: 100%;
+        margin: 0 auto;
+        background: #3B5D78 url('') no-repeat center center;
+        background-size: cover;
+        display: flex;
+        align-items: center;
+    }
+
+    footer {
+        font-size: 11px;
+        bottom: 20px;
+        display: block;
+        color: #fff;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+    }
+
+    footer.home {
+        margin-top: 28px;
+    }
+
+    footer a,
+    footer span,
+    footer p {
+        color: #fff;
+        font-size: 11px;
+        line-height: 26px;
+        margin: 0 auto;
+    }
+
+    footer a:hover {
+        text-decoration: underline;
+    }
+
+    footer .floatL,
+    footer .floatR {
+        line-height: 26px;
+    }
+
+    footer .floatL {
+        padding-left: 10px;
+    }
+
+    footer .floatR {
+        padding-right: 10px;
+    }
+
+    .clr {
+        clear: both;
+    }
+
+    .floatL,
+    .leftC {
+        float: left;
+    }
+
+    .floatR,
+    .rightC {
+        float: right;
+    }
+
+    img {
+        border: 0;
+    }
+
+    a {
+        color: #fff;
+        -webkit-transition: all .2s ease;
+        -moz-transition: all .2s ease;
+        -o-transition: all .2s ease;
+        transition: all .2s ease;
+    }
+
+    header a.logo {
+        width: 170px;
+        height: 70px;
+        display: block;
+        text-indent: -9999px;
+        position: absolute;
+        top: 20px;
+        left: 0px;
+        z-index: 2;
+        background-image: url('/img/logo.png') !important;
+        background-size: 136% !important;
+        background-position: -30px -20px !important;
+    }
+
+    label {
+        width: 180px;
+        display: inline-block;
+        text-align: right;
+        margin: 0;
+        margin-right: 8px;
+        padding: 0;
+        font-family: 'Dosis';
+        font-weight: 500;
+        text-transform: uppercase;
+    }
+
+    input {
+        -moz-border-radius: 3px;
+        -webkit-border-radius: 3px;
+        border-radius: 3px;
+        border: none;
+        background: #fff;
+        padding: 7px;
+        font-size: 14px;
+        width: 200px;
+        margin-bottom: 10px;
+    }
+
+    button,
+    #DefaultFormContact input[type='submit'] {
+        background: #000;
+        color: #fff;
+        -moz-border-radius: 3px;
+        -webkit-border-radius: 3px;
+        border-radius: 3px;
+        cursor: pointer;
+        font-family: 'Dosis';
+        font-size: 16px;
+        font-weight: 700;
+        padding: 5px 10px;
+        text-transform: uppercase;
+        border: none;
+    }
+
+    button:hover,
+    #DefaultFormContact input[type='submit']:hover {
+        background: #FFF;
+        color: #666a80;
+    }
+
+    form button {
+        margin-left: 188px;
+    }
+
+
+    /****Formularz na zaslepce***/
+    #DefaultFormContact {
+        max-width: 405px;
+    }
+
+    #DefaultFormContact label {
+        float: left;
+    }
+
+    #DefaultFormContact .group-wrapper>.form-item:last-child {
+        text-align: right
+    }
+
+    #DefaultFormContact .errors {
+        font-size: 11px;
+        margin-top: -8px;
+        margin-left: 160px;
+        margin-bottom: 2px;
+    }
+
+    /***/
+
+    h1 {
+        font-family: 'Dosis';
+        font-size: 48px;
+        font-weight: 500;
+        letter-spacing: -1px;
+        margin: 0;
+        padding: 0;
+    }
+
+    h2,
+    h3,
+    h4,
+    h5 {
+        font-family: 'Dosis';
+        letter-spacing: -1px;
+        margin: 0;
+        padding: 0;
+    }
+
+    h1.main {
+        font-size: 40px;
+    }
+
+    .art {
+        background: #fff;
+        padding: 20px;
+        color: #666a80;
+    }
+
+    .art h2 {
+        font-size: 36px;
+        line-height: 36px;
+        font-weight: 500;
+        margin-bottom: 20px;
+    }
+
+    .homePageName a {
+        color: var(--szary);
+        text-decoration: none;
+        text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.3);
+        line-height: 50px;
+    }
+
+    .homePageName .arrow {
+        width: 0px;
+        font-size: 0px;
+        display: inline-block;
+        margin: 4px;
+        margin-bottom: 0;
+        height: 0;
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        border-left: 10px solid var(--szary);
+    }
+
+    .row-fluid:before,
+    .row-fluid:after {
+        display: table;
+        line-height: 0;
+        content: "";
+    }
+
+    .row-fluid:after {
+        clear: both;
+    }
+
+    header {
+        position: relative;
+        display: block;
+        height: 100px;
+    }
+
+    body {
+        font-size: 14px;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #fff;
+        margin: 0;
+        padding: 0;
+    }
+
+    footer a {
+        color: #fff;
+        display: inline-block;
+        text-decoration: none;
+    }
+
+    footer a:hover {
+        text-decoration: underline;
+    }
+
+    .container {
+        width: 990px;
+        margin: 0 auto;
+        padding-bottom: 160px;
+    }
+
+    .round {
+        -moz-border-radius: 7px;
+        -webkit-border-radius: 7px;
+        border-radius: 7px;
+        overflow: hidden;
+    }
+
+    .homePageBtn {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .homePageBtn li {
+        display: block;
+        width: 20%;
+        padding: 0;
+        margin: 0;
+        float: left;
+    }
+
+    .homePageBtn li a {
+        display: block;
+        padding: 20px 0;
+        font-family: 'Dosis';
+        font-weight: 600;
+        font-size: 18px;
+        margin: 0 4px;
+        text-transform: uppercase;
+        color: #fff;
+        text-decoration: none;
+        background: rgba(0, 0, 0, 0.5);
+        text-align: center;
+        text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.3);
+    }
+
+    .homePageBtn li a:hover {
+        background: rgba(0, 0, 0, 0.8);
+    }
+
+    .homePageBtn li a.active {
+        background: #05497f;
+    }
+
+    .kolejneedycje {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .kolejneedycje li {
+        display: block;
+        width: 20%;
+        padding: 0;
+        margin: 0;
+        float: left;
+    }
+
+    .kolejneedycje li a {
+        display: block;
+        padding: 10px;
+        font-family: 'Dosis';
+        font-size: 18px;
+        margin: 4px;
+        text-transform: uppercase;
+        color: #fff;
+        text-decoration: none;
+        background: #fff;
+        text-align: center;
+        height: 150px;
+    }
+
+    .kolejneedycje li a:hover span {
+        background: #fff;
+        color: #212121;
+    }
+
+    .kolejneedycje li a:hover {
+        opacity: 1 !important;
+    }
+
+    .kolejneedycje li img {
+        display: block;
+        max-width: 100%;
+        width: 100%;
+        margin: 5px auto;
+    }
+
+    .kolejneedycje li span {
+        background: #212121;
+        padding: 3px 10px;
+        font-size: 15px;
+        line-height: 15px;
+        -moz-border-radius: 3px;
+        -webkit-border-radius: 3px;
+        border-radius: 3px;
+        font-weight: 600;
+    }
+
+    .kolejneedycje li h2 {
+        padding: 0;
+        margin: 0;
+        color: #333;
+        text-transform: none;
+        font-size: 13px;
+        font-weight: normal;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+
+    .sponsors {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: block;
+    }
+
+    .sponsors li {
+        float: left;
+        width: 33.3333333334%;
+        margin-bottom: 8px;
+        vertical-align: middle;
+    }
+
+    .sponsors li.general {
+        width: 66.6666666668%;
+        margin-bottom: 0;
+    }
+
+    .sponsors li a {
+        height: 80px;
+        line-height: 80px;
+        text-align: center;
+        display: block;
+        color: #444;
+        background: #fff;
+        margin: 0 4px;
+        text-decoration: none;
+        font-family: 'Dosis';
+        font-weight: 600;
+        font-size: 14px;
+        text-transform: uppercase;
+    }
+
+    .sponsors li img {
+        max-width: 100%;
+        width: 100%;
+        margin: auto;
+        vertical-align: middle;
+        max-height: 100%;
+        display: inline-block;
+    }
+
+
+    .sponsors li .big_box_main img {
+        display: block;
+        max-width: 100%;
+        width: 100%;
+        margin: auto;
+    }
+
+    .big_box_main {
+        display: flex;
+        align-items: center;
+        margin: 0 4px;
+        justify-content: space-around;
+    }
+
+    @media(max-width:768px){
+        .big_box_main {
+            flex-direction: column;
+        }
+        .sponsors li .big_box_main img.polskapress {
+            position: relative;
+            right: 11px;
+        }
+        .sponsors li .big_box_main img.mieszkanie {
+            margin-bottom: 20px;
+        }
+    }
+
+    .sponsors li.general a,
+    .big_box_main {
+        height: 168px;
+        line-height: 168px;
+    }
+
+    .sponsors li.generalMin a {
+        height: 168px;
+    }
+
+    .box {
+        width: 25%;
+        float: left;
+    }
+
+    .box a {
+        height: 256px;
+        line-height: 256px;
+        text-align: center;
+        display: block;
+        color: #444;
+        background: #fff;
+        margin: 0 4px;
+        text-decoration: none;
+        font-family: 'Dosis';
+        font-weight: 600;
+        font-size: 14px;
+        text-transform: uppercase;
+    }
+
+    .box.half {
+        width: 50%;
+    }
+
+    .box a:hover {
+        transform: scale(0.99);
+    }
+
+    .article {
+        height: 240px;
+        background: #fff url('/_images/frontend/education/article.jpg') no-repeat center center;
+        background-size: cover;
+        margin: 8px;
+        position: relative;
+        overflow: hidden;
+        background-size: contain !important;
+        background-repeat: no-repeat !important;
+        background-color: #0086cb !important;
+        background-position: center !important;
+
+    }
+
+    .article h1 {
+        position: absolute;
+        bottom: 0px;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        font-family: 'Dosis';
+        font-weight: 600;
+        font-size: 18px;
+        text-transform: none;
+        line-height: 20px;
+        text-align: left;
+        padding: 5px;
+        display: none;
+    }
+
+    .enter {
+        height: 240px;
+        background: #fff url('/img/targi-mieszkan450-299-wejscie--v2.png') no-repeat center center;
+        background-size: cover;
+        margin: 8px;
+        position: relative;
+        overflow: hidden;
+        background-size: contain;
+        background-color: #00a500;
+    }
+
+    .sponsors li a.ladnydom {
+        float: left;
+        display: block;
+        width: 101px;
+        height: 67px !important;
+        margin-top: 75px;
+        background: url('/_images/frontend/default/ladnydom.png') no-repeat scroll 0 0 transparent;
+        border: 0px !important;
+        -moz-border-radius: 0px !important;
+        -webkit-border-radius: 0px !important;
+        border-radius: 0px !important;
+        -moz-box-shadow: none !important;
+        -webkit-box-shadow: none !important;
+        box-shadow: none !important;
+        margin-right: 30px;
+        margin-left: 67px;
+    }
+
+    .sponsors li a.eogrody {
+        float: left;
+        display: block;
+        width: 167px;
+        height: 67px !important;
+        margin-top: 75px;
+        background: url('/_images/frontend/default/eogrody.jpg') no-repeat scroll 0 0 transparent;
+        border: 0px !important;
+        -moz-border-radius: 0px !important;
+        -webkit-border-radius: 0px !important;
+        border-radius: 0px !important;
+        -moz-box-shadow: none !important;
+        -webkit-box-shadow: none !important;
+        box-shadow: none !important;
+    }
+
+    section {
+        clear: both;
+        display: block;
+        padding: 20px 0;
+    }
+
+    @media (min-width: 1600px) {
+        .container {
+            width: 1310px;
+        }
+
+        .sponsors li {
+            float: left;
+            width: 33.3333333334%;
+            margin-bottom: 8px;
+            vertical-align: middle;
+        }
+
+        .sponsors li a {
+            height: 100px;
+            line-height: 100px;
+        }
+
+        .sponsors li.general a,
+        .big_box_main {
+            height: 208px;
+            line-height: 208px;
+        }
+
+        .sponsors li.generalMin a {
+            height: 208px;
+        }
+
+        .box a {
+            height: 316px;
+            line-height: 316px;
+        }
+
+        .article,
+        .enter {
+            height: 300px;
+        }
+    }
+
+    /* Large desktop */
+    @media (min-width: 1200px) and (max-width: 1599px) {
+
+        .container {
+            width: 1170px;
+        }
+
+        .sponsors li {
+            float: left;
+            width: 33.3333333334%;
+            margin-bottom: 8px;
+            vertical-align: middle;
+        }
+
+        .sponsors li a {
+            height: 90px;
+            line-height: 90px;
+        }
+
+        .sponsors li.general a,
+        .big_box_main {
+            height: 188px;
+            line-height: 188px;
+        }
+
+        .sponsors li.generalMin a {
+            height: 188px;
+        }
+
+        .box a {
+            height: 286px;
+            line-height: 286px;
+        }
+
+        .article,
+        .enter {
+            height: 270px;
+        }
+    }
+
+    /* Portrait tablet to landscape and desktop */
+    @media (min-width: 768px) and (max-width: 979px) {
+        .sponsors li {
+            float: left;
+            width: 33.3333333334%;
+            margin-bottom: 8px;
+            vertical-align: middle;
+        }
+
+        .kolejneedycje li {
+            width: 25%;
+        }
+
+        .container {
+            width: 720px;
+        }
+
+        .box {
+            width: 50%;
+            margin-bottom: 8px;
+        }
+
+        .box.half {
+            float: none;
+            width: 100%;
+        }
+
+        a.logo {
+            right: 0;
+            left: auto;
+            height: 65px;
+        }
+
+        header {
+            height: 30px;
+        }
+    }
+
+    /* Landscape phone to portrait tablet */
+    @media (max-width: 767px) {
+        .sponsors li {
+            float: left;
+            width: 33.3333333334%;
+            margin-bottom: 8px;
+            vertical-align: middle;
+        }
+
+        .kolejneedycje li span {
+            padding: 3px 5px;
+            font-size: 13px;
+            line-height: 13px;
+        }
+
+        .kolejneedycje li {
+            width: 33.3333333334%;
+        }
+
+        h1 {
+            font-size: 36px;
+        }
+
+        .container {
+            width: 90%;
+        }
+
+        .box {
+            width: 50%;
+            margin-bottom: 8px;
+        }
+
+        .box.half {
+            float: none;
+            width: 100%;
+        }
+
+        a.logo {
+            right: 0;
+            left: auto;
+            height: 65px;
+        }
+
+        header {
+            height: 30px;
+        }
+    }
+
+    /* Landscape phones and down */
+    @media (max-width: 480px) {
+        .sponsors li {
+            float: left;
+            width: 33.3333333334%;
+            margin-bottom: 8px;
+            vertical-align: middle;
+        }
+
+        .kolejneedycje li span {
+            font-size: 13px;
+            line-height: 13px;
+        }
+
+        .kolejneedycje li {
+            width: 50%;
+        }
+
+    }
+
+    /******* Style dla formularza zaślepki na stronie glownej *****/
+
+    .checkOfferNow {
+        position: absolute;
+        right: 20px;
+        bottom: 20px;
+        padding: 15px 20px;
+        font-size: 21px;
+        background: #2c3192;
+    }
+
+    .contactFormBg {
+        background: #2c3192;
+        color: #fff;
+        margin: 4px;
+        height: 250px;
+    }
+
+    /****** Style dla podstony współpraca ******/
+
+    .w-spec {
+        float: left;
+        width: 50%;
+        position: relative;
+    }
+
+    .w-spec.first .round {
+        padding: 30px;
+        background: #f9f9f9;
+        margin-right: 20px;
+    }
+
+    .w-spec.last .round {
+        padding: 30px;
+        background: #f9f9f9;
+        margin-left: 20px;
+    }
+
+    ul.miniicon {
+        padding: 0;
+        margin: 10px auto;
+    }
+
+    ul.miniicon li {
+        list-style: none;
+        padding-left: 36px;
+        margin-bottom: 15px;
+    }
+
+    ul.miniicon li strong {
+        display: block;
+    }
+
+    ul.miniicon li.livechat {
+        background: url(/_images/frontend/default/live-chat.gif) no-repeat left top;
+    }
+
+    ul.miniicon li.custom {
+        background: url(/_images/frontend/default/custom.gif) no-repeat left top;
+    }
+
+    ul.miniicon li.contact {
+        background: url(/_images/frontend/default/contact.gif) no-repeat left top;
+    }
+
+    ul.miniicon li.stats {
+        background: url(/_images/frontend/default/stats.gif) no-repeat left top;
+    }
+
+    ul.miniicon li.social {
+        background: url(/_images/frontend/default/social.gif) no-repeat left top;
+    }
+
+    ul.miniicon li.video {
+        background: url(/_images/frontend/default/video.gif) no-repeat left top;
+    }
+
+    ul.miniicon li.center {
+        background: url(/_images/frontend/default/center.gif) no-repeat left top;
+    }
+
+    ul.miniicon li.promo {
+        background: url(/_images/frontend/default/promo.gif) no-repeat left top;
+    }
+
+
+
+
+
+    .iblead {
+        float: left;
+        width: 33.3333333334%;
+        margin-bottom: 8px;
+    }
+
+    .icon {
+        background: url(/img/logo.png) no-repeat;
+        height: 100px;
+        width: 150px;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .icon.b1 {
+        background-position: 0px 0;
+    }
+
+    .icon.b2 {
+        background-position: -150px 0;
+    }
+
+    .icon.b3 {
+        background-position: -300px 0;
+    }
+
+    .ib1,
+    .ib2,
+    .ib3 {
+        position: relative;
+    }
+
+    .ib2,
+    .ib3 {
+        border-left: 1px solid #f9f9f9;
+    }
+
+    .icon-text {
+        padding-top: 20px;
+        padding-left: 150px;
+        padding-right: 10px;
+    }
+
+    .w-spec button:hover {
+        background: #666a80;
+        color: #FFF;
+    }
+
+    .w-spec .button {
+        background: #e0141c;
+        color: #fff;
+    }
+</style>
+
+<div id="top" style="background-image: url('img/background.jpg'); <?php if (!empty($this->selectedEvent->bg_color)) echo 'background-color:' . $this->selectedEvent->bg_color . '; '; ?>">
+    <div class="container">
+        <header>
+            <a href="/" class="logo" style="background-image: url('img/logo.png')"></a>
+        </header>
+
+        <section id="Section" class="row-fluid">
+            <!-- <h1 class="homePageName">
+                <a href="#">
+                    Targi Edukacja </a>
+                <small>
+                    <a href="#"> wejście </a>
+                </small>
+                <span class="arrow"></span>
+            </h1> -->
+            <br>
+
+            <div class="box">
+                <a href="/wydarzenie/dom-mieszkanie-ogrod-2020/hala-targowa" class="round">
+                    <div class="enter"></div>
+                </a>
+            </div>
+
+            <div class="box">
+                <a class="round" href="https://pomorska.pl/instalacja-fotowoltaiczna-w-domu-wywiad-z-ekspertem-czy-panele-sloneczne-sa-oplacalne/ar/c9-15041054">
+                    <div class="article" style="background: url(/img/targi-mieszkan450-299-rozmowa-v2.png);">
+                        <h1>Przewodniki po stypendiach i grantach</h1>
+                    </div>
+                </a>
+            </div>
+
+            <div class="box half">
+                <ul class="sponsors ">
+
+                    <li class="general" style="">
+                        <div class="big_box_main round" style="background-color:#fff;">
+                            <a style="float:left;height:auto;" href="https://polskapress.pl/pl"><img class="polskapress" style="width:160px;" src="/img/targi-mieszkanppg.png"></a>
+                            <a href="https://www.facebook.com/Mieszkaniezpomyslem/" style="float:right;height:auto;"><img class="mieszkanie" style="width:210px;" src="/img/targi-mieszkanmieszkanie-zpomyslem_logo.png"></a>
+                        </div>
+
+                    </li>
+                    <li class="" style="">
+                        <a href="https://www.golbalux.pl/pl" title="Golbalux" class="round" style="background:#FFF;" target="_blank">
+                            <img style="width:auto;" src="/img/fabryka-domow.png">
+                        </a>
+                    </li>
+                    <li class="" style="">
+                        <a href="/wydarzenie/dom-mieszkanie-ogrod-2020/route_offer_catalogue" title="Oferty" class="round" style="" target="_blank">
+                            <img style="width:auto;" src="/img/targi-mieszkanoferty.png">
+                        </a>
+                    </li>
+                    <li class="" style="">
+                        <a href="/wydarzenie/dom-mieszkanie-ogrod-2020/wystawcy" title="Wystawcy" class="round" style="">
+                            <img style="width:auto;" src="/img/targi-mieszkanwystawcy.png">
+                        </a>
+                    </li>
+                    <li class="" style="">
+                        <a href="/wydarzenie/dom-mieszkanie-ogrod-2020/artyku%C5%82y" title="Artykuły" class="round" style="">
+                            <img style="width:auto;" src="/img/targi-mieszkanartykuly.png">
+                        </a>
+                    </li>
+                    <li class="" style="">
+                        <a href="/wydarzenie/dom-mieszkanie-ogrod-2020/strona/quizy" title="Quizy" class="round" style="" target="_blank">
+                            <img style="width:auto" src="/img/targi-mieszkanquizy.png">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+    </div>
+</div>

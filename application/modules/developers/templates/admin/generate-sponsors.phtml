@@ -1,0 +1,20 @@
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+    <h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+<?php if ($this->map_saved):?>
+	<h2><?=$this->translate('label_developers_maps-has-been-saved')?></h2>
+<?php else:?>
+	<?php if ($this->error):?>
+		<h2><?=$this->translate('label_developers_wrong_id')?>!</h2>
+	<?php else:?>
+		<h2><?=$this->translate('label_developers_json-type-sponsors')?></h2>
+		<?php echo $this->json_sponsors;?><br /><br />
+		<h2><?=$this->translate('label_developers_json-type-names')?></h2>
+		<?php echo $this->json_names;?><br /><br />
+		<h2><?=$this->translate('label_developers_array-type-sponsors')?></h2>
+		<?php Zend_Debug::dump($this->sponsors);?>
+		<h2><?=$this->translate('label_developers_array-type-names')?></h2>
+		<?php Zend_Debug::dump($this->names);?>
+	<?php endif;?>
+<?php endif;?>

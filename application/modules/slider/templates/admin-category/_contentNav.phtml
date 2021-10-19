@@ -1,0 +1,8 @@
+<ul class="contents">
+    <?php echo $this->render('_backLink.phtml');?>
+    <?php if(!empty($this->sliderCategory)): ?>
+    <li>
+        <a href="<?php echo $this->url( array(), 'admin_slider-category' ); ?>"><?php echo $this->translate('Show list');?></a>
+    </li>
+    <?php endif; ?>
+</ul>

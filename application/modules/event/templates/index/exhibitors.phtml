@@ -1,0 +1,176 @@
+<?php $this->placeholder('h1')->captureStart();?>
+<h1 class="title"><?=$this->escape($this->selectedEvent->getTitle())?></h1>
+<?php $this->placeholder('h1')->captureEnd();?>
+
+<div class="defaultDataTable" >
+    <div class="filtersDataTable clearfix">
+        <div class="floatR">
+            <!--<label>Branża</label>-->
+            <select id="brandFilter" name="brandFilter"  style="display:none;">
+                <option value=""><?php echo $this->translate('Choose brand from list');?></option>
+               <?php foreach ($this->brandList as $key => $brand):?>
+                    <option value="<?php echo $brand;?>"><?php echo $brand;?></option>
+                <?php endforeach;?>
+            </select>
+            <!--<label>Region</label>-->
+            <select id="regionFilter" name="regionFilter" class="hideRegion"  style="display:none;">
+                <option value=""><?php echo $this->translate('Choose region from list');?></option>
+                <?php foreach ($this->provinceList as $key => $province):?>
+                    <option value="_<?php echo $key;?>_"><?php echo $province;?></option>
+                <?php endforeach;?>
+            </select>
+            <!--<label>Szukaj</label>-->
+            <input  style="display:none;" type="text" id="searchFilter" name="searchFilter" placeholder="<?php echo $this->translate('Type keyword');?>" style="margin-right:0px;float:left" />
+        </div>
+        <h2><?php echo $this->translate( 'label_event_index_exhibitors_exhibitors' ); ?></h2>
+    </div>
+    <div class="mcsb">
+        <table id="source" style="width:100%" class="sortable">
+            <thead class="border_tr">
+            <tr class="headRow">
+                <th class="head" style="width:200px">
+                    <?php echo $this->translate('label_event_index_exhibitors_name'); ?>
+                </th>
+                <th class="head" style="width:160px">
+                    <?php echo $this->translate('label_event_index_exhibitors_sector'); ?>
+                </th>
+                <th class="head" style="width:120px">
+                    <?php echo $this->translate('label_event_index_exhibitors_contact-us'); ?>
+                </th>
+                <th class="head">
+                    <?php echo $this->translate('label_event_index_exhibitors_description'); ?>
+                </th>
+                <th class="head hiddenTd">
+                    woj
+                </th>
+                <th class="head sorttable_nosort" style="width:5px">
+
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php $row=0; $i = 0; foreach ($this->exhibStandList as $key => $stand): ?>
+                <tr data-rel="<?= $row ;?>" id="<?= $stand->getHash();?>" class="itemDataTable <?php if (0 == ($key % 2)): ?>rdkEven<?php else: ?>rdkOdd<?php endif; ?>" style="text-align:center;" data-keys="<?php echo $stand->getStandKeywords();?>">
+                    <td class="col">
+                        <a class="edit stand_link" href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(),'hall_uri' => $stand->EventStandNumber->EventHallMap->uri, 'stand_uri' => $stand->getUri()), 'event_stand'); ?>">
+                            <?php echo $this->escape($stand->getName()); ?>
+                        </a>
+                    </td>
+                    <td class="col">
+                        <?php foreach ($stand->ExhibStandHasBrand as $k => $standBrand): ?>
+                            <?= $k != 0 ? '<br />' : ''; ?>
+                            <?= $standBrand->Brand->getName(); ?>
+                        <?php endforeach; ?>
+                    </td>
+                    <td style="padding-right: 15px;" class="contact_col col">
+                        <a data-tooltip="comm_<?=$i;?>" class="<?php if( isset($this->groupStatusList[$stand->live_chat_group_id]) /*&& $this->groupStatusList[$stand->live_chat_group_id] == 'accepting chats'*/):?>activeChat<?php else:?>inactiveChat contentLoad<?php endif;?> chatIcon tooltipLoad" href="<?php if( isset($this->groupStatusList[$stand->live_chat_group_id]) && $this->groupStatusList[$stand->live_chat_group_id] == 'accepting chats'):?><?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(),'hall_uri' => $stand->EventStandNumber->EventHallMap->uri, 'stand_uri' => $stand->getUri()), 'event_stand'); ?><?php else:?><?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(),'hall_uri' => $stand->EventStandNumber->EventHallMap->uri, 'stand_uri' => $stand->getUri()), 'event_stand_contact');?><?php endif;?>"></a>
+                        <div class="tooltipContent" id="comm_<?=$i;?>">
+                            <?php if( isset($this->groupStatusList[$stand->live_chat_group_id]) /*&& $this->groupStatusList[$stand->live_chat_group_id] == 'accepting chats'*/):?>
+                                <?php echo $this->translate('label_event_index_exhibitors_chat-with-exhibitor');?>
+                            <?php else:?>
+                                <?php echo $this->translate('label_event_index_exhibitors_mail-exhibitor');?>
+                            <?php endif;?></div>
+                    </td>
+                    <td class="col desc_stands">
+                        <div><?php echo $stand->getShortInfo(); ?></div>
+                    </td>
+                    <td class="col hiddenTd"><?php foreach( $stand->StandHasAddressProvince as $addressProvince): ?>_<?php echo $addressProvince->id_address_province;?>_ <?php endforeach;?></td>
+                     <td class="col hiddenTd"><?php foreach( $stand->StandHasAddressProvince as $addressProvince):?><?php if ($addressProvince->id_address_province == 17):?>1<?php endif;?><?php endforeach;?></td>
+                </tr>
+                <?php $row++; $i++; endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+<?php $this->headScript()->captureStart(); ?>
+
+var itemDataTable = '.itemDataTable';
+var colDataTable = '.col';
+var filtersDataTable = '.filtersDataTable';
+
+function refreshMcsb() {
+    $('.defaultDataTable div.mcsb .mCSB_container').css({top:0});
+    $('.defaultDataTable div.mcsb').mCustomScrollbar("update");
+    $('table.sortable tr:not(.hiddenTr):odd').removeClass('rdkOdd').removeClass('rdkEven').addClass('rdkEven');
+    $('table.sortable tr:not(.hiddenTr):even').removeClass('rdkOdd').removeClass('rdkEven').addClass('rdkOdd');
+}
+
+function searchDefaultDataTable(sel) {
+    var strAllRegion = $(this).parent().find('input.hAllRegion').val();
+    var searchFilter = $.trim($('#searchFilter').val().toLowerCase());
+    var searchFilterFlag;
+    var brandFilter = $.trim($('#brandFilter').val().toLowerCase());
+    var regionFilter = $.trim($('#regionFilter').val().toLowerCase());
+    
+    var searchFilterArr = [];
+    
+    // remove extra spaces
+    searchFilter = searchFilter.replace(/[\s]+/g, ' ');   // g = replace all instances
+    searchFilterArr = searchFilter.split(' ');
+    
+    $(sel).find(itemDataTable).each(function(k,v) {
+        
+        var dataKeys = $(this).attr('data-keys');
+        dataKeys = dataKeys.replace(',', ' ');
+        dataKeys = dataKeys.replace(';', ' ');
+    
+        if(searchFilterArr.length > 0) {
+            searchFilterFlag = false;
+            $.each(searchFilterArr, function(i, v) {
+                if(dataKeys.search(v.toLowerCase()) >= 0) {
+                    searchFilterFlag = true;
+                } else {
+                    searchFilterFlag = false;
+                    return false;
+                }
+            });
+        }
+    
+        if(
+            (
+                $(this).attr('data-col1').search(searchFilter) >= 0 ||
+                $(this).attr('data-col2').search(searchFilter) >= 0 || 
+                $(this).attr('data-col4').search(searchFilter) >= 0 || 
+                $(this).attr('data-col5').search(searchFilter) >= 0 ||
+                searchFilterFlag
+            ) &&
+            (
+                $(this).attr('data-col2').search(brandFilter) >= 0
+            ) &&
+            (
+                $(this).attr('data-col5').search(regionFilter) >= 0 ||
+                $(this).attr('data-col6') == 1
+            )
+        ) {
+            $(this).removeClass('hiddenTr').removeClass('visibleTr').addClass('visibleTr');
+        } else {
+            $(this).removeClass('hiddenTr').removeClass('visibleTr').addClass('hiddenTr');
+        }
+    });
+
+    refreshMcsb();
+}
+
+function defaultDataTable(sel) {
+    $(sel).find(itemDataTable).each(function(k,v) {
+        $(this).attr('data-col1', $.trim($(this).find(colDataTable).eq(0).text().toLowerCase()))
+               .attr('data-col2', $.trim($(this).find(colDataTable).eq(1).text().toLowerCase()))
+               .attr('data-col4', $.trim($(this).find(colDataTable).eq(3).text().toLowerCase()))
+               .attr('data-col5', $.trim($(this).find(colDataTable).eq(4).text().toLowerCase()))
+               .attr('data-col6', $.trim($(this).find(colDataTable).eq(5).text().toLowerCase()));
+    });
+    
+    $(filtersDataTable).find('input').bind('keyup', function(event) {
+        searchDefaultDataTable(sel);
+    });
+    $(filtersDataTable).find('select').bind('change', function(event) {
+        searchDefaultDataTable(sel);
+    });
+    
+}
+
+$(document).ready(function() {
+    defaultDataTable('.defaultDataTable');
+});
+
+<?php $this->headScript()->captureEnd(); ?>

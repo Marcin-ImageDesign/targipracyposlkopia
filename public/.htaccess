@@ -1,0 +1,25 @@
+RewriteEngine On
+AddType application/x-httpd-php73 .php
+
+#Header set Access-Control-Allow-Origin "*"
+#Header set Access-Control-Allow-Headers "Content-Type, authorization"
+
+<filesMatch ".(jpg|jpeg|png|gif|ico)$">
+  Header set Cache-Control "max-age=86400, public"
+</filesMatch>
+<FilesMatch "\.(css|js)$">
+  Header set Cache-Control "max-age=86400, private"
+</FilesMatch>
+
+#Serve Files
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule .? - [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+
+#AuthUserFile /usr/home/webexpo/domains/webexpo/targipracyposl.webexpo.pl/public/.htpasswd
+#AuthType Basic
+#AuthName "--- LOGIN I HASLO ---"
+#Require valid-user

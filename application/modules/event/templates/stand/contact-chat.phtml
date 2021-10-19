@@ -1,0 +1,33 @@
+<?php $this->placeholder('h1')->captureStart();?>
+    <h1 class="title"><?=$this->escape($this->selectedEvent->getTitle())?></h1>
+<?php $this->placeholder('h1')->captureEnd();?>
+
+<h2><?php echo $this->translate('label_event_stand_contact_exhibitor-information'); ?>:</h2>
+<div style="width:100%;" class="mcsbContact">
+    <?php if(!empty($this->content)) : ?>
+        <div class="contactPanel"><?= $this->content; ?></div>
+    <?php else: ?>
+        <div><?php echo $this->translate('label_event_stand_contact_no-data'); ?></div>    
+    <?php endif; ?>
+        
+        <!-- <div class="contactChat">
+            <p class="lineTitle">Rozpocznij czat</p>
+            <a href="#" class="chat" title="">Start</a>
+        </div> -->
+        
+    <?php if(isset($this->formContact)): ?>
+        <div class="contactForm">
+            <?php echo $this->formContact?>
+        </div>
+    <?php endif; ?>
+</div>
+
+<?php $this->headScript()->captureStart(); ?>
+    $(".mcsbContact").mCustomScrollbar();
+    
+    function refreshMcsbContact() {
+        $(".mcsbContact").mCustomScrollbar('update');
+    }
+<?php $this->headScript()->captureEnd(); ?>
+
+    

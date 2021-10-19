@@ -1,0 +1,49 @@
+<h2><?php echo $this->translate('Choose exhibition hall');?></h2>
+<div class="nav_hall_list">
+<ul class="">
+    <?php foreach($this->event_halls as $key => $hall):?>
+        <li>
+            <a href="javascript:;" onclick="changeTab(this, <?php echo $key; ?>)" class="<?php if ($key == $this->active_hall['id_event_hall_map']):?>active<?php endif;?>" data-url="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'hall_uri' => $hall['uri']), 'event_hall_uri');?>"><?php echo $hall['name'];?></a>
+        </li>
+    <?php endforeach;?>
+</ul>
+<div class="enter_container">
+    <a class="nav_enter" id="nav_enter" href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'hall_uri' => $this->active_hall['uri']), 'event_hall_uri');?>"><?php echo $this->translate('Enter hall');?></a>
+</div>
+</div>
+<div class="hall_switch_cont">
+    <?php foreach($this->event_halls as $key => $hall):?>
+        <div id="<?php echo $key;?>" class="tabCont <?php if ($key == $this->active_hall['id_event_hall_map']):?>active<?php endif;?>">
+            <img class="promo_image" src="<?php echo Service_Image::getUrl($hall['id_promo_photo'], 200, 300, 'w');?>" />
+            <?php echo $hall['description'];?>
+        </div>
+        
+        <script type="text/javascript">
+            $("#<?php echo $key;?>").mCustomScrollbar();
+        </script>
+        
+    <?php endforeach;?>
+</div>
+<script type="text/javascript">
+    var active_hall = '<?php echo $this->active_hall["id_event_hall_map"];?>';
+    // var forcedDefault = '<?php echo $this->forcedDefault;?>';
+    function changeTab(current, i) {
+        $('.nav_hall_list a').removeClass('active');
+        $(current).addClass('active');
+        $('.hall_switch_cont .tabCont').hide();
+        $('#'+i).show();
+        
+        var url = $(current).data('url');
+        var enter = $("#nav_enter");
+        enter.attr('href', url).removeClass('nav_disabled');
+        //nie blokujemy wejscia na aktywnej hali
+        // if ((i == active_hall) && !forcedDefault){
+        //     enter.addClass("nav_disabled");
+        //     enter.attr('href', 'javascript:;')
+        // }else{
+        //     enter.attr('href', url).removeClass('nav_disabled');
+        // }
+        $('#'+i).mCustomScrollbar('update');
+    }
+    //$(".tabCont").mCustomScrollbar();
+</script>

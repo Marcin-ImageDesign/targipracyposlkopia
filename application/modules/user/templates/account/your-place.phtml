@@ -1,0 +1,111 @@
+<?php if ($this->noUser): ?>
+        <?php echo $this->translate('label_event_index_gamification_unclassified');?>
+    <?php else: ?>
+
+        <table width="100%">
+            <tbody>
+                <tr>
+                    <td style="width: 200px;" align="center"> 
+                        <?php if($this->userAuth->hasImage()):?>
+                            <img src="<?php echo Service_Image::getUrl($this->userAuth->getIdImage(), 200, 200, 'a');?>" />
+                        <?php else:?>
+                            <img src="/_images/frontend/default/full.png">
+                        <?php endif;?>
+                    </td>
+                    <td align="center" valign="top" style="font-size: 28px;line-height: 31px;background-color: #F0F0EB;width: 645px;padding-top: 33px;">
+                        <?php echo $this->userAuth->getFirstName(); ?>  <?php echo $this->userAuth->getLastName(); ?><br>
+                        <div>
+                            <?php if ($this->trendUser): ?>
+                                <img src="/_images/frontend/default/trend_big_<?php echo $this->trendUser; ?>.png" width="100"/>
+                            <?php endif; ?>
+                        </div>
+                        <div class="gam_position gam_trend_<?php echo $this->trendUser; ?>"><?php echo $this->position; ?></div>
+                        <br>
+                        <div class="gam_your_points"> <?php echo $this->translate('label_event_index_gamification_your_points');?>: <?php echo $this->userRank->points; ?><br>
+                            <?php if ($this->pointsToday): ?>
+                                <?php echo $this->translate('label_event_index_gamification_earned_today');?>: <?php echo $this->pointsToday; ?> pkt
+                            <?php endif; ?>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="summaryPanel">
+
+            <div class="item">
+                <div class="info">
+                    <div class="value"><span><b><?php echo $this->countAll;?></b>&nbsp;<?php echo $this->translate('label_event_index_gamification_number_users_1');?></span></div>
+                    <div class="unit"><?php echo $this->translate('label_event_index_gamification_number_users_2');?></div>
+                </div>
+            </div>
+
+            <div class="item">
+                <div class="info">
+                    <?php if ($this->position!=1): ?>
+                        <div class="value"><span><?php echo $this->translate('label_event_index_gamification_no_advance_1');?>&nbsp;<b><?php echo $this->countUp; ?></b> pkt</span></div>
+                        <div class="unit"><?php echo $this->translate('label_event_index_gamification_no_advance_2');?></div>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <div class="item last">
+                <div class="info">
+                    <div class="value"><span><?php echo $this->translate('label_event_index_gamification_end_time_fair_1');?></span></div>
+                    <div class="unit"><?php echo $this->translate('label_event_index_gamification_end_time_fair_2');?>&nbsp;<b><?php echo $this->endDays;?></b>&nbsp;<?php echo $this->translate('label_event_index_gamification_end_time_fair_3');?></div>
+                </div>
+            </div>
+
+        </div>
+
+        <div style="clear: both;"></div>
+
+        <?php if ($this->yourPlaceList): ?>
+            <table cellspacing="0" cellpadding="0" class="gam_tab">
+                <tbody>
+                <?php foreach ($this->yourPlaceList as $key => $participant): ?>
+                    <?php $actualRank=$key+1; ?>
+                    <tr class="row <?php if (0 == ($key % 2)): ?>odd<?php else: ?>even<?php endif; ?> <?php if($participant->User->getId()==$this->userAuth->getId()): ?> highlight <?php endif;?>">
+                        <td valign="middle" width="2%">
+                            <?php $rank = GamificationUserPoints::getUserRank($this->selectedEvent->getId(), $participant->User->getId());echo $rank['rank'] ?>.
+                        </td>
+                        <td valign="middle" width="2%">
+                            <?php if($participant->User->getId()==$this->userAuth->getId()): ?>
+                                 <?php if($this->userAuth->hasImage()):?>
+                                    <img src="<?php echo Service_Image::getUrl($this->userAuth->getIdImage(), 40, 40, 'a');?>" />
+                                <?php else:?>
+                                    <img src="/_images/frontend/default/people_grey.png"/>
+                                <?php endif;?>
+                            <?php else: ?>
+                                <?php if($participant->User->hasImage()):?>
+                                    <img src="<?php echo Service_Image::getUrl($participant->User->getIdImage(), 40, 40, 'a');?>" />
+                                <?php else:?>
+                                    <img src="/_images/frontend/default/people_blue.png"/>
+                                <?php endif;?>
+                            <?php endif; ?>
+                        </td>
+                        <td valign="middle" width="2%">
+                            <?php if($participant->User->getId()==$this->userAuth->getId()): ?>
+                                <?php echo $this->translate('label_event_index_gamification_you');?>
+                            <?php else: ?>
+                                <?php echo mb_strtoupper(mb_substr($participant->User->getFirstName(), 0, 1, 'utf-8'), 'utf-8'); ?>.<?php echo mb_strtoupper(mb_substr($participant->User->getLastName(), 0, 1, 'utf-8'), 'utf-8'); ?>.
+                            <?php endif; ?>
+                        </td>
+                        <td valign="middle" width="2%"><?php echo $participant->getPoints(); ?> pkt</td>
+                        <td>
+                            <?php if($participant->GamificationUserHistoryPoints AND $actualRank==$participant->GamificationUserHistoryPoints->getRank()): ?>
+                                <img src="/_images/frontend/default/trend_equal.png"/>
+                            <?php elseif($participant->GamificationUserHistoryPoints AND $actualRank<$participant->GamificationUserHistoryPoints->getRank()): ?>
+                                <img src="/_images/frontend/default/trend_up.png"/>
+                            <?php elseif($participant->GamificationUserHistoryPoints AND $actualRank>$participant->GamificationUserHistoryPoints->getRank()): ?>
+                                <img src="/_images/frontend/default/trend_down.png"/>
+                            <?php else: ?>
+                                &nbsp;
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php endif; ?>
+    <?php endif; ?>

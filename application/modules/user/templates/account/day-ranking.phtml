@@ -1,0 +1,95 @@
+<?php if ($this->dayRankingList): ?>
+    <?php $rowRank = $this->pager->getFirstIndice();?>
+    <table cellspacing="0" cellpadding="0" class="gam_tab">
+        <tbody>
+        <?php foreach ($this->dayRankingList as $key => $participant): ?>
+            <tr class="row <?php if (0 == ($key % 2)): ?>odd<?php else: ?>even<?php endif; ?> <?php if($participant->User->getId()==$this->userAuth->getId()): ?> highlight <?php endif;?>">
+                <td valign="middle" width="2%"><?php echo $rowRank++; ?>.</td>
+                <td valign="middle" width="2%">
+                    <?php if($participant->User->getId()==$this->userAuth->getId()): ?>
+                         <?php if($this->userAuth->hasImage()):?>
+                                <img src="<?php echo Service_Image::getUrl($this->userAuth->getIdImage(), 40, 40, 'a');?>" />
+                            <?php else:?>
+                                <img src="/_images/frontend/default/people_grey.png"/>
+                            <?php endif;?>
+                    <?php else: ?>
+                        <?php if($participant->User->hasImage()):?>
+                                <img src="<?php echo Service_Image::getUrl($participant->User->getIdImage(), 40, 40, 'a');?>" />
+                            <?php else:?>
+                                <img src="/_images/frontend/default/people_blue.png"/>
+                            <?php endif;?>
+                    <?php endif; ?>
+                </td>
+                <td valign="middle" width="2%">
+                    <?php if($participant->User->getId()==$this->userAuth->getId()): ?>
+                        <?php echo $this->translate('label_event_index_gamification_you');?>
+                    <?php else: ?>
+                        <?php echo mb_strtoupper(mb_substr($participant->User->getFirstName(), 0, 1, 'utf-8'), 'utf-8'); ?>.<?php echo mb_strtoupper(mb_substr($participant->User->getLastName(), 0, 1, 'utf-8'), 'utf-8'); ?>.
+                    <?php endif; ?>
+                </td>
+                <td valign="middle" width="2%"><?php echo $participant->getPoints(); ?> pkt</td>
+                <td>&nbsp;</td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+
+    <div id="pagination">
+
+        <?php if( $this->pager->getLastPage() > 1 ): ?>
+            <div class="pager">
+                <?php if ($this->pager->getPreviousPage() == $this->pager->getPage()):?>
+                    <span style='color:#AAAAAA;' class="previous">&laquo; <?php echo $this->translate('pagination_previous');?></span>
+                <?php else:?>
+                    <a href="javascript:changeTabDayRankingAjax('?page=<?=$this->pager->getPreviousPage()?><?php if(isset($this->paginationAnhor)): ?>#<?=$this->paginationAnhor?><?php endif; ?>')" class="previous">&laquo; <?php echo $this->translate('pagination_previous');?></a>
+                <?php endif;?>
+                <?php if( !$this->pagerRange->isInRange(1) ): ?>
+                    <a href="javascript:changeTabDayRankingAjax('?page=1<?php if(isset($this->paginationAnhor)): ?>#<?=$this->paginationAnhor?><?php endif; ?>')" class="first">1</a>
+                    ...
+                <?php endif; ?>
+                <?php foreach( $this->pages as $page ): ?>
+                    <?php if( $this->pager->getPage() == $page ): ?>
+                        <span class="infos"><strong><?=$page?></strong></span>
+                    <?php else: ?>
+                        <a href="javascript:changeTabDayRankingAjax('?page=<?=$page?><?php if(isset($this->paginationAnhor)): ?>#<?=$this->paginationAnhor?><?php endif; ?>')" class="page"><?=$page?></a>
+                    <?php endif;?>
+                <?php endforeach; ?>
+                <?php if( !$this->pagerRange->isInRange( $this->pager->getLastPage() ) ): ?>
+                    ...
+                    <a href="javascript:changeTabDayRankingAjax('?page=<?=$this->pager->getLastPage()?><?php if(isset($this->paginationAnhor)): ?>#<?=$this->paginationAnhor?><?php endif; ?>')" class="last"><?=$this->pager->getLastPage()?></a>
+                <?php endif; ?>
+                <a href="javascript:changeTabDayRankingAjax('?page=<?=$this->pager->getNextPage()?><?php if(isset($this->paginationAnhor)): ?>#<?=$this->paginationAnhor?><?php endif; ?>')" class="next"><?php echo $this->translate('pagination_next');?> &raquo;</a>
+            </div>
+        <?php endif; ?>
+    </div>
+
+    <script type="text/javascript">
+        function changeTabDayRankingAjax(param){
+            var wrap = $('#wrap_acc');
+
+            $.ajax({
+                async: "false",
+                type: "GET",
+                url: '<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'user_account_day-ranking');?>' + param,
+                success: function(data) {
+                    wrap.html(data);
+                    $('.gam_buttons').removeClass('active');
+                    $('.day_ranking').addClass('active');
+
+                    wrap.mCustomScrollbar({
+                        autoDraggerLength:true,
+                        scrollButtons:{
+                            enable:false
+                        },
+                        advanced:{
+                            updateOnContentResize: true
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+
+<?php else:?>
+    <?php echo $this->translate('Brak uczestników gry');?>
+<?php endif; ?>

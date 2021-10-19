@@ -1,0 +1,115 @@
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+<h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+<table cellspacing="0" cellpadding="0" class="grid datas">
+    <tbody>
+        <tr class="row">
+            <td valign="top" class="col bold">
+                <?php echo $this->translate('label_shop_admin_show_id'); ?>
+            </td>
+            <td valign="top" class="col">
+                <?php echo $this->shopOrder->getId(); ?>
+            </td>
+        </tr>
+        <tr class="row">
+            <td valign="top" class="col bold">
+                <?php echo $this->translate('label_shop_admin_show_created-at'); ?>
+            </td>
+            <td valign="top" class="col">
+                <?php echo $this->shopOrder->getCreatedAt(); ?>
+            </td>
+        </tr>
+        <tr class="row">
+            <td valign="top" class="col bold">
+                <?php echo $this->translate('label_shop_admin_show_user-name'); ?>
+            </td>
+            <td valign="top" class="col">
+                <?php echo $this->shopOrder->User->getName(); ?>
+            </td>
+        </tr>
+        <tr class="row">
+            <td valign="top" class="col bold">
+                <?php echo $this->translate('label_shop_admin_show_exhib-stand-name'); ?>
+            </td>
+            <td valign="top" class="col">
+                <a target="_blank" href="<?php echo $this->url(array('stand_hash' => $this->shopOrder->ExhibStand->hash), 'event_admin-stand_edit') ?>">
+                    <?php echo $this->shopOrder->ExhibStand->getName(); ?>
+                </a>
+            </td>
+        </tr>
+        <tr class="row">
+            <td valign="top" class="col bold">
+                <?php echo $this->translate('label_shop_admin_show_price'); ?>
+            </td>
+            <td valign="top" class="col">
+                <?php echo $this->currency($this->shopOrder->getPrice()); ?>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<form id="grid-action-form" method="post" action="">
+    <div class="toolbar toolbar-top"><?php echo $this->placeholder('toolbar'); ?></div>
+    <table cellspacing="0" cellpadding="0" class="grid datas">
+        <tbody>
+        <tr>
+            <th class="head first" style="width: 7%; text-align: right;">
+                <?php echo $this->translate('Lp.'); ?>
+            </th>
+            <th class="head">
+                <?php echo $this->translate('label_admin_shop_order_product-name'); ?>
+            </th>
+            <th class="head" style="width: 7%">
+                <?php echo $this->translate('label_admin_shop_order_product-count'); ?>
+            </th>
+            <th class="head" style="width: 18%; text-align: right;">
+                <?php echo $this->translate('label_admin_shop_order_product-price'); ?>
+            </th>
+            <th class="head" style="width: 23%; text-align: right">
+                <?php echo $this->translate('label_admin_shop_order_product-price-total'); ?>
+            </th>
+        </tr>
+        <tr class="row row-template">
+            <td valign="top" class="first col"></td>
+            <td valign="top" class="col"></td>
+            <td valign="top" class="col"></td>
+            <td valign="top" class="col"></td>
+            <td valign="top" class="col"></td>
+        </tr>
+
+        <?php foreach( $this->shopOrder->Products as $key => $product ): /* @var $product ShopOrderProduct */ ?>
+            <tr class="row <?php if( 0 == ($key%2) ): ?>odd<?php else: ?>even<?php endif; ?>">
+                <td valign="top" class="col" style="text-align: right;">
+                    <?php echo ++$key.'.'; ?>
+                </td>
+                <td valign="top" class="col">
+                    <a target="_blank" href="<?php echo $this->url( array('stand_hash' => $this->shopOrder->ExhibStand->hash, 'product_hash' => $product->Product->getHash()), 'admin_stand-offer_edit' ) ?>">
+                        <?php echo $product->Product->getName(); ?>
+                    </a>
+                </td>
+                <td valign="top" class="col">
+                    <?php echo $product->getCount(); ?>
+                </td>
+                <td valign="top" class="col" style="text-align: right;">
+                    <?php echo $this->currency($product->getPrice()); ?>
+                </td>
+                <td valign="top" class="col" style="text-align: right;">
+                    <?php echo $this->currency($product->getPriceTotal()); ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+        <tr class="row">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td valign="top" class="col bold" style="text-align: right;">
+                <?php echo $this->translate('label_shop_admin_show_price'); ?>
+            </td>
+            <td valign="top" class="col bold" style="text-align: right;">
+                <?php echo $this->currency($this->shopOrder->getPrice()); ?>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="toolbar toolbar-bottom"><?php echo $this->placeholder('toolbar'); ?></div>
+</form>

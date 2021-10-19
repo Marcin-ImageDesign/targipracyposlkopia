@@ -1,0 +1,15 @@
+
+<div class="spacerL"></div>
+    <ul class="contents">
+        <?php echo $this->render('_backLink.phtml');?>
+        <li>
+            <a href="<?php echo $this->url( array( ), 'brand_admin' ); ?>">
+           <?php echo $this->translate('Show brand list'); ?>
+        </a>
+        </li>
+        <li>
+            <a href="<?php echo $this->url( array( ), 'brand_admin_new' ); ?>">
+          <img class="mb-3" src="/_images/icon/add.png" />  <?php echo $this->translate('Add brand'); ?>
+        </a>
+        </li>
+    </ul>

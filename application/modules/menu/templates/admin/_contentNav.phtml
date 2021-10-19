@@ -1,0 +1,13 @@
+<ul class="contents">
+    <?php echo $this->render('_backLink.phtml');?>
+    <li>
+        <a href="<?php echo $this->url( array(), 'admin_menu' ); ?>">
+            <?php echo $this->translate('Show menu'); ?>
+        </a>
+    </li>
+    <li>
+        <a href="<?php echo $this->url( array(), 'admin_menu_new' ); ?>">
+            <?php echo $this->translate('Add page menu'); ?>
+        </a>
+    </li>
+</ul>

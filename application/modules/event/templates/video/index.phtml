@@ -1,0 +1,37 @@
+<?php $this->placeholder('h1')->captureStart();?>
+    <h1 class="title"><?=$this->escape($this->selectedEvent->getTitle())?></h1>
+<?php $this->placeholder('h1')->captureEnd();?>
+    
+
+   <h2>
+       <?php echo $this->translate( 'label_event_video_index_videos' ); ?>
+   </h2>
+
+<div class="mcsb">
+   <?php $vi = 0; ?>
+   <?php if ($this->eventVideoList->count() > 0):?>
+       <?php foreach ($this->eventVideoList as $eventVideo):?>
+       <?php $vi++; ?>
+       <div class="videoItem<?php echo (($vi%4)==0)?' lastElemInLine':'' ?>">
+           <div class="videoItemIns" style="background-image: url('<?php echo $eventVideo->getVideoPhoto();?>');">
+               <a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'video_hash' => $eventVideo->getHash()), 'event-video_details');?>" class="contentLoad" title=""></a>
+           </div>
+           <a class="contentLoad" href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(),'video_hash' => $eventVideo->getHash()), 'event-video_details');?>"><?php echo $eventVideo->getName() ?></a>
+       </div>
+       
+           
+        <?php endforeach; ?>
+    <?php else:?>
+        <p>Lista klipów wideo jest pusta</p>
+    <?php endif;?>
+   <div class="clr"></div>
+
+</div>
+<?php echo $this->render('pagination.phtml'); ?>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.overlay_content').height(455);
+        $('.pager a').addClass('contentLoad');
+    })
+</script>
+

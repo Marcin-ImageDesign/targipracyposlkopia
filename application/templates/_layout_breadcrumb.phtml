@@ -1,0 +1,21 @@
+<p>
+    <a href="<?php echo $this->url(array(), 'home');?>" title="<?php echo $this->translate('Home page'); ?>"><?php echo $this->translate('Home page'); ?></a>
+    
+    <?php if(isset($this->selectedEvent) && $this->selectedEvent): ?>
+        <span class="sep">/</span>
+        <a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'hall_uri' => $this->hall_uri), 'event_hall_uri');?>" title="<?php echo $this->escape($this->selectedEvent->getTitle()); ?>"><?php echo $this->escape($this->selectedEvent->getTitle()); ?></a>
+    <?php endif; ?>
+        
+    <?php $count = count($this->breadcrumb); ?>
+    <?php foreach($this->breadcrumb as $k => $v): ?>
+        <span class="sep">/</span>
+        <?php if(isset($v['url']) && ($count>($k+1))): ?>
+            <a href="<?php echo $this->escape($v['url']); ?>" title="<?php echo $this->escape($v['label']); ?>">
+                <?php echo $this->escape($v['label']); ?>
+            </a>
+        <?php else: ?>
+            <?php echo $this->escape($v['label']); ?>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</p>
+    

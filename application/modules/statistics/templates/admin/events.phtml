@@ -1,0 +1,65 @@
+<script type="text/javascript" src="//www.google.com/jsapi"></script>
+<script type="text/javascript" src="<?= $this->BaseUserUri(); ?>/_js/statistics_chart_functions.js"<?= '?tiem='.time();?>></script>
+
+<script type="text/javascript">
+      var user_role = parseInt('<?= $this->userAuth->UserRole->getId(); ?>');
+      google.load("visualization", "1", {packages:["imagebarchart", "annotatedtimeline"]});
+      google.setOnLoadCallback(showGraphs);
+	  function showGraphs() {
+              $.getJSON("<?= $this->url(array('type' => 'events_view','hash' => $this->selectedBaseUser->getHash()), 'statistics_admin-history'); ?>?date_from=<?php echo $this->search['date_from'];?>&date_to=<?php echo $this->search['date_to'];?>", statistics_data_handler);
+	  }
+
+</script>
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+
+<h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+<?php $this->placeholder('aside')->captureStart(); ?>
+<?php echo $this->filter; ?>
+<?php $this->placeholder('aside')->captureEnd(); ?>
+<?php if(!empty($this->eventList)) : ?>
+    <div id="time_line" style="height: 300px; margin-left: auto; margin-right: auto;">
+    &nbsp;
+    </div>
+<form id="grid-action-form" method="post" action="">
+    <div class="toolbar toolbar-top"><?php echo $this->placeholder('toolbar'); ?></div>
+    <table cellspacing="0" cellpadding="0" class="grid datas">
+        <tbody>
+            <tr>
+                <th class="head">
+                    <?php echo $this->translate('Event name'); ?>
+                </th>
+                <th class="head">
+                    <?php echo $this->translate('Stand views count'); ?>
+                </th>
+                <th class="head">
+                    <?php echo $this->translate('label_statistics-admin_hall-view'); ?>
+                </th>
+            </tr>
+            <tr class="row row-template">
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+            </tr>
+
+            <?php foreach ($this->eventList as $key => $event): ?>
+                <tr class="row <?php if (0 == ($key % 2)): ?>odd<?php else: ?>even<?php endif; ?>">
+                    <td valign="top" class="col">
+                      <a class="edit" href="<?php echo $this->url(array(), 'statistics_admin-events'); ?>?setSelectedEvent=<?php echo $event->getHash();?>">
+                            <?php echo $this->escape($event->getTitle()); ?>
+                      </a>
+                    </td>
+                    <td valign="top" class="col">
+                        <?= isset($this->statisticsList[$event->getId()][Statistics::CHANNEL_STAND_VIEW]) ?  $this->escape($this->statisticsList[$event->getId()][Statistics::CHANNEL_STAND_VIEW]) : 0; ?>
+                    </td>
+                    <td valign="top" class="col">
+                        <?php echo (int)@$this->statisticsList[$event->getId()][Statistics::CHANNEL_HALL_VIEW] ?>
+                    </td>
+                </tr>                
+            <?php endforeach; ?>
+
+        </tbody>
+    </table>
+
+</form>
+<?php endif; ?>
+

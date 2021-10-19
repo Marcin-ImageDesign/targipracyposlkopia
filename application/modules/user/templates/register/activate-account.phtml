@@ -1,0 +1,15 @@
+<p>
+    <?php echo $this->escape($this->message); ?>
+</p>
+<p><?php echo $this->translate('Please wait for automatic redirection.');?></p>
+<?php 
+    if ($this->selectedEvent->getIsReceptionActive()){
+        $url = $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'event_reception');
+    }else{
+        $url = $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'event_hall');
+    }
+?>
+<?php $this->headScript()->captureStart(); ?>
+    var url = '<?php echo $url?>';
+    setTimeout(function(){window.location.href=url}, 5000)
+<?php $this->headScript()->captureEnd(); ?>

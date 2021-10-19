@@ -1,0 +1,52 @@
+<?php if( 'get' == $this->mode ): ?>
+	<script type="text/javascript">
+		function getFileElement( link, title ){
+			window.opener.setLink( link, title );
+			window.close();
+		}
+	</script>
+<?php endif; ?>
+
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+    <h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+    <?php echo $this->partial(
+        '_headling_button.phtml',
+        array( 'title' => $this->translate('Send new file'), 'url' => $this->url( array(), 'site_files_uploadFile' ).'?path='.$this->path.'&mode='.$this->mode )  ); ?>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+<form method="post" action="<?=$this->url(array(),'site_files_operation')?>">
+	<?=$this->formHidden('path', $this->path )?>
+	<?=$this->formHidden('mode', $this->mode )?>
+
+	<div class="files_manager_container">
+
+        <?php echo $this->render('admin/_breadcrumb.phtml'); ?>
+		<?=$this->render('admin/selected-options.phtml')?>
+		<div class="cl"></div>
+		<?php if( $this->viewMode == 'list' ):?>
+			<?=$this->render('admin/view_list.phtml')?>
+		<?php else: ?>
+			<?=$this->render('admin/view_tiles.phtml')?>
+		<?php endif; ?>
+	</div>
+	
+	<div class="cl"></div>
+	<div class="spacerS"></div>
+		<?=$this->render('admin/selected-options.phtml')?>
+
+	<?php if( count($this->catalogContent) != 0 ): ?>
+		<div class="mlL onLeft">&uarr; <a href="#" id="select_all_files"><?php echo $this->translate('select all'); ?></a> /
+            <a href="#" id="deselect_all_files"><?php echo $this->translate('clear all'); ?></a></div>
+		<div class="cl"></div>
+		<div class="spacerL"></div>
+
+		<div class="legend">
+			<div class="info"> - <?php echo $this->translate('select do copy'); ?></div>
+			<div class="color copyFile"></div>
+			<div class="info"> - <?php echo $this->translate('select do cut'); ?></div>
+			<div class="color cutFile"></div>
+			<div class="info"> - <?php echo $this->translate('selected'); ?></div>
+			<div class="color selectedFile"></div>
+		</div>
+	<?php endif; ?>
+</form>

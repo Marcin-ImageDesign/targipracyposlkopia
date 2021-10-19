@@ -1,0 +1,20 @@
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+    <h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+<h2><?=$this->translate('label_developers-admin_get-logs')?></h2>
+<div>Plik logów apacha: <a href="<?=$this->url(array(), 'developers_admin_get-file')?>?file=error.log">error.log</a></div>
+<div>Plik logów apacha: <a href="<?=$this->url(array(), 'developers_admin_get-file')?>?file=access.log">access.log</a></div>
+
+<h2><?=$this->translate('label_developers-admin_get-file')?></h2>
+<form action="<?=$this->url(array(), 'developers_admin_get-file')?>" method="get">
+    File: <?=$this->formText('file', '')?>
+    Display: <?=$this->formText('display', '1')?>
+    <?=$this->formSubmit('option', 'Get File')?>
+</form>
+
+<?php if(isset($this->display_buffer)): ?>
+    <p>
+        <?=$this->display_buffer?>
+    </p>
+<?php endif; ?>

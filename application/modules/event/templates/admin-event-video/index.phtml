@@ -1,0 +1,100 @@
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+<?php
+
+echo $this->partial(
+        '_headling_button.phtml', array('title' => $this->translate('label_cms_add-new-video'), 'url' => $this->url(array('event_hash' => $this->selectedEvent->getHash()), 'admin_event-video_new')));
+
+?>
+<h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+<?php $this->placeholder('aside')->captureStart(); ?>
+<?php echo $this->filter; ?>
+<script type="text/javascript">
+    $(document).ready(function(){
+        changeFilterSelect('select-active-filter');
+    });
+    
+</script>
+<?php $this->placeholder('aside')->captureEnd(); ?>
+
+<?php $this->placeholder('toolbar')->captureStart(); ?>
+<?php echo $this->render('commponents/pagination.phtml'); ?>
+<?php $this->placeholder('toolbar')->captureEnd(); ?>
+
+<form id="grid-action-form" method="post" action="">
+    <div class="toolbar toolbar-top"><?php echo $this->placeholder('toolbar'); ?></div>
+    <table cellspacing="0" cellpadding="0" class="grid datas">
+        <tbody>
+            <tr>
+                <th class="head" width="120">
+                    <?php echo $this->translate('label_event_admin-stand-video_index_created-at'); ?>
+                </th>
+                <th class="head" width="550">
+                    <?php echo $this->translate('label_event_admin-stand-video_index_video-name'); ?>
+                </th>
+                <th class="head">
+                    <?php echo $this->translate('label_event_admin-stand-video_index_video-preview'); ?>
+                </th>
+                <th class="head">
+                    <?php echo $this->translate('label_event_admin-stand-video_index_is-active'); ?>
+                </th>
+                
+            </tr>
+            <tr class="row row-template">
+                <td valign="top" class="first col"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+            </tr>
+
+            <?php foreach ($this->eventVideoList as $key => $video): ?>
+                <tr class="row <?php if (0 == ($key % 2)): ?>odd<?php else: ?>even<?php endif; ?>">
+                    <td valign="top" class="col">
+                        <a class="edit" href="<?php echo $this->url(array('event_hash' => $this->selectedEvent->getHash(),'video_hash' => $video->getHash()), 'admin_event-video_edit');?>">
+                             <?php echo date('Y-m-d H:i',strtotime($video->getCreatedAt()));?>
+                        </a>
+                    </td>
+                    <td valign="top" class="col">
+                        <a class="edit" href="<?php echo $this->url(array('event_hash' => $this->selectedEvent->getHash(),'video_hash' => $video->getHash()), 'admin_event-video_edit');?>">
+                            <?php echo $video->getName();?>
+                        </a>
+                    </td>
+                    <td valign="top" class="col">
+                        <a target="_blank" class="edit" href="http://www.youtube.com/watch?v=<?php echo $video->getKey();?>">
+                            <?php echo $this->translate('label_event_admin-stand-video_index_video-preview');?>
+                        </a>
+                    </td>
+                    <td valign="top" class="col">
+                            <div class="online">
+                            <?php $isActive = (int)$video->getIsActive(); ?>
+                            <a href="<?php echo $this->url( array('event_hash' => $this->selectedEvent->getHash(), 'video_hash' => $video->getHash() ), 'admin_event-video_status' ); ?>" class="status"><span class="switch-<?php echo $isActive; ?>"><?php echo $isActive; ?></span></a>
+                        </div>
+                    </td>
+                    <td valign="top" class="col" nowrap>
+                        <ul class="actions">
+                            <li>
+                                <a title="<?php echo $this->translate('label_event_admin-stand-video_index_edit'); ?>" class="help" href="<?php echo $this->url(array('event_hash' => $this->selectedEvent->getHash(),'video_hash' => $video->getHash()), 'admin_event-video_edit');?>">
+                                    <span class="ui-icon ui-icon-pencil"><?php echo $this->translate('label_event_admin-stand-video_index_edit'); ?></span>
+                                    <span class="bullet" style="width: 24px;"><?php echo $this->translate('label_event_admin-stand-video_index_edit'); ?></span>
+                                    <span class="ui-icon ui-icon-triangle-1-s queue"></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a onclick="return confirm('<?php echo $this->translate('label_event_admin-stand-video_index_comm-confirm-delete'); ?>');" title="<?php echo $this->translate('label_event_admin-stand-video_index_delete'); ?>" class="help" href="<?php echo $this->url(array('event_hash' => $this->selectedEvent->getHash(),'video_hash' => $video->getHash()), 'admin_event-video_delete');?>">
+                                    <span class="ui-icon ui-icon-close"><?php echo $this->translate('label_event_admin-stand-video_index_delete'); ?></span>
+                                    <span class="bullet" style="width: 36px;"><?php echo $this->translate('label_event_admin-stand-video_index_delete'); ?></span>
+                                    <span class="ui-icon ui-icon-triangle-1-s queue"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>                
+            <?php endforeach; ?>
+
+        </tbody>
+    </table>
+
+</form>
+<div class="toolbar toolbar-bottom"><?php echo $this->placeholder('toolbar'); ?></div>

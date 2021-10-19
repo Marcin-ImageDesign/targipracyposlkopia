@@ -1,0 +1,13 @@
+<?php $this->placeholder('h1')->captureStart();?>
+    <h1 class="title"><?=$this->escape($this->selectedEvent->getTitle())?></h1>
+<?php $this->placeholder('h1')->captureEnd();?>
+
+<h2><?php echo $this->translate('label_event_stand_info_exhibitor-information'); ?>:</h2>
+ <?php if(!empty($this->content)) : ?>
+    <div style="width:100%;float:left;" class="mcsb">
+	    <img style="float:right;padding-left:10px;padding-bottom:10px;" src="<?php echo Service_Image::getUrl($this->exhibStand->id_image_about_us, 400, 300, 'bi' ); ?>" />
+	    <?= $this->content; ?>
+	</div>
+<?php else: ?>
+    <div style="width:100%; text-align: center;" class="mcsb"><?= $this->translate('label_event_stand_info_no-data'); ?></div>    
+<?php endif; ?>

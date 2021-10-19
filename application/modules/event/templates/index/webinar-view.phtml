@@ -1,0 +1,93 @@
+<?php if($this->showExtendedRegistration):?>
+    <div style="float: left;width: 37%;padding:0 10px">
+        Aby uzyskać dostęp do webinariów, uzupełnij dane.
+        <div style="margin-top: 20px;line-height:18px">
+                <h2>Korzyści z rejestracji rozszerzonej</h2>
+                <div>
+                    <ul>
+                        <li>
+                            <span class="greenGreen">Pełen zakres danych</span> - uzyskaj dostęp do szerszego zakresu danych i informacji o wystawcach.
+                        </li>
+                        <li>
+                            <span class="greenGreen">Konkursy</span> - Zdobywaj nagrody w trakcie zwiedzania stoisk, składania aplikacji na wybrane stanowiska pracy, uczestnicz w Webinariach.
+                        </li>
+                        <li>
+                            <span class="greenGreen">Oferty pracy</span> - Dowiedz się na jakie stoiska rekrutują konkretne firmy i złóż swoją aplikację online!
+                        </li>
+                        <li>
+                            <span class="greenGreen">Webinaria</span> - Jeśli jesteś zainteresowany rynkiem pracy w branży IT koniecznie przeczytaj oraz zobacz co mają w tym temacie do powiedzenia specjaliści w tej dziedzinie.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        <script type="text/javascript">
+            $('select.companyPosition').change(function(){
+                var value = $(this).find('option:selected').val();
+                if(value  >1 && value < 5){
+                    $('select.companyPositionDetail2').parents('.form-item').hide();
+                    $('select.companyPositionDetail').parents('.form-item').show('fast');
+                    $('label[for="UserRegister-position"]').addClass('required');
+                    $('label[for="UserRegister-position"] em').html("*");
+                } else if(value == 5 ) {
+                    $('select.companyPositionDetail').parents('.form-item').hide();
+                    $('select.companyPositionDetail2').parents('.form-item').show('fast');
+                    $('label[for="UserRegister-position"]').removeClass('required');
+                    $('label[for="UserRegister-position"] em').html("");
+                } else {
+                    $('select.companyPositionDetail').parents('.form-item').hide('fast');
+                    $('select.companyPositionDetail2').parents('.form-item').hide('fast');
+                    $('label[for="UserRegister-position"]').addClass('required');
+                    $('label[for="UserRegister-position"] em').html("*");
+                }
+            }).change();
+            $('#UserRegister-company').change(function(){
+                if($(this).val() != ''){
+                    $('label[for="UserRegister-company_post_code"]').addClass('required');
+                    $('label[for="UserRegister-company_post_code"] em').html("*");
+                } else {
+                    $('label[for="UserRegister-company_post_code"]').removeClass('required');
+                    $('label[for="UserRegister-company_post_code"] em').html("");
+                }
+            });
+            $('#registerExtended').submit(function(event){
+                var action = $(this).attr('action');
+                $.ajax({
+                    url: action,
+                    type: 'post',
+                    data:  $(this).serializeArray(),
+                    success: function(data){
+                        if(data.target){
+                            window.location.replace(data.target);
+                        } else if(data.contentTarget){
+                            loadOverlay(data.contentTarget);
+                        } 
+                        else if(data.error){
+                            $('.message').show();
+                        } else {
+                            loadOverlay(action);
+                        }
+                    }
+                });
+                event.preventDefault();
+            });
+        </script>
+    </div>
+    <div style="float: left;width:60%">
+        <div class="message" style="display: none;"><div class="message-error"><?=$this->translate('form_user_register_extended_erorr');?></div></div>
+        <form id="registerExtended" action="<?=$this->url(array('event_uri' => $this->selectedEvent->getUri(),'id_webinar'=> $this->id_webinar,'url_webinar' => $this->url_webinar), 'event_webinar_view');?>" class="form webinar" autocomplete="off" method="post">
+            <div class="group-wrapper group-main register-extended">
+
+                <?php foreach($this->registerExtendedForm->getElements() as $element):?>
+                    <?=$element;?>
+                <?php endforeach;?>
+                <input style="width:100% !important"  type="submit" value="<?=$this->translate('form_user_register_submit');?>">
+
+            </div>
+        </form>
+        <div id="wrap" class="">
+
+        </div>
+    </div>
+
+<?php endif;?>
+

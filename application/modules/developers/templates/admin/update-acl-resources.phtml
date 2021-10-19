@@ -1,0 +1,28 @@
+<h1><?= $this->translate('label_developers-new-resources') ?></h1>
+<br/>
+<ul>
+    <?php foreach ($this->missingFromDb as $name): ?>
+        <li>
+            <?= $name; ?>
+        </li>
+    <?php endforeach; ?>
+</ul>
+<?php if (count($this->missingFromDb) > 0): ?>
+    <?= $this->partial('_headling_button.phtml', ['title' => $this->translate('Add resources to DB'), 'url' => $this->url([], 'developers_admin_add-new-res')]); ?>
+<?php endif ?>
+<br/>
+<h1><?= $this->translate('label_developers-missing-resources') ?></h1>
+<br/>
+<ul>
+    <?php foreach ($this->missingFromApp as $name): ?>
+        <li>
+            <?= $name; ?>
+        </li>
+    <?php endforeach; ?>
+</ul>
+<?php if (count($this->missingFromApp) > 0): ?>
+    <?php
+    echo $this->partial(
+        '_headling_button.phtml', ['title' => $this->translate('Remove from DB'), 'url' => $this->url([], 'developers_admin_remove-missing-res')]);
+    ?>
+<?php endif ?>

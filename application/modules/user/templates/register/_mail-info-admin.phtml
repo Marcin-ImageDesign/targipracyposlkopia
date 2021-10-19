@@ -1,0 +1,21 @@
+<table border="0" cellpadding="5" cellspacing="5" width="600"  style="font-size: 12px; font-family: Tahoma;">
+    <tr>
+        <th colspan="2" align="left"><b><?php echo $this->translate('label_user_register_mail_admin_user-registration');?> <?php echo DOMAIN; ?></b></th>
+    </tr>
+
+    <tr>
+        <td style="border-bottom: 1px dashed #cccccc;" width="25%"><?php echo $this->translate('label_user_register_mail_admin_date');?>:</td>
+        <td style="border-bottom: 1px dashed #cccccc;"><b><?php echo date('Y-m-d H:i'); ?></b></td>
+    </tr>
+
+    <tr>
+        <td style="border-bottom: 1px dashed #cccccc;"><?php echo $this->translate('label_user_register_mail_admin_name-surname');?>:</td>
+        <td style="border-bottom: 1px dashed #cccccc;"><b><?php echo $this->escape( $this->user->getName() ); ?></b></td>
+    </tr>
+
+    <tr>
+        <td style="border-bottom: 1px dashed #cccccc;"><?php echo $this->translate('label_user_register_mail_admin_email');?>:</td>
+        <td style="border-bottom: 1px dashed #cccccc;"><b><?php echo $this->escape( $this->user->getEmail() ); ?></b></td>
+    </tr>
+
+</table>

@@ -1,0 +1,41 @@
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+    <h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+<div class="message">
+    <div class="message-info"><?=$this->translate('label_please_select-event_to-continue')?></div>
+</div>
+
+<table cellspacing="0" cellpadding="0" class="grid datas">
+    <tbody>
+    <tr>
+        <th class="head first"><?php echo $this->translate('Title'); ?></th>
+        <th class="head"><?php echo $this->translate('Select'); ?></th>
+        <th width="60px" class="head"></th>
+    </tr>
+    <tr class="row row-template">
+        <td valign="top" class="first col"></td>
+        <td valign="top" class="col"></td>
+    </tr>
+
+    <?php foreach($this->eventList as $key => $event): /* @var $event Event */ ?>
+        <tr class="row <?php if(0 == ($key % 2)): ?>odd<?php else: ?>even<?php endif; ?>">
+            <td valign="top" class="col">
+                <a href="<?=$this->return?>?setSelectedEvent=<?=$event->getHash()?>">
+                    <?php echo $this->escape($event->getTitle()); ?>
+                </a>
+            </td>
+            <td valign="top" class="col">
+                <ul class="actions">
+                    <li>
+                        <a href="<?=$this->return?>?setSelectedEvent=<?=$event->getHash()?>">
+                            wybierz <img src="/_images/icon/bullet_go.png" class="mb-3"/>
+                        </a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+
+    </tbody>
+</table>

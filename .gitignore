@@ -1,0 +1,11 @@
+.idea/*
+public/chat/files/
+public/chat/cache/*
+public/chat/files/operator/*
+*.orig
+*/_repository/*
+*/_db/*
+private/base_user/_vtargi.pl/_files/*
+
+/config.php
+vendor/*

@@ -1,0 +1,22 @@
+<div class="logotypes">    
+    <?php if(true && $this->standNumberList->count() > 0):?>
+        <?php foreach ($this->standNumberList as $standNumber):?>
+            <a class="numbers_preview" style="left:<?php echo round(($standNumber->logo_pos_x) / $this->y_factor);?>px;top:<?php echo round(($standNumber->logo_pos_y ) / $this->x_factor)  ;?>px"><div class='stand_no <?php if($standNumber->id_stand_level == 1):?> standStd <?php elseif ($standNumber->id_stand_level == 2):?> standRegio <?php else:?> standMain <?php endif;?>'><?php echo $standNumber->name;?></div>
+            </a>
+        <?php endforeach;?>
+    <?php endif;?>
+</div>
+<img height="<?php echo $this->iframe_height;?>" width="<?php echo $this->iframe_width;?>" src="<?php 
+            echo Service_Image::getUrl(
+                $this->eventHallMap->getImage(),
+                $this->eventHallMap->getWidth(),
+                $this->eventHallMap->getHeight(),
+                'b'
+            )?>" alt="" class="imageMapMin" />
+<script type="text/javascript">
+    if($('.logotypes a').size() > 0){
+        $('.logotypes').show();
+    }
+    $('.imageMapMin').show();
+
+</script>

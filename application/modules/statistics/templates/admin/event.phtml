@@ -1,0 +1,121 @@
+<script type="text/javascript" src="//www.google.com/jsapi"></script>
+<script type="text/javascript" src="<?= $this->BaseUserUri(); ?>/_js/statistics_chart_functions.js"></script>
+
+
+<script type="text/javascript">
+      google.load("visualization", "1", {packages:["imagebarchart", "annotatedtimeline"]});
+      google.setOnLoadCallback(showGraphs);
+	  function showGraphs() {
+              $.getJSON("<?= $this->url(array('type' => 'event_stands_view','hash' => $this->event->getHash()), 'statistics_admin-history'); ?>?date_from=<?php echo $this->search['date_from'];?>&date_to=<?php echo $this->search['date_to'];?>", statistics_data_handler);
+	  }
+      
+</script>
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+
+<h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+<?php $this->placeholder('aside')->captureStart(); ?>
+<?php echo $this->filter; ?>
+<?php $this->placeholder('aside')->captureEnd(); ?>
+<h2><?php echo $this->event->getTitle();?></h2>
+<?php if(!empty($this->statisticsList)) : ?>
+    <div id="time_line" style="height: 300px; margin-left: auto; margin-right: auto;">
+        &nbsp;
+    </div>
+<form id="grid-action-form" method="post" action="">
+    <div class="toolbar toolbar-top"><?php echo $this->placeholder('toolbar'); ?></div>
+    <table cellspacing="0" cellpadding="0" class="grid datas">
+        <tbody>
+            <tr>
+                <th class="head <?php if ($this->orderCol == 'id_user'): ?>sorting-<?php if ($this->orderDir == 'DESC'): ?>desc<?php else: ?>asc<?php endif; ?><?php endif; ?>">
+                    <a href="?order=id_user <?php if ($this->orderDir == 'DESC'): ?>ASC<?php else: ?>DESC<?php endif; ?>&page=1">
+                        <span class="ui-icon"></span><?php echo $this->translate('statistics_stand_name'); ?>
+                    </a>
+                </th>
+                <th>
+                    <?php echo $this->translate('statistics_views_count'); ?>
+                </th>
+                <th>
+                    <?php echo $this->translate('statistics_product_list_count'); ?>
+                </th>
+                <th>
+                    <?php echo $this->translate('statistics_product_count'); ?>
+                </th>
+                <th>
+                    <?php echo $this->translate('statistics_contact_count'); ?>
+                </th>
+                <th>
+                    <?php echo $this->translate('statistics_fb_count'); ?>
+                </th>
+                <th>
+                    <?php echo $this->translate('statistics_file_count'); ?>
+                </th>
+                <th>
+                    <?php echo $this->translate('statistics_shop_count'); ?>
+                </th>
+            </tr>
+            <tr class="row row-template">
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+            </tr>
+            <tr class="row summary">
+                <td valign="top" class="col"><?php echo $this->translate('label_statistics_summary');?></td>
+                <td valign="top" class="col"><?php echo $this->global['stand_view'];?></td>
+                <td valign="top" class="col"><?php echo $this->global['stand_product_viewlist'];?></td>
+                <td valign="top" class="col"><?php echo $this->global['stand_product_view'];?></td>
+                <td valign="top" class="col"><?php echo $this->global['stand_contact_view'];?></td>
+                <td valign="top" class="col"><?php echo $this->global['stand_facebook_view'];?></td>
+                <td valign="top" class="col"><?php echo $this->global['stand_file_view'];?></td>
+                <td valign="top" class="col"><?php echo $this->global['stand_shop_view'];?></td>
+            </tr>
+
+
+            <?php foreach ($this->exhib_stands as $key => $exhib_stand): ?>
+                <tr class="row <?php if (0 == ($key % 2)): ?>odd<?php else: ?>even<?php endif; ?>">
+                    <td valign="top" class="col">
+                        <?php echo $this->escape($exhib_stand->getName()); ?>
+                    </td>
+                    <td valign="top" class="col">
+                        <a class="edit" href="<?php echo $this->url(array( 'hash' => $exhib_stand->getHash()), 'statistics_admin-stand-view'); ?>">
+                            <?= isset($this->statisticsList[$exhib_stand->getId()][Statistics::CHANNEL_STAND_VIEW]) ?  $this->escape($this->statisticsList[$exhib_stand->getId()][Statistics::CHANNEL_STAND_VIEW]) : 0; ?>
+                        </a>
+                    </td>
+                    <td valign="top" class="col">
+                        <?= isset($this->statisticsList[$exhib_stand->getId()][Statistics::CHANNEL_STAND_PRODUCT_VIEWLIST]) ?  $this->escape($this->statisticsList[$exhib_stand->getId()][Statistics::CHANNEL_STAND_PRODUCT_VIEWLIST]) : 0; ?>
+                    </td>
+                    <td valign="top" class="col">
+                        <?= isset($this->statisticsList[$exhib_stand->getId()][Statistics::CHANNEL_STAND_PRODUCT_VIEW]) ?  $this->escape($this->statisticsList[$exhib_stand->getId()][Statistics::CHANNEL_STAND_PRODUCT_VIEW]) : 0; ?>
+                    </td>
+                    
+                    <td valign="top" class="col">
+                        <?= isset($this->statisticsList[$exhib_stand->getId()][Statistics::CHANNEL_STAND_CONTACT_VIEW]) ?  $this->escape($this->statisticsList[$exhib_stand->getId()][Statistics::CHANNEL_STAND_CONTACT_VIEW]) : 0; ?>
+                    </td>
+                    
+                    <td valign="top" class="col">
+                        <?= isset($this->statisticsList[$exhib_stand->getId()][Statistics::CHANNEL_STAND_FACEBOOK_VIEW]) ?  $this->escape($this->statisticsList[$exhib_stand->getId()][Statistics::CHANNEL_STAND_FACEBOOK_VIEW]) : 0; ?>
+                    </td>
+                    
+                    <td valign="top" class="col">
+                        <?= isset($this->statisticsList[$exhib_stand->getId()][Statistics::CHANNEL_STAND_FILE_VIEW]) ?  $this->escape($this->statisticsList[$exhib_stand->getId()][Statistics::CHANNEL_STAND_FILE_VIEW]) : 0; ?>
+                    </td>
+                    
+                    <td valign="top" class="col">
+                        <?= isset($this->statisticsList[$exhib_stand->getId()][Statistics::CHANNEL_STAND_SHOP_VIEW]) ?  $this->escape($this->statisticsList[$exhib_stand->getId()][Statistics::CHANNEL_STAND_SHOP_VIEW]) : 0; ?>
+                    </td>
+                    
+                </tr>                
+            <?php endforeach; ?>
+
+        </tbody>
+    </table>
+
+</form>
+<?php endif; ?>
+
+

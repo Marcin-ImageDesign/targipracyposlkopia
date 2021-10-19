@@ -1,0 +1,68 @@
+<table>
+    <thead>
+    <tr>
+        <th style="width:150px;"><?php echo $this->translate('label_event_stand-offer_index_offer'); ?></th>
+        <th><?php echo $this->translate('label_event_stand-offer_index_description'); ?></th>
+        <th><?php echo $this->translate('label_event_stand-offer_index-count'); ?></th>
+        <th>Cena</th>
+        <th>Wartość</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach( $this->shopOrderList as $key => $briefcase ): /** @var $briefcase ShopOrder */ ?>
+        <?php foreach ($briefcase->Products as $product) : /** @var $product ShopOrderProduct */ ?>
+            <tr>
+                <td class="name">
+                    <?php echo $this->escape( $product->Product->getName() );?>
+                </td>
+                <td class="desc">
+                    <?php echo $this->LimitText($product->Product->getDescription(), 18); ?>
+                </td>
+                <td class="count">
+                    <?php echo $this->escape($product->getCount()) ?>
+                </td>
+                <td class="price">
+                    <?php echo $this->currency($product->getPrice()); ?>
+                </td>
+
+                <td class="value">
+                    <?php $value = $product->getCount() * $product->getPrice(); ?>
+                    <?php echo $this->currency($value); ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    <?php endforeach; ?>
+    <tr>
+        <td colspan="5" style="text-align:right !important;">
+            Całkowita wartość zakupów<br>
+            <?php echo $this->currency($briefcase->getPrice()); ?>
+        </td>
+    </tr>
+    </tbody>
+
+</table>
+<div style="margin-top: 20px; background-color: #157d6d; color: #fff; padding: 5px; font-weight: bold;">
+    <?php echo $this->translate( 'label_briefcase_user_data_adv') ?>
+</div>
+<div>
+    Imię i Nazwisko (nazwa firmy):
+    <strong>
+        <?php echo $this->clientData->getFirstName() . $this->clientData->getLastName(); ?>
+        <?php echo $company = (!empty($this->clientData->company)) ? ' (' . $this->clientData->getCompany() . ') ' : ''; ?>
+    </strong>
+    <br>
+    Kod pocztowy / Miasto:
+    <strong>
+        <?php echo $this->clientData->getPostCode() . ' ' . $this->clientData->getCity(); ?>
+    </strong>
+    <br>
+    Ulica / Nr domu / Nr mieszkania:
+    <strong>
+        <?php echo $this->clientData->getStreet(); ?>
+    </strong>
+    <br>
+    Email / Telefony:
+    <strong>
+        <?php echo $this->clientData->getEmail() . ' ' . $this->clientData->getPhone(); ?>
+    </strong>
+</div>

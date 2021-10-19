@@ -1,0 +1,44 @@
+<?php if( isset( $this->event ) && !$this->event->isNew() ): ?>
+    <div class="contents_menu_header"><?php echo $this->translate('label_nav_participation_admin_accounts'); ?>
+        <div class="spacerL"></div>
+    </div>
+    <ul class="contents">
+        <?php if($this->userAuth->hasAccess('participation_admin_organizers')): ?>
+        <li>
+            <a href="<?php echo $this->url( array(), 'user_admin-participation_list-'.ExhibParticipationType::TYPE_ORGANIZER ); ?>">
+                <img class="mb-3" src="/_images/icon/tango_16/edit-copy.png"> <?php echo $this->translate('Show organizers'); ?>
+            </a>
+        </li>
+        <?php endif; ?>
+        <li>
+            <a href="<?php echo $this->url( array(), 'user_admin-participation_list-'.ExhibParticipationType::TYPE_EXHIBITOR ); ?>">
+                <img class="mb-3" src="/_images/icon/tango_16/edit-copy.png"> <?php echo $this->translate('Show exhibitors'); ?>
+            </a>
+        </li>
+        <li>
+            <a href="<?php echo $this->url( array(), 'user_admin-participation_list-'.ExhibParticipationType::TYPE_MODERATOR ); ?>">
+                <img class="mb-3" src="/_images/icon/tango_16/edit-copy.png"> <?php echo $this->translate('Show moderators'); ?>
+            </a>
+        </li>
+        <li>
+            <a href="<?php echo $this->url( array(), 'user_admin-participation_list-'.ExhibParticipationType::TYPE_PARTICIPANT ); ?>">
+                <img class="mb-3" src="/_images/icon/tango_16/edit-copy.png"> <?php echo $this->translate('Show visitors'); ?>
+            </a>
+        </li>
+    </ul>
+    <div class="contents_menu_header"><?php echo $this->translate('Organizational office'); ?>
+        <div class="spacerL"></div>
+    </div>
+    <ul class="contents">
+        <li>
+            <a href="<?php echo $this->url( array( 'hash' => $this->event->getHash() ), 'event_admin-file' ); ?>">
+                <img class="mb-3" src="/_images/icon/tango_16/edit-copy.png"> <?php echo $this->translate('Information documents'); ?>
+            </a>
+        </li>
+        <li>
+            <a href="<?php echo $this->url( array( 'hash' => $this->event->getHash() ), 'event_admin-site' ); ?>">
+                <img class="mb-3" src="/_images/icon/tango_16/edit-copy.png"> <?php echo $this->translate('Sites list'); ?>
+            </a>
+        </li>
+    </ul>
+<?php endif; ?>

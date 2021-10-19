@@ -1,0 +1,19 @@
+<?php
+$this->headLink()->appendStylesheet('/_css/admin/form.css');
+?>
+
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+<h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+<div>
+    <?php echo $this->formMenu; ?>
+</div>
+<div class="cl"></div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        linkType();
+        seoActive();
+        $(".multiselect").multiselect();
+    });
+</script>

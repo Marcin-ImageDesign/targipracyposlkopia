@@ -1,0 +1,198 @@
+<?php
+
+$isLoginRequired = $this->selectedEvent->is_login_required && !$this->userAuth;
+
+if ($isLoginRequired) {
+    $event_uri = $this->url(['event_uri' => $this->selectedEvent->getUri()], 'user_register_index');
+} else {
+    if ($this->selectedEvent->getIsReceptionActive() && !$this->is_skip_reception) {
+        $event_uri = $this->url(['event_uri' => $this->selectedEvent->getUri()], 'event_reception');
+    } else {
+        $event_uri = $this->url(['event_uri' => $this->selectedEvent->getUri()], 'event_hall');
+    }
+}
+
+?>
+
+<div id="top" style="<?php
+if ($this->selectedEvent->bg_id_image) {
+    echo 'background-image: url(\'' . Service_Image::getUrl($this->selectedEvent->bg_id_image, null, null, 'n') . '\'); ';
+} elseif (!empty($this->selectedEvent->bg_color)) {
+    echo 'background-color:' . $this->selectedEvent->bg_color . '; ';
+} else {
+    echo 'background-color: #eceeef;';
+}
+?>">
+    <div class="container">
+        <header>
+        <a href="/" class="logo" style="<?php if ($this->selectedEvent->id_image)
+                echo 'background-image: url(\'' . Service_Image::getUrl($this->selectedEvent->id_image, '202', '60', 'b') . '\'); ' ?>"></a>
+            <a href="<?php echo $this->url(['event_uri' => $this->selectedEvent->getUri(), 'site_uri' => 'webinaria'], 'event_site'); ?>"
+               class="main_site_button round pullRight"><?php echo $this->translate('Webinary'); ?></a>
+            <a href="<?php echo $this->url(['event_uri' => $this->selectedEvent->getUri()], 'event_offer_catalogue'); ?>"
+               class="main_site_button round pullRight"><?php echo $this->translate('Oferty pracy'); ?></a>
+            <a href="<?php echo $this->url(['event_uri' => $this->selectedEvent->getUri(), 'hall_uri' => $this->hall_uri], 'event_exhibitors'); ?>"
+               class="main_site_button round pullRight"><?php echo $this->translate('Wystawcy'); ?></a>
+            <a href="<?php echo $this->url(['event_uri' => $this->selectedEvent->getUri()], 'event_reception'); ?>"
+               class="main_site_button round pullRight"><?php echo $this->translate('Recepcja'); ?></a>
+        </header>
+
+        <section style="padding:10px 0;" id="Section" class="row-fluid">
+            <div id="left_box_hall" class="left_box_hall round test">
+                <div id="nt-example1-container">
+                    <ul id="nt-example1" style="min-height: 550px;margin-top: 20px;">
+                        <?php if (!empty($this->sideBanners)): ?>
+                            <?php foreach ($this->sideBanners as $key => $banner): ?>
+                                <li>
+                                    <a style="<?= $banner['style']; ?>" href="<?= $banner['link']; ?>"
+                                       class="side_box_link dimm"
+                                       target="<?= $banner['target']; ?>">
+                                        <img src="<?= Service_Image::getUrl($banner['image' . $key], ['height' => 65, 'width' => 210, 'resize' => 'b']); ?>"
+                                             alt="<?= $banner['name']; ?>"/>
+                                    </a>
+                                </li>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </ul>
+                </div>
+            </div>
+
+            <?php if ($this->selectedEvent->getIsSliderOn()): ?>
+                <?php $this->headScript()->appendFile('/_js/jquery.newsTicker.min.js'); ?>
+
+                <script type="text/javascript">
+                    <?php $this->headScript()->captureStart(); ?>
+                    $(document).ready(function () {
+                        var nt_example1 = $('#nt-example1')
+                            .newsTicker({
+                                row_height: 85,
+                                max_rows: 6,
+                                duration: 2000,
+                            });
+                    });
+                    <?php $this->headScript()->captureEnd(); ?>
+                </script>
+            <?php endif; ?>
+
+            <div class="hall_outside">
+                <div id="introFlashIns"></div>
+                <img id="hall_pic" style="max-width: 100%;border-radius: 4px;"
+                     src="<?= $this->background_data->getUri() ?>" alt=""/>
+                <a href="<?= $event_uri ?>" class="blue_button_main">
+                    <?= $this->translate('click_here_to_enter'); ?>
+                </a>
+
+                <?php if (!empty($this->data_banner)): ?>
+                    <?php foreach ($this->data_banner as $key => $banner) : ?>
+                    <?php if (!empty($banner['banners'][0]['img'])): ?>
+                    <a href="<?= $banner['banners'][0]['link']; ?>" target="<?= $banner['banners'][0]['target']; ?>"
+                       class="side_banner" id="ban_<?= $banner['name']; ?>"
+                       style="top:<?= $banner['top']; ?>px; left:<?= $banner['left']; ?>px; width:<?= $banner['width']; ?>px; height:<?= $banner['height']; ?>px;
+                               background-image: url('<?= Service_Image::getUrl($banner['banners'][0]['img'], ['width' => $banner['width'], 'height' => $banner['height'], 'resize' => 'b']); ?>');
+                               background-repeat:no-repeat;
+                               background-position:center center;
+                               "></a>
+                <?php endif; ?>
+                <?php endforeach; ?>
+
+                    <script type="text/javascript">
+                        <?php $this->headScript()->captureStart(); ?>
+                        var data_banner = <?= json_encode($this->data_banner); ?>;
+                        // mniejszy rozmiar :: 968x547
+                        // większy rozmiar :: 1038x587
+                        // współczynnik :: 1.07232
+                        var ratio = 1.0724; //1.07232
+
+                        $(window).resize(function () {
+                            resizeBanner();
+                        });
+                        $(window).load(function () {
+                            resizeBanner();
+                        });
+
+                        function resizeBanner() {
+                            if (parseInt($('.container').width()) == 1310) {
+                                for (var i = 0; i < data_banner.length; i++) {
+                                    $('#ban_' + data_banner[i]['name']).css({height: (parseInt(data_banner[i]['height'] * ratio))});
+                                    $('#ban_' + data_banner[i]['name']).css({width: (parseInt(data_banner[i]['width'] * ratio))});
+                                    $('#ban_' + data_banner[i]['name']).css({top: (parseInt(data_banner[i]['top'] * ratio))});
+                                    $('#ban_' + data_banner[i]['name']).css({left: (parseInt(data_banner[i]['left'] * ratio))});
+                                }
+                            } else {
+                                for (var i = 0; i < data_banner.length; i++) {
+                                    $('#ban_' + data_banner[i]['name']).css({height: data_banner[i]['height']});
+                                    $('#ban_' + data_banner[i]['name']).css({width: data_banner[i]['width']});
+                                    $('#ban_' + data_banner[i]['name']).css({top: data_banner[i]['top']});
+                                    $('#ban_' + data_banner[i]['name']).css({left: data_banner[i]['left']});
+                                }
+                            }
+                        }
+                        <?php $this->headScript()->captureEnd(); ?>
+                    </script>
+
+                <?php endif; ?>
+            </div>
+
+            <div style="clear:both"></div>
+        </section>
+    </div>
+    <!--[if IE 8]>
+    <style type="text/css">
+        .homePageBtn li a, .hallPageBtn li a, footer {
+            background-image: url('/_images/frontend/default/black50.png');
+        }
+    </style>
+    <![endif]-->
+    <style>
+        /* fix for safari */
+        video {
+            min-height: 100%;
+            min-width: 100%;
+            height: auto !important;
+            width: auto !important;
+        }
+    </style>
+    <?php $this->headScript()->captureStart(); ?>
+
+    $(window).load(function(){
+    var set_height = $('#hall_pic').height();
+    var set_width = $('.hall_outside').width();
+    $('#left_box_hall').height(set_height);
+    $('.left_box_hall img, .hall_outside .blue_button_main').show();
+    $('.side_banner').show();
+
+    <?php if ($this->background_data->getIsAnimationOn()): ?>
+        $('#introFlashIns').first()
+        // fix for safari
+        .css('height', set_height)
+        // hide and add video
+        .hide().html(
+        '<video width="'+set_width+'" height="'+set_height+'" style="border-radius: 4px;">'
+            +'<source src="/_externals/intro/<?= Engine_I18n::getLangCode();?>/film_hala_recepcja.mp4" type="video/mp4" />'
+            +'</video>'
+        );
+        $('.hall_outside .blue_button_main').click(function() {
+        startAnim();
+        return false;
+        });
+    <?php endif; ?>
+
+    })
+
+    function startAnim() {
+    // hide baners
+    $('.side_banner').fadeOut(80);
+    // show video
+    $('#introFlashIns').first().show().find('video').first()
+    // redirection when the video has finished
+    .on('ended', function(){
+    window.location = $('.hall_outside .blue_button_main').attr('href');
+    })
+    // play
+    [0].play();
+    // hide img and button
+    $('#hall_pic').first().hide();
+    $('.hall_outside .blue_button_main').hide();
+    }
+
+<?php $this->headScript()->captureEnd(); ?>

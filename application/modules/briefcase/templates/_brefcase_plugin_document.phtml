@@ -1,0 +1,47 @@
+<?php if ( $this->eventStandFilesList->count() > 0 ) : ?>
+<div id="briefcaseDocument">
+    <table>
+        <thead>
+            <tr>
+                <th style="width:100px;"><?php echo $this->translate('label_briefcase_stand') ?></th>
+                <th style="width:150px;"><?php echo $this->translate('label_briefcase_document-title') ?></th>
+                <th><?php echo $this->translate('label_briefcase_document-desc') ?></th>
+                <th style="width:60px;">&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ( $this->eventStandFilesList as $briefcaseDocument ) : ?>
+            <tr>
+                <td class="name_stand">
+                    <a style="float: left; text-transform: none;" title="<?= $briefcaseDocument->ExhibStand->getName() ?>" class="read_more" href="<?=$this->url(array('event_uri' => $briefcaseDocument->ExhibStand->Event->getUri(),'hall_uri'=>$briefcaseDocument->ExhibStand->EventStandNumber->EventHallMap->uri,'stand_uri'=>$briefcaseDocument->ExhibStand->getUri()),'event_stand') ?>">
+                        <?php echo $this->escape( $briefcaseDocument->ExhibStand->getName() ); ?>
+                    </a><br/>
+                </td>
+                <td class="name">
+                    <a href="<?= $this->url(array('event_uri' => $briefcaseDocument->ExhibStand->Event->getUri(), 'hash' => $briefcaseDocument->getHash()), 'event_download_stand_file') ?>" title="<?php echo $this->escape( $briefcaseDocument->getName() ) ?>">
+                        <?php echo $this->escape( $briefcaseDocument->getName() );?>
+                    </a>
+                </td>
+                <td class="desc">
+                    <?php echo $this->LimitText($briefcaseDocument->getDescription(), 18); ?>
+                </td>
+
+                <td class="pobierz">
+                    <a style="float:left" href="<?= $this->url(array('event_uri' => $briefcaseDocument->ExhibStand->Event->getUri(), 'hash' => $briefcaseDocument->getHash()), 'event_download_stand_file') ?>" title="<?php echo $this->escape( $briefcaseDocument->getName() ) ?>">
+                        <img style="width: 24px;" src="<?= $this->BaseUserUri().'/_images/download.png'?>" />
+                    </a>
+                    <a style="float:left" class="rem_element" title="<?=$this->escape( $this->translate( 'label_briefcase_remove-from-briefcase' ) ); ?>" href="<?php echo $this->url(array('id_briefcase_type' => BriefcaseType::TYPE_BRIEFCASE_DOCUMENT, 'element'=>$briefcaseDocument->getId(), 'namespace'=>$briefcaseDocument->ExhibStand->id_event),'briefcase_remove-element')?>?return=<?php echo $this->url();?>" class="contentLoad" onclick="return confirm('<?php echo $this->translate('label_briefcase_remove-from-briefcase-comm1'); ?>')"><img style="margin-left: 7px;" src="<?= $this->BaseUserUri().'/_images/delete.png'?>" /></a>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+
+    </table>
+    </div>
+<?php endif; ?>
+<?php $this->headScript()->captureStart(); ?>
+$("#briefcaseDocument").mCustomScrollbar();
+<?php $this->headScript()->captureEnd(); ?>
+
+
+

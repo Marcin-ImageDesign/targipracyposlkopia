@@ -1,0 +1,40 @@
+<?php
+    $this->headLink()->appendStylesheet('/_css/admin/form.css');
+?>
+
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+    <h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+
+<?php echo $this->formBaseUser; ?>
+
+    
+<script type="text/javascript">
+ //    $(document).ready(function(){
+	// var select = $('select.field-switcher'),
+	//     div_parent = $('select.field-switcher').parent();
+	// select.css('display','none');
+	// select.each(function(){
+	//    if($(this).val()== '1'){
+	//        $(this).parent().append('<span onselectstart="return false;" style="-moz-user-select: none;" class="switch-1">1</span>');
+	//    }else{
+	//        $(this).parent().append('<span onselectstart="return false;" style="-moz-user-select: none;" class="switch-0">0</span>');
+	//    }
+	// });
+	
+	div_parent.find('span').css('cursor','pointer');
+	
+	div_parent.find('span').click(function(){
+	   if($(this).attr('class')=='switch-1'){
+	       $(this).attr('class','switch-0');
+	       $(this).parent().find('select').val($(this).parent().find('select option:first').val());
+	   }else{
+	       $(this).attr('class','switch-1');
+	       $(this).parent().find('select').val($(this).parent().find('select option:last').val());
+	   }; 
+	});
+	
+    });
+    
+</script>

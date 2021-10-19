@@ -1,0 +1,25 @@
+<?php if( $this->pager->getLastPage() > 1 ): ?>
+    <div class="pager">
+        <?php if ($this->pager->getPreviousPage() == $this->pager->getPage()):?>
+            <span style='color:#AAAAAA;' class="previous">&laquo; <?php echo $this->translate('pagination_previous');?></span>
+        <?php else:?>
+        <a href="<?=$this->url()?>?page=<?=$this->pager->getPreviousPage()?><?php if(isset($this->paginationAnhor)): ?>#<?=$this->paginationAnhor?><?php endif; ?>" class="previous">&laquo; <?php echo $this->translate('pagination_previous');?></a>
+        <?php endif;?>
+        <?php if( !$this->pagerRange->isInRange(1) ): ?>
+            <a href="<?=$this->url()?>?page=1<?php if(isset($this->paginationAnhor)): ?>#<?=$this->paginationAnhor?><?php endif; ?>" class="first">1</a>
+            ...
+        <?php endif; ?>
+        <?php foreach( $this->pages as $page ): ?>
+            <?php if( $this->pager->getPage() == $page ): ?>
+                <span class="infos"><strong>[ <?=$page?> ]</strong></span>
+            <?php else: ?>
+                <a href="<?=$this->url()?>?page=<?=$page?><?php if(isset($this->paginationAnhor)): ?>#<?=$this->paginationAnhor?><?php endif; ?>" class="page"><?=$page?></a>
+            <?php endif;?>
+        <?php endforeach; ?>
+        <?php if( !$this->pagerRange->isInRange( $this->pager->getLastPage() ) ): ?>
+            ...
+            <a href="<?=$this->url()?>?page=<?=$this->pager->getLastPage()?><?php if(isset($this->paginationAnhor)): ?>#<?=$this->paginationAnhor?><?php endif; ?>" class="last"><?=$this->pager->getLastPage()?></a>
+        <?php endif; ?>
+        <a href="<?=$this->url()?>?page=<?=$this->pager->getNextPage()?><?php if(isset($this->paginationAnhor)): ?>#<?=$this->paginationAnhor?><?php endif; ?>" class="next"><?php echo $this->translate('pagination_next');?> &raquo;</a>
+    </div>
+<?php endif; ?>

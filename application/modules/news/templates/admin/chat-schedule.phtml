@@ -1,0 +1,63 @@
+<?php
+$this->headLink()->appendStylesheet('/_css/admin/form.css');
+$this->headLink()->appendStylesheet('/_css/admin/ui.multiselect.css');
+$this->headLink()->appendStylesheet('/_css/admin/common.css');
+$this->headScript()->appendFile('/_js/admin/jquery-ui.min.js');
+$this->headScript()->appendFile('/_js/admin/ui.multiselect.js');
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        .table th:first-child {
+            text-align: left !important;
+        }
+
+        .table td {
+            text-align: center;
+        }
+
+        .table td:first-child {
+            text-align: left !important;
+        }
+
+        .table td:last-child {
+            text-align: center !important;
+        }
+
+        .table th {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+<h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+
+<table class="table table-hover">
+    <thead>
+    <tr>
+<!--        <th>L.p.</th>-->
+        <th>Nazwa</th>
+        <th>Rozpoczęcie chata</th>
+        <th>Opis</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php echo $this->render('admin/chat-schedule-list.phtml', $this); ?>
+    </tbody>
+</table>
+
+
+</div>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            #id_exhib_participation {
+                -webkit-appearance: none;
+            }
+            #status {
+                -webkit-appearance: none;
+            }
+
+        </style>
+    </head>
+    <?php
+    $this->headLink()->appendStylesheet('/_css/admin/form.css');
+    ?>
+    <?php $this->placeholder('headling_1')->captureStart(); ?>
+    <h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+    <?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+
+    <?php echo $this->form; ?>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#submit').hide();
+            $("#id_exhib_participation").attr("disabled", true);
+            $("#number").attr("disabled", true);
+            $("#price_net").attr("disabled", true);
+            $("#price_vat").attr("disabled", true);
+            $("#price_gross").attr("disabled", true);
+            $("#title").attr("disabled", true);
+            $("#status").attr("disabled", true);
+            $("#file_name").hide();
+        });
+    </script>
+</html>

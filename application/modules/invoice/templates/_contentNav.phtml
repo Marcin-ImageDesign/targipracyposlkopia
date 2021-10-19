@@ -1,0 +1,25 @@
+<div class="spacerL"></div>
+<ul class="contents">  
+    <li>
+        <a href="<?php echo $this->url(array(), 'invoice_admin-index'); ?>">
+            <img class="mb-3" src="/_images/icon/chart_bar.png" />  <?php echo $this->translate('Lista Faktur'); ?>
+        </a>
+    </li>
+    <li>
+        <a href="<?php echo $this->url(array(), 'invoice_admin-new'); ?>">
+            <img class="mb-3" src="/_images/icon/add.png" />  <?php echo $this->translate('Add invoice'); ?>
+        </a>
+    </li>
+
+    <?php
+    $url = $_SERVER['REQUEST_URI'];
+    if (strpos($url, 'admin/invoice/new') !== false) {
+        echo $this->render('_backLink.phtml');
+    } else if (strpos($url, 'admin/invoice/details') !== false) {
+        echo $this->render('_backLink.phtml');
+    } else if (strpos($url, 'admin/invoice/edit') !== false) {
+        echo $this->render('_backLink.phtml');
+    }
+    ?>
+
+</ul>

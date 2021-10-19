@@ -1,0 +1,131 @@
+<?php $this->placeholder('h1')->captureStart(); ?>
+    <h1 class="title"><?= $this->escape($this->selectedEvent->getTitle()) ?></h1>
+<?php $this->placeholder('h1')->captureEnd(); ?>
+        
+<?php $this->headScript()->appendFile('/_externals/map/js/jquery.ui.touch-punch.min.js'); ?>      
+<?php $this->headScript()->appendFile('/_externals/map/js/jquery.easing-1.4.pack.js'); ?>
+<?php $this->headScript()->appendFile('/_externals/map/js/jquery.browser.min.js'); ?>      
+<?php $this->headScript()->appendFile('/_externals/map/js/jquery.dotimeout.js'); ?>      
+
+<div class="map">
+    <div class="loader"></div>
+
+    <div class="btnsPanel">
+        <a href="javascript:;" class="upBtn"></a>
+        <a href="javascript:;" class="rightBtn"></a>
+        <a href="javascript:;" class="downBtn"></a>
+        <a href="javascript:;" class="leftBtn"></a>
+        <a href="javascript:;" class="centerBtn"></a>
+        
+        <a href="javascript:;" class="zoomInBtn"></a>
+        <a href="javascript:;" class="zoomOutBtn"></a>
+    </div>
+
+    <div class="mask">
+        <div class="wrapper draggable">
+            <div class="logotypes">
+                <?php if(false && count( $this->standNumberList ) > 0):?>
+                    <!--only for testing all numbers position-->
+                    <?php foreach ($this->standNumberList as $standNumber):?>
+                        <a href="#" class="stand_<?php echo $standNumber['id_stand_level'];?>" style="margin:<?php echo $standNumber['logo_pos_y'];?>px 0 0 <?php echo $standNumber['logo_pos_x'];?>px;">
+                            [<?php echo $standNumber['name']; ?>] - <?=$standNumber['id']?><img src="/_images/frontend/onet_logo.jpg" alt="" style="width:100%; height:100%;" />
+                        </a>
+                    <?php endforeach;?>
+                <?php endif;?>
+
+                <?php if(true && count( $this->standNumberList ) > 0):?>
+                    <?php foreach ($this->standNumberList as $standNumber):?>
+                        <a
+                            href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'hall_uri' =>  $this->hall_uri,'stand_uri' => $standNumber['ExhibStand']['Translations'][Engine_I18n::getLangId()]['uri']), 'event_stand'); ?>"
+                            class="stand_<?php echo $standNumber['id_stand_level'];?> <?=$standNumber['ExhibStand']['css_class']?>"
+                            style="cursor:pointer; margin:<?php echo $standNumber['logo_pos_y'];?>px 0 0 <?php echo $standNumber['logo_pos_x'];?>px;"
+                            data-title="<div class='img' style='background-image: url(<?php echo Service_Image::getUrl($standNumber['ExhibStand']['id_image_logo'], 220, 77); ?>)'></div><p class='cName'><?php echo $this->escape($standNumber['ExhibStand']['Translations'][Engine_I18n::getLangId()]['name']); ?></p><p class='cDesc'><?php echo  $this->escape($standNumber['ExhibStand']['Translations'][Engine_I18n::getLangId()]['short_info']); ?></p>
+                                <?php if( isset($this->groupStatusList[$standNumber['ExhibStand']['live_chat_group_id']]) /*&& $this->groupStatusList[$exhibitor->live_chat_group_id] == 'accepting chats'*/):?><p class=' chatIcon chatAvalible tooltipLoad'><?php echo $this->translate('label_exhibitor_avalible_on_chat');?></p><?php endif;?>"
+                        >
+                            <table style="cursor:pointer;"
+                                   onclick="location.href='<?php echo $this->url(['event_uri' => $this->selectedEvent->getUri(), 'hall_uri' => $this->hall_uri, 'stand_uri' => $standNumber['ExhibStand']['Translations'][Engine_I18n::getLangId()]['uri']], 'event_stand'); ?>'">
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <img alt="<?php echo $standNumber['ExhibStand']['Translations'][Engine_I18n::getLangId()]['name'] ?>"
+                                             src="
+                                    <?php if ($standNumber['id_stand_level'] == StandLevel::LEVEL_STANDARD): ?>
+                                        <?php echo Service_Image::getUrl($standNumber['ExhibStand']['id_image_logo'], 90, 47, 'b'); ?>
+                                    <?php elseif ($standNumber['id_stand_level'] == StandLevel::LEVEL_REGIONAL): ?>
+                                        <?php echo Service_Image::getUrl($standNumber['ExhibStand']['id_image_logo'], 110, 57, 'b'); ?>
+                                    <?php else: ?>
+                                        <?php echo Service_Image::getUrl($standNumber['ExhibStand']['id_image_logo'], 145, 75, 'b'); ?>
+                                    <?php endif; ?>"
+                                             style="width: 100%; cursor:pointer"
+                                             onclick="location.href='<?php echo $this->url(['event_uri' => $this->selectedEvent->getUri(), 'hall_uri' => $this->hall_uri, 'stand_uri' => $standNumber['ExhibStand']['Translations'][Engine_I18n::getLangId()]['uri']], 'event_stand'); ?>'"
+                                        />
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </a>
+                    <?php endforeach; ?>
+                <?php endif;?>
+            </div>
+            <img src="<?= Service_Image::getUrl(
+                $this->eventHallMap->getImage(),
+                $this->eventHallMap->getWidth(),
+                $this->eventHallMap->getHeight(),
+                'b'
+            )?>" alt="map" class="imageMapMin" usemap="#mymap" />
+            <?php $hallMap = $this->eventHallMap->getHallMap(); ?>
+        </div>
+
+        <?php if(!empty($hallMap)):?>
+            <map
+                <?php foreach($hallMap['attribs'] as $key => $attrib):?>
+                    <?php echo $key."='".$attrib."'";?>
+                <?php endforeach;?>
+            >
+                <?php foreach ((array)@$hallMap['items'] as $item):?>
+                    <area
+                        <?php foreach($item as $key => $attr):?>
+                            <?php echo $key."='".$attr."'";?>
+                        <?php endforeach;?>
+                    />
+                <?php endforeach;?>
+
+            </map>
+        <?php endif;?>
+    </div>
+  </div>
+<a class="fbSideTab" href="https://www.facebook.com/mediaPPG" target="_blank"></a> <!--event_share()-->
+
+<?php $this->headScript()->appendFile('/_externals/map/js/jquery.color.1.9.js'); ?>  
+<?php $this->headScript()->appendFile('/_externals/map/js/rdk.js'); ?>
+    
+    <?php $this->headScript()->captureStart(); ?>        
+    <?php if ($this->eventHallMap->hasZoomData() ) : ?>
+        <?php $data = $this->eventHallMap->getZoomData() ?>
+        var $wrapperPositionX = '<?php echo $data['start_x']; ?>';
+        var $wrapperPositionY = '<?php echo $data['start_y'] ?>';
+        var $zoom = <?php echo $data['start_key']; ?>; //tryb zooma domyślnego - oddalone/przyblizone $zoomArr[$zoom]
+        var $zoomArr = [];
+        $zoomArr[1] = <?php echo $data['zoom_factor_1']; ?>;
+        $zoomArr[2] = <?php echo $data['zoom_factor_2']; ?>;
+
+    <?php else:?>
+        var $wrapperPositionX = '130';
+        var $wrapperPositionY = '133';
+        var $zoom = 1;
+        var $zoomArr = [];
+        $zoomArr[1] = .65;
+        $zoomArr[2] = .80;
+        //var $wrapperPositionX = '30';
+        //var $wrapperPositionY = '63';
+        //var $zoom = 1;
+        //var $zoomArr = [];
+        //$zoomArr[1] = .55;
+        //$zoomArr[2] = z;
+    <?php endif; ?>
+        
+        if ($zoomArr[1] == $zoomArr[2] ) {
+            $('.zoomInBtn, .zoomOutBtn').css('display', 'none');
+        }
+
+    <?php $this->headScript()->captureEnd(); ?>

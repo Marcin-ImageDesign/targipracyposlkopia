@@ -1,0 +1,72 @@
+Text:
+  connection: baza
+  tableName: text
+  columns:
+    id_text:
+      type: integer
+      autoincrement: true
+      primary: true
+    id_text_parent:
+      type: integer
+      notnull: false
+    hash:
+      type: string (32)
+      notnull: true
+    is_active:
+      type: boolean
+      default: true
+  indexes:
+      hash:
+       fields: hash
+       type: unique
+  relations:
+    Parent:
+      class: Text
+      foreignAlias: Texts
+      local: id_text_parent
+      foreign: id_text
+      type: one
+      foreignType: many
+      onDelete: SET NULL
+    Translations:
+      class: TextTranslation
+      local: id_text
+      foreign: id_text
+      type: many
+      foreignType: one
+
+TextTranslation:
+  connection: baza
+  tableName: text_translation
+  attributes:
+    coll_key: id_language
+  columns:
+    id_text:
+      type: integer
+      primary: true
+    id_language:
+      type: integer
+      primary: true
+    title:
+      type: string
+      notnull: true
+    uri:
+      type: string
+      notnull: true
+    text:
+      type: string
+      notnull: true
+    meta_title:
+      type: string
+      notnull: true
+    meta_keywords:
+      type: string
+      notnull: true
+    meta_description:
+      type: string
+      notnull: true
+  relations:
+    Language:
+      local: id_language
+      foreign: id_language
+      onDelete: CASCADE

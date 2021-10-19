@@ -1,0 +1,114 @@
+<div class="mcsb mcsbRegister login-register-content" style="width: 900px; margin: 0 auto;" id="login-register-top">
+    <div class="facebook-login">
+        <a class="btn-auth btn-facebook large" href="#" onclick="loginFB()">
+            Zaloguj się przez <b>Facebook</b>
+        </a>
+    </div>
+    <section class="register-content">
+        <?php if(!$this->selectedEventArchive):?>
+            <?php if($this->formRegister->getSubForm('registerExtended')):?>
+                <div style="line-height:18px">
+                    <h3 style="font-size: 15px;">Aby w pełni korzystać z naszej platformy prosimy uzupełnić tylko kilka danych dzięki którym będziesz posiadał dostęp do:</h3>
+                    <div>
+                        <ul>
+                            <li>
+                                <span class="greenGreen">Czat</span> - możesz porozmawiać z wystawcami na temat współpracy lub warunków jakie oferują pracownikom.
+                            </li>
+                            <li>
+                                <span class="greenGreen">Pełen zakres danych</span> - uzyskaj dostęp do szerszego zakresu danych i informacji o wystawcach.
+                            </li>
+                            <li>
+                                <span class="greenGreen">Konkursy</span> - Zdobywaj nagrody w trakcie zwiedzania stoisk, składania aplikacji na wybrane stanowiska pracy, uczestnicz w Webinariach.
+                            </li>
+                            <li>
+                                <span class="greenGreen">Oferty pracy</span> - Dowiedz się na jakie stoiska rekrutują konkretne firmy i złóż swoją aplikację online!
+                            </li>
+                            <li>
+                                <span class="greenGreen">Webinaria</span> - Jeśli jesteś zainteresowany rynkiem pracy w branży IT koniecznie przeczytaj oraz zobacz co mają w tym temacie do powiedzenia specjaliści w tej dziedzinie.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            <?php endif;?>
+        <?php endif;?>
+        <?php if(!$this->selectedEventArchive):?>
+            <h2>
+                Nie masz jeszcze konta? Załóż teraz.
+            </h2>
+            <?php echo $this->formRegister; ?>
+        <?php endif;?>
+    </section>
+    <section class="login-content">
+        <h2>
+            Masz już konto? Zaloguj się.
+        </h2>
+        <?php echo $this->form; ?>
+        <p>
+            <a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'password-recover') ?>">
+                <?php echo $this->escape( $this->translate('label_default_auth_recovery-password-button') ); ?>
+            </a>
+            <br/>
+            <a href="<?php echo $this->url( array('event_uri' => $this->selectedEvent->getUri()), 'user_register_send-activate-link' ); ?>">
+                <?php echo $this->translate('label_user_register_index_send-active-link'); ?>
+            </a>
+        </p>
+
+    </section>
+    <div class="clear"></div>
+    <div class="registerReqInfo">
+        <div style="text-align:right;">
+        </div>
+
+        <p><em class="required">*</em> – <?php echo $this->translate('label_user_register_index_required-field'); ?></p>
+    </div>
+</div>
+
+<script type="text/javascript">
+<?php $this->headScript()->captureStart(); ?>
+    $('.register-extended').hide();
+
+    function updateScrollbar() {
+        $('.register-content').height($('#UserRegisterForm').height());
+        $('.mcsb').mCustomScrollbar('update');
+    }
+    $('.register-extended-header').off('click');
+    $('.register-extended-header').on('click',function(){
+        $('.register-extended').slideToggle(500, updateScrollbar);
+    });
+
+    $('label[for="UserRegister-accept_data"]').shorten({
+            showChars: 81,
+            moreText: 'rozwiń',
+            lessText: 'zwiń'
+    });
+
+    $('label[for="UserRegister-accept_marketing"]').shorten({
+        showChars: 53,
+        moreText: 'rozwiń',
+        lessText: 'zwiń'
+    });
+    $('a.morelink').click(function(){
+        if($(this).hasClass('less')){
+            $('.register-content').height($('#UserRegisterForm').height() + 280); //obejście hacka z default js
+        } else{
+            $('.register-content').height($('#UserRegisterForm').height() + 360); //obejście hacka z default js
+        }
+        $('.mcsb').mCustomScrollbar('update');
+    });
+
+    function loginFB() {
+        FB.login(
+            function (response) {
+                if (response.authResponse) {
+                    FB.api('/me', {fields: 'id,name,picture,email'}, function (response) {
+                        window.location = '<?= $this->url(array(), 'login-facebook') ?>?' + $.param(response);
+                    });
+                } else {
+                    alert('Błąd podczas logowania przez Facebook');
+                }
+            }
+        );
+    }
+
+<?php $this->headScript()->captureEnd(); ?>
+</script>

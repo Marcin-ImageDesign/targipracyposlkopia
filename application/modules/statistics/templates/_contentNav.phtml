@@ -1,0 +1,33 @@
+<div class="spacerL"></div>
+<ul class="contents">
+    
+    <li>
+        <a href="<?php echo $this->url( array(), 'statistics_admin-index' ); ?>">       
+            <?php echo $this->translate('Statistics');?>
+        </a>
+    </li>
+    <?php if(!empty($this->event) && $this->show_gamification) : ?>
+        <li>
+            <a href="<?php echo $this->url( array(), 'statistics_admin-gamification2' ); ?>">
+                <?php echo $this->translate('Gamification'); ?>
+            </a>
+        </li>
+    <?php endif; ?>
+    
+    <?php if($this->showExportLinkEvent):?>
+        <li>
+            <a href="<?php echo $this->url( array(), 'statistics_admin-export_event' ); ?>">       
+                <?php echo $this->translate('Export event statistics');?>
+            </a>
+        </li>
+    <?php endif; ?>
+    
+    <?php if($this->showExportLinkStand):?>
+        <li>
+            <a href="<?php echo $this->url( array(), 'statistics_admin-export_stand' ); ?>">       
+                <?php echo $this->translate('Export stand statistics');?>
+            </a>
+        </li>
+    <?php endif; ?>
+
+</ul>

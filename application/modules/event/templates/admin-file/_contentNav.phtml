@@ -1,0 +1,16 @@
+<ul class="contents">
+    <?php echo $this->render('_backLink.phtml');?>
+    <li>
+        <a href="<?php echo $this->url( array( 'hash' => $this->event->getHash() ), 'event_admin-file' ); ?>">
+            <img class="mb-3" src="/_images/icon/tango_16/edit-copy.png"> <?php echo $this->translate('File list'); ?>
+        </a>
+    </li>
+    <li>
+        <a href="<?php echo $this->url( array( 'hash' => $this->event->getHash() ), 'event_admin-file_new' ); ?>">
+            <img class="mb-3" src="/_images/icon/ico1/add-page-yellow.gif">
+            <?php echo $this->translate('Add new file'); ?>
+        </a>
+    </li>
+</ul>
+
+<?php echo $this->render('_contentNav.phtml'); ?>

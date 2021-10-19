@@ -1,0 +1,8 @@
+<?php if($this->isChat):?>
+    <div class="toggleChat iframe">
+    <div class="clearfix chatForm" ><?php echo $this->form;?></div>
+
+    </div>
+<?php else:?>
+    <?php echo $this->form;?>
+<?php endif;?>

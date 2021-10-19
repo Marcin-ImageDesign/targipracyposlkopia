@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            #id_exhib_participation {
+                -webkit-appearance: none;
+            }
+            #status {
+                -webkit-appearance: none;
+            }
+            #submit{
+                color: red;
+            }
+
+        </style>
+    </head>
+    <?php
+    $this->headLink()->appendStylesheet('/_css/admin/form.css');
+    ?>
+    <?php $this->placeholder('headling_1')->captureStart(); ?>
+    <h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+    <?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+
+    <?php echo $this->form; ?>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#id_exhib_participation").attr("disabled", true);
+            
+            $('.field-wrapper div').append('<div class="delete_file"><a href="<?php echo $this->url(array('hash' => $this->hash), 'invoice_admin-delete-file'); ?>"><i title="Usuń plik" class="ui-icon ui-icon-close"></i></a></div>');
+            $('.field-wrapper i').css('display', 'inline-block');
+            $('.delete_file').css('display', 'inline-block');
+            $('.delete_file').css('float', 'right');
+        });
+    </script>
+</html>

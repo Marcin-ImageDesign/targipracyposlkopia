@@ -1,0 +1,99 @@
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+<?php if( $this->selectedEvent && $this->userAuth->hasAccess('event_admin-stand_new'))
+    echo $this->partial( '_headling_button.phtml', array('title' => $this->translate('button_cms_stand_add'), 'url' => $this->url(array( 'event_hash' => $this->selected_event_hash), 'event_admin-stand_new')));
+?>
+<h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+<?php $this->placeholder('aside')->captureStart(); ?>
+<?php echo $this->filter; ?>
+<script type="text/javascript">
+    $(document).ready(function(){
+    changeFilterSelect('select-stand-filter');
+    });
+    
+</script>
+<?php $this->placeholder('aside')->captureEnd(); ?>
+
+<?php $this->placeholder('toolbar')->captureStart(); ?>
+    <?php echo $this->render('commponents/pagination.phtml'); ?>
+<?php $this->placeholder('toolbar')->captureEnd(); ?>
+
+<form id="grid-action-form" method="post" action="">
+    <div class="toolbar toolbar-top"><?php echo $this->placeholder('toolbar'); ?></div>
+    <table cellspacing="0" cellpadding="0" class="grid datas">
+        <tbody>
+            <tr>
+                <th class="head"><?php echo $this->translate('label_cms_admin-stand_stand-number'); ?></th>
+                <th class="head"><?php echo $this->translate('label_cms_admin-stand_name'); ?></th>
+                <th class="head"><?php echo $this->translate('label_cms_admin-stand_event'); ?></th>
+                <th class="head"><?php echo $this->translate('Hall'); ?></th>
+                <th class="head"><?php echo $this->translate('label_cms_admin-stand_stand-level'); ?></th>
+                <th class="head"><?php echo $this->translate('label_cms_admin-stand_is-active'); ?></th>
+                <th class="head"></th>
+            </tr>
+            <tr class="row row-template">
+                <td valign="top" class="first col"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+                <td valign="top" class="col"></td>
+            </tr>
+
+            <?php foreach ($this->standList as $key => $stand): /** @var $stand ExhibStand */ ?>
+            <?php $editUrl = $this->url(array('stand_hash' => $stand->getHash()), 'event_admin-stand_edit'); ?>
+                <tr class="row <?php if (0 == ($key % 2)): ?>odd<?php else: ?>even<?php endif; ?>">
+                    <td valign="top" class="col">
+                        <?php if(!empty($stand->EventStandNumber->name)): ?><?= $stand->EventStandNumber->name;?><?php endif;?>
+                    </td>
+                    <td valign="top" class="col">
+                        <a class="edit" href="<?php echo $editUrl; ?>">
+                            <?php echo $this->escape($stand->getName()); ?>
+                        </a>
+                    </td>
+                    <td valign="top" class="col">
+                        <?= $this->escape($stand->Event->getTitle());?>
+                    </td>
+                    <td valign="top" class="col">
+                        <?= $this->escape($stand->EventStandNumber->EventHallMap->getName());?>
+                    </td>
+                    <td valign="top" class="col">
+                        <?php echo $this->escape($stand->StandLevel->getName()); ?>
+                    </td>
+                    <td valign="top" class="col">
+                        <?php $isActive = (int) $stand->is_active; ?>
+                        <a href="<?php echo $this->url(array('stand_hash' => $stand->getHash()), 'admin_participation-stands_stand-status'); ?>" class="status">
+                            <span class="switch-<?php echo $isActive; ?>"><?php echo $isActive; ?></span>
+                        </a>
+                    </td>
+                    <td valign="top" class="col" nowrap>
+                        <ul class="actions">
+                            <li>
+                                <a title="<?php echo $this->translate('label_cms_option_edit'); ?>" class="help" href="<?php echo $editUrl; ?>">
+                                    <span class="ui-icon ui-icon-pencil"><?php echo $this->translate('label_cms_option_edit'); ?></span>
+                                    <span class="bullet" style="width: 24px;"><?php echo $this->translate('label_cms_option_edit'); ?></span>
+                                    <span class="ui-icon ui-icon-triangle-1-s queue"></span>
+                                </a>
+                            </li>
+                            <?php if( $this->userAuth->isAdmin() || $this->userAuth->isOrganizer() ):?>
+                                <li>
+                                    <a onclick="return confirm('<?php echo $this->translate('cms-label_confirm-delete-item'); ?>');" title="<?php echo $this->translate('label_delete'); ?>" class="help" href="<?php echo $this->url(array('hash' => $stand->getHash()), 'event_admin-stand-delete'); ?>">
+                                        <span class="ui-icon ui-icon-close"><?php echo $this->translate('label_delete'); ?></span>
+                                        <span class="bullet" style="width: 36px;"><?php echo $this->translate('label_delete'); ?></span>
+                                        <span class="ui-icon ui-icon-triangle-1-s queue"></span>
+                                    </a>
+                                </li>
+                            <?php endif;?>
+                        </ul>
+                    </td>
+                </tr>                
+            <?php endforeach; ?>
+
+        </tbody>
+    </table>
+
+</form>
+<div class="toolbar toolbar-bottom"><?php echo $this->placeholder('toolbar'); ?></div>
+

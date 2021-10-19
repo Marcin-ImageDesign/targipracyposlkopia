@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'Properties' => 'Właściwości',
+    'File Manager' => 'Menadżer Plików',
+    'Save successfully completed' => 'Zapis zakończony pomyślnie',
+    'Picture edit' => 'Edycja obrazu',
+    'Root folder' => 'Folder główny',
+    'select all' => 'Zaznacz wszystkie',
+    'clear all' => 'Odznacz wszystkie',
+    'Fiel/Folder name' => 'Nazwa pliku/folderu',
+    'File list' => 'Lista plików',
+    'New folder' => 'Nowy folder',
+    'Send new file' => 'Wyślij nowy plik',
+    'File not found' => 'Nie znaleziono pliku',
+    'Open' => 'Otwórz',
+    'Copy' => 'Kopiuj',
+    'delete' => 'usuń',
+    'copy' => 'kopiuj',
+    'cut' => 'wytnij',
+    'paste' => 'wklej',
+    'cancel' => 'przerwij',
+    'Following items from directory' => 'Następujące elementy z katalogu',
+    'will be' => 'zostaną',
+    'copied' => 'skopiowane',
+    'cut out' => 'wycięte',
+];

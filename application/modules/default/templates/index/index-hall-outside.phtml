@@ -1,0 +1,603 @@
+<?php
+$is_login_required = false;
+if ($this->selectedEvent->is_login_required && !$this->userAuth) {
+    $is_login_required = true;
+    $event_uri = $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'event_reception');
+} else {
+    if ($this->selectedEvent->getIsReceptionActive() && !$this->is_skip_reception) {
+        $event_uri =  $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'event_reception');
+    } else {
+        $event_uri =  $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'event_hall');
+    }
+}
+?>
+<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0">
+<style>
+    @charset "utf-8";
+
+    
+    @font-face {
+    font-family: 'barlow_semi_condensedsemibold';
+    src: url('_images/frontend/nowy-landing/barlowsck-semibold-webfont.woff2') format('woff2'),
+         url('_images/frontend/nowy-landing/barlowsck-semibold-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+
+
+    @font-face {
+    font-family: 'barlow_sckregular';
+    src: url('_images/frontend/nowy-landing/barlowsck-regular-webfont.woff2') format('woff2'),
+         url('_images/frontend/nowy-landing/barlowsck-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+    html {
+        overflow: scroll;
+        overflow-x: auto;
+        height: 100%;
+    }
+
+    html,
+    body,
+    form,
+    img {
+        margin: 0;
+        padding: 0;
+        border: none;
+    }
+
+    body {
+        height: 100%;
+    }
+
+    body  {
+        outline: none;
+        font-family: 'barlow_sckregular', sans-serif;
+    }
+
+    #landing-content {
+        width: 100%;
+        position: relative;
+        height: 100%;
+        margin: 0 auto;
+        background: #3B5D78 url('') no-repeat center center;
+        background-size: cover;
+        display: flex;
+        align-items: center;
+        background-position: center;
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .main-section {
+        width: 1170px;
+        flex-direction: column;
+        display: flex;
+    }
+    .center-section {
+        display:flex;
+        flex-direction: column;
+        width:594px;
+        height:555px;
+
+    }
+    .title-section {
+        display: inline;
+        font-size: 43px;
+        text-align:center;
+        line-height: 80px;
+        letter-spacing: 1px;
+    }
+
+    .title span {
+        width: auto;
+        color: #fff;
+        text-transform:uppercase;
+        font-family: 'barlow_semi_condensedsemibold', sans-serif;
+    }
+    .organizers {
+        display:flex; 
+        flex-direction: row;
+        height:30%;
+        padding-bottom:25px;
+    }
+    .ps-photo {
+        height:64.5%;
+        background-image: url("_images/frontend/nowy-landing/ps_panorama.png");
+        background-position: center;
+        background-size: cover;
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+    }
+    .two-boxes  {
+        border-top-right-radius: 12px;
+        border-top-left-radius: 12px;
+    }
+    .left {
+        width:40%;
+        display: flex;
+        justify-content:space-evenly;
+        margin-top:32px;
+    }
+    .right {
+        width:60%;
+        text-align: left;
+    }
+    .right .images {
+        display: flex;
+        justify-content:space-evenly;
+    }
+    .main-content-section {
+        display: flex;
+        height: 550px;
+    }
+
+    .two-boxes {
+        width: 285px;
+    }
+
+    .box {
+        height: 550px;
+        width: 285px;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        border-radius: 12px;
+        border: 3px #fff solid;
+    } 
+    .second-box img {
+        padding-top:10px;
+    }
+    .first-box img {
+        padding-top:3px;
+    }
+    .second-box span {
+        margin-top:15px;
+    }
+    .first-box span {
+        margin-top:10px;
+    }
+    .box hr {
+        width:110px;
+        border-bottom:5px solid #ff9f00;
+        margin-top:10px;
+    }
+    .box img {
+        padding-top:15px;
+    }
+    div .img1 {
+        height:60%;
+        background-image: url("_images/frontend/nowy-landing/enter_photo.png");
+        background-size:cover;
+        background-repeat: no-repeat;
+        border-top-right-radius: 12px;
+        border-top-left-radius: 12px;
+    }
+    div .img2 {
+        height:60%;
+        background-image: url("_images/frontend/nowy-landing/bks_photo.png");
+        background-size:cover;
+        background-repeat: no-repeat;
+        border-top-right-radius: 12px;
+        border-top-left-radius: 12px;
+    }
+
+    .box-title {
+        align-self: flex-end;
+        width: 100%;
+        text-align: center;
+        height: 40%;
+        border-bottom-right-radius: 12px;
+        border-bottom-left-radius: 12px;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        background-color:#004A91;
+    }
+    .box-title.first img{
+        width:30%;
+    }
+    .box-title.third img{
+        width:35%;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .box-title span {
+        display: block;
+        font-size: 23px;
+        text-decoration: none;
+        color: #fff;
+        line-height: 27px;
+        text-align: center;
+        font-weight: 600
+    }
+
+    .box-title span b {
+        font-weight: 700;
+    }
+
+    
+
+    .top {
+        margin-bottom: 24px
+    }
+
+    .center-boxes {
+        width: auto;
+        height: 480px;
+        text-align: center;
+        background-color: #fff;
+        margin-left: 24px;
+        margin-right: 24px;
+        border-radius: 12px;
+        display: block;
+        border:3px solid #fff;
+    }
+
+    .center-boxes img {
+        display: inline-block;
+    }
+
+    .center-boxes span {
+        font-size: 14px;
+        margin-bottom: 20px;
+        letter-spacing:1px;
+        margin-top: 25px;
+        display: block;
+        color: #7f7f7f;
+        font-weight:600;
+    }
+
+    .bottom-buttons {
+        margin-top: 20px;
+        text-align:center
+    }
+    
+
+    .bottom-buttons a {
+        width: 44.5%;
+        display: inline-block;
+        background: #fff;
+        border-radius: 12px;
+        height: 74px;
+    }
+    .bottom-buttons a:nth-child(2) {
+        margin-left:15px;
+    }
+
+    .bottom-buttons span {
+        font-size: 23px;
+        text-decoration: none;
+        color: #1e5a99;
+        line-height: 27px;
+        text-align: center;
+        line-height: 74px;
+        margin: 0px;
+        letter-spacing:-0.5px;
+    }
+
+    .bottom-text {
+        font-size: 43px;
+        letter-spacing:1px;
+        color: #fff;
+        padding-top: 30px;
+        text-align: center;
+    }
+    .bottom-text .boldie {
+        font-family: 'barlow_semi_condensedsemibold', sans-serif;
+    }
+    .outer-blow {
+        -webkit-box-shadow: 0px 0px 24px -5px rgba(30, 90, 153, 1);
+        -moz-box-shadow: 0px 0px 24px -5px rgba(30, 90, 153, 1);
+        box-shadow: 0px 0px 24px -5px rgba(30, 90, 153, 1);
+    }
+
+    #links {
+        display: none;
+    }
+
+    @media (min-width: 768px) and (max-width: 1200px) {
+        .main-section {
+            width: 90%;
+
+        }
+        #landing-content{
+            height:auto;
+        }
+        .main-content-section {
+            display: flex;
+        }
+
+        .title-section {
+            font-size: 32px;
+        }
+
+        .two-boxes {
+            width: 32%;
+        }
+
+        .box {
+            width: 100%;
+        }
+
+        .center-boxes {
+            height:500px;
+        }
+        
+        .left{
+             justify-content:space-around;
+
+        }
+        
+        .left img{
+            height: 80px!important;
+        }
+        .right img {
+            height:55px!important;
+        }
+        
+    
+     
+        
+
+        
+
+        .center-boxes span {
+            margin-top: 10px;
+            margin-bottom: 20px;
+
+        }
+
+        
+        .bottom-text {
+            margin-top:30px!important;
+        }
+
+        .box-title {
+            height: 40%
+        }
+
+        .third,
+        .fourth {
+            padding-bottom: 10px;
+        }
+
+        .bottom-buttons {
+            width:91%;
+            align-self: center;
+            display:flex; 
+            align-items: center;
+            flex-direction: row;
+        }
+        .bottom-buttons a {
+            width:50%;
+        }
+        
+    }
+
+    @media (max-width: 768px) {
+        .main-section {
+            width: 95%;
+            overflow: auto;
+            height: 100%;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+        .title {
+            line-height: 2;
+            padding-top:20px;
+            padding-bottom:20px;
+        }
+        .main-content-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .box-title {
+            height: 40%;
+        }
+        .title-section {
+            font-size: 32px;
+        }
+
+        .bottom-buttons {
+            width:100%!important;
+            
+        }
+        .bottom-buttons a{
+            width:48%!important;
+            
+        }
+
+        .two-boxes:nth-child(2) {
+            margin-top: 100px;
+        }
+
+        .box {
+            width: 100%;
+        }
+
+        .two-boxes img {
+            height: 100%;
+        }
+
+        
+
+        
+
+        .box {
+            width: auto;
+            height: auto;
+        }
+
+        
+        .two-boxes  {
+            width:100%;
+            
+        }
+
+        
+
+        
+
+        .box-title {
+            height:auto;
+        }
+        .box-title img{
+            height:30%
+        }
+        .box-title span{
+            font-size:40px;
+            line-height:50px;
+        }
+
+        
+        .center-section {
+            width:100%!important;
+            height:800px;
+            margin-bottom:20px;
+        }
+        .center-boxes {
+            width:98%;
+            margin-left: 0px;
+            margin-right: 0px;
+        }
+        .bottom-text {
+            display:none;
+        }
+        .two-boxes:nth-child(2) {
+            margin-top:40px;
+        }
+        .box-title{
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .box-title img{
+            padding-top:25px;
+        }
+        .box-title hr {
+            margin-bottom:25px;
+        }
+    }
+    @media (max-width: 540px) {
+        .bottom-buttons a{
+            width:100%!important;
+            
+        }
+        .bottom-buttons a:nth-child(2) {
+        margin-left:0px;
+        margin-top:15px;
+    }
+    .left img{
+            height: 75px!important;
+            padding-top:15px;
+        }
+        .right img {
+            height:45px!important;
+            padding-top:15px;
+        }
+        .title span {
+            line-height:2;
+        }
+        .title{
+            padding-bottom:20px;
+            padding-top:10px;
+        }
+    }
+
+    
+</style>
+
+<div id="landing-content" style="background-image: url(_images/frontend/nowy-landing/background.png)">
+    <div class="main-section">
+        <div class="title-section">
+            <div class="title">
+                <span>GIEŁDA PRACODAWCY, PRZEDSIEBIORCZOŚCI I TECHNOLOGII</span>
+            </div>
+            
+        </div>
+        <div class="main-content-section">
+            <div class="two-boxes" >
+                <a href="/wejscie.html" style="background-color:#004A91">
+                    <div class="box top outer-blow first-box">
+                        <div class="img1">
+                        </div>
+                        <div class="box-title first">
+                            <img src="_images/frontend/nowy-landing/enter_logo-white.svg">
+
+                            <span class="boldie">WEJŚCIE <br> NA TARGI</span>
+                            <hr class="orange">
+                        </div>
+                    </div>
+                </a>
+                
+            </div>
+            <div class="center-section">
+            <div class="center-boxes outer-blow">
+                
+                <div class="organizers">
+                    <div class="left">
+                        <a href="https://www.polsl.pl/" target="_blank"><img style="height:100px;" src="_images/frontend/nowy-landing/ps_logo.svg">
+                        <img style="height:100px; padding-left:20px;" src="_images/frontend/nowy-landing/uczelniabadawcza_logo.svg"></a>
+                    </div>
+                    <div class="right">
+                        <span>Organizatorzy</span>
+                    <div class="images">
+                    <a href="http://www.kariera.polsl.pl/" target="_blank"><img style="height:65px;" src="_images/frontend/nowy-landing/bks_logo.svg"></a>
+                    <a href="http://www.doktoranci.polsl.pl/" target="_blank"><img style="height:65px;" src="_images/frontend/nowy-landing/ursd_logo.png"></a>
+                    <a href="http://samorzad.polsl.pl/" target="_blank"><img style="height:65px;" src="_images/frontend/nowy-landing/uzss_logo.png"></a>
+                    </div>
+                    </div>
+                    
+                </div>
+                <div class="ps-photo">
+
+                </div>
+               
+            </div>
+            <div class="bottom-buttons">
+                <a class="outer-blow" href="<?php echo $this->url(['event_uri' => $this->selectedEvent->getUri(), 'site_uri' => 'szkolenia'], 'event_site'); ?>" target="_blank">
+                    <div class="button ">
+                        <span class="boldie" style="font-size:20px; line-height:28px;position:relative; top:10px; font-family: 'barlow_semi_condensedsemibold', sans-serif;">HARMONOGRAM<br/>SZKOLEŃ</span>
+                    </div>
+                </a>
+                
+                
+                <a class="outer-blow"  href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'site_uri' => 'informacje'), 'event_site');?>">    
+                    <div class="button">
+                        <span class="boldie" style="font-size:20px; line-height:28px;position:relative; top:10px; font-family: 'barlow_semi_condensedsemibold', sans-serif;">HARMONOGRAM<br>SPOTKAŃ ONLINE</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+        
+            <div class="two-boxes" >
+                <a href="http://www.kariera.polsl.pl/">
+                    <div class="box top outer-blow second-box">
+                        <div class="img2">
+                        </div>
+                        <div class="box-title third"  >
+                            <img src="_images/frontend/nowy-landing/bks_logo-white.svg">
+                            <span class="boldie">BIURO KARIER<br>STUDENCKICH</span>
+                            <hr class="orange">
+                        </div>
+                        
+                    </div>
+                </a>
+                
+            </div>
+
+        </div>
+        <div class="bottom-text">
+            <span>POLITECHNIKA ŚLĄSKA  &nbsp; <span class="boldie">&bull; &nbsp;  18-22 października 2021</span></span>
+        </div>
+    </div>
+</div>

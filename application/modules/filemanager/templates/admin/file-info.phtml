@@ -1,0 +1,71 @@
+<?php
+    $this->headLink()->appendStylesheet('/_css/v3/form.css');
+?>
+
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+    <h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+<div class="paM">
+	<?php if( !$this->fileInfo['exists'] ): ?>
+		<div class="msg-error"><?php echo $this->translate('File not found');?></div>
+	<?php else: ?>
+        <div class="onLeft">
+            <table style="width: 550px;" border="1">
+                <tr>
+                    <td colspan="2" style="font-weight: bold; font-size: 14px; padding-bottom: 10px;">Właściwości <?=($this->fileInfo['type']=='dir'?'katalogu':'pliku')?></td>
+                </tr>
+                <tr>
+                    <td style="width: 35%">Nazwa <?=$this->fileInfo['type'] == 'dir' ? 'katalogu':'pliku'?>:</td>
+                    <td class="bold"><?=$this->fileInfo['file']?></td>
+                </tr>
+                <tr>
+                    <td>Data modyfikacji:</td>
+                    <td><?=date('Y-m-d H:i:s', $this->fileInfo['modificated'])?></td>
+                </tr>
+
+                <?php if( $this->fileInfo['type'] == 'file' ): ?>
+                    <tr>
+                        <td>Lokalizacja:</td>
+                        <td><a href="<?=$this->fileInfo['path']?>" target="_blank"><?=$this->fileInfo['path']?></a></td>
+                    </tr>
+                    <tr>
+                        <td>Rozszerzenie pliku:</td>
+                        <td><?=$this->fileInfo['ext']?></td>
+                    </tr>
+                    <tr>
+                        <td>Rozmiar pliku:</td>
+                        <td><?=number_format($this->fileInfo['size'], 0, ' ', ',')?> b</td>
+                    </tr>
+                    <?php if($this->fileInfo['isImage']): ?>
+                        <tr>
+                            <td colspan="2" style="font-weight: bold; font-size: 14px; padding: 20px 0px 10px 0px;">Parametry pliku graficznego:</td>
+                        </tr>
+                        <tr>
+                            <td>Szerokość:</td>
+                            <td><?=$this->fileInfo['width']?> px</td>
+                        </tr>
+                        <tr>
+                            <td>Wysokość:</td>
+                            <td><?=$this->fileInfo['height']?> px</td>
+                        </tr>
+                    <?php endif; ?>
+                <?php endif; ?>
+
+            </table>
+        </div>
+
+		<div class="onRight">
+			<?php if( $this->fileInfo['type'] == 'dir' ): ?>
+				<img src="/_images/yt/file_types/folder.png" style="max-width: 150px; max-height: 150px;"/>
+			<?php else: ?>
+				<?php if( $this->fileInfo['isImage'] ): ?>
+					<img src="<?=$this->fileInfo['preview']?>" style="max-width: 150px; max-height: 150px;"/>
+				<?php else: ?>
+					<img src="/_images/yt/file_types/file.png" style="max-width: 150px; max-height: 150px;"/>
+				<?php endif; ?>
+			<?php endif; ?>
+		</div>
+	<?php endif; ?>
+</div>
+<div class="cl"></div>

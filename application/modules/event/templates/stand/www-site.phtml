@@ -1,0 +1,20 @@
+<div class="promotion_info">Jeśli chcesz otrzymywać informacje promocyjne, pozostaw swój adres email.</div>
+
+<?php if (isset($this->wwwForm)):?>
+	<?php echo $this->wwwForm;?>
+<?php endif;?>
+
+<script type="text/javascript">
+		$('a.close').attr({'href': 'http://<?= $this->exhibStand->getWwwAdress();?>', 'target': '_blank'});
+		$('a.close').click(function(){
+			$.doTimeout(300, function(){
+				$('a.close').removeAttr('href').removeAttr('target');
+				
+			});
+		})
+		
+		function jumpToSite(){
+			$('a.close').click();
+		}
+
+</script>

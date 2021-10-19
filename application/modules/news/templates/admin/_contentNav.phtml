@@ -1,0 +1,18 @@
+<ul class="contents">
+    <?php echo $this->render('_backLink.phtml');?>
+    <li>
+        <a href="<?php echo $this->url( array(), 'news_admin' ); ?>">
+            <?php echo $this->translate('News list'); ?>
+        </a>
+    </li>
+    <li>
+        <a href="<?php echo $this->url( array(), 'news_admin_new' ); ?>">
+            <?php echo $this->translate('Add news'); ?>
+        </a>
+    </li>
+    <li>
+        <a href="<?php echo $this->url( array(), 'news_admin_chat-schedule' ); ?>">
+            <?php echo $this->translate('Chat schedule'); ?>
+        </a>
+    </li>
+</ul>

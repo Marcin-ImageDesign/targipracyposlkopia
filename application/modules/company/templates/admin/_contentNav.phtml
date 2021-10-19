@@ -1,0 +1,20 @@
+<ul class="contents">
+    <?php echo $this->render('_backLink.phtml');?>
+   
+    <li>
+        <a href="<?php echo $this->url( array(), 'company_admin' ); ?>"><?=$this->translate('nav_section-nav_company-list')?></a>
+    </li>
+    <li>
+        <a href="<?php echo $this->url( array(), 'company_admin_new' ); ?>"><?=$this->translate('nav_section-nav_company-add')?></a>
+    </li>
+<!--    --><?php //if($this->company && !$this->company->isNew()):?>
+<!--    <li>-->
+<!--        <a href="--><?php //echo $this->url( array('hash'=>$this->company->getHash()), 'company_admin-user' ); ?><!--">--><?//= $this->translate('Show list of employees'); ?><!--</a>-->
+<!--    </li>-->
+<!--    --><?php //else:?>
+<!--    <li>-->
+<!--        <a href="--><?php //echo $this->url( array('hash'=>''), 'company_admin-user' ); ?><!--">--><?//= $this->translate('Show list of employees'); ?><!--</a>-->
+<!--    </li>-->
+<!--    --><?php //endif;?>
+    
+</ul>

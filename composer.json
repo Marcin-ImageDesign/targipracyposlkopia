@@ -1,0 +1,24 @@
+{
+    "name": "fap/voxexpo",
+    "require": {
+        "php": ">=7.3",
+        "diablomedia/doctrine1": "^3.0",
+        "swiftmailer/swiftmailer": "^5.4",
+        "zendframework/zend-config": "^3.1",
+        "filp/whoops": "^2.7",
+        "shardj/zf1-future": "^1.18",
+        "shardj/zf1-extras-future": "^1.12"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/diablomedia/doctrine1"
+        }
+    ],
+    "autoload": {
+        "classmap": [
+            "application",
+            "library"
+        ]
+    }
+}

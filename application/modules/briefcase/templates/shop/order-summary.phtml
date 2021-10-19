@@ -1,0 +1,136 @@
+<h2><?php echo $this->translate('label_show_order_summary-title'); ?></h2>
+
+<div class="mcsb">
+    <?php if( count($this->briefcaseList) > 0 ): ?>
+        <?php $i = 0; $totalPrice = 0.00; ?>
+        <div class="dataTableRdk">
+            <table class="order-table">
+                <thead>
+                <tr>
+                    <th style="width:500px;"><?php echo $this->translate('label_order-stand'); ?></th>
+                    <th><?php echo $this->translate('label_order-count'); ?></th>
+                    <th class="price"><?php echo $this->translate('label_order-price'); ?></th>
+                    <th class="value"><?php echo $this->translate('label_order-price-sum'); ?></th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach( $this->briefcaseList as $key => $briefcase ): ?>
+                    <tr>
+<!--                        <td class="name_stand">-->
+<!--                            --><?php //if ($briefcase->imageExists()):?>
+<!--                                <a href="--><?php //echo $this->url(array('event_uri' => $briefcase->ExhibStand->Event->getUri(), 'stand_uri' => $briefcase->ExhibStand->getUri(), 'product_hash' => $briefcase->getHash()),'event_stand-offer_details');?><!--" title="--><?php //echo $this->escape( $briefcase->getName() ) ?><!--">-->
+<!--                                    <img width="100" src="--><?php //echo Service_Image::getUrl($briefcase->id_image, 100);?><!--" alt="--><?//=$this->escape($briefcase->getName())?><!--" />-->
+<!--                                </a>-->
+<!--                            --><?php //endif;?>
+<!--                        </td>-->
+                        <td class="name">
+                            <a href="<?php echo $this->url(array('event_uri' => $briefcase->ExhibStand->Event->getUri(), 'stand_uri' => $briefcase->ExhibStand->getUri(),'hall_uri'=>$briefcase->ExhibStand->EventStandNumber->EventHallMap->uri, 'product_hash' => $briefcase->getHash()),'event_stand-offer_details');?>" title="<?php echo $this->escape( $briefcase->getName() ) ?>" class="product-name">
+                                <?php echo $this->escape($briefcase->ExhibStand->getName()) . ' / <strong>' . $this->escape( $briefcase->getName() );?></strong>
+                            </a>
+                        </td>
+                        <form action="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'shop_add'); ?>">
+                            <td class="count">
+                                <input type="hidden" name="element" value="<?php echo $briefcase->getId() ?>" />
+                                <input type="text" disabled="disabled" class="spinner" name="value" value="<?php echo $this->briefcaseIdCount[$briefcase->getId()] ?>" style="width:27px;" />
+                            </td>
+                        </form>
+
+                        <td class="price" style="text-align:right">
+                            <?php echo $this->currency($briefcase->getPrice()); ?>
+                        </td>
+
+                        <td class="value" style="text-align:right">
+                            <?php $value = $this->briefcaseIdCount[$briefcase->getId()] * $briefcase->getPrice(); ?>
+                            <?php echo $this->currency($value); ?>
+                        </td>
+                    </tr>
+                    <?php
+                    $i++;
+                    $totalPrice += $value;
+                    ?>
+                <?php endforeach; ?>
+                <tr>
+                    <td colspan="" style="text-align:left !important; background-color:transparent">
+                        <?php if ( !empty( $this->choosenLocationName ) ) : ?>
+                            <p class="cart-summary">
+                                <?php echo $this->translate('label_choose_shop-location_choosen'); ?><br>
+                            </p>
+                            <span class="cart-price">
+                                <?php echo $this->choosenLocationName; ?>
+                            </span>
+                        <?php endif; ?>
+                    </td>
+                    <td colspan="7" style="text-align:right !important; background-color:transparent">
+                        <p class="cart-summary"><?php echo $this->translate('label_order-summary-text'); ?><br>
+                        <span class="cart-price"><?php echo $this->currency($totalPrice); ?></span>
+                        </p>
+                    </td>
+                </tr>
+                </tbody>
+
+            </table>
+            <a href="<?php echo $this->url( array('event_uri' => $this->selectedEvent->getUri()), 'shop_index' ) ?>">
+                <?php echo $this->translate( 'label_show_order_summary-back-index'); ?>
+            </a>
+
+            <div class="user-data-title">
+                <?php echo $this->translate( 'label_show_order_summary-user-data') ?>
+            </div>
+            <div>
+                <table style="margin-top:10px;">
+                    <tr>
+                        <td style="width:35%"><?php echo $this->translate( 'label_show_order_summary-user-data-first-name-last-name') ?>:</td>
+                        <td style="width:65%">
+                            <strong>
+                                <?php echo $this->clientData->getFirstName() . $this->clientData->getLastName(); ?>
+                                <?php echo $company = (!empty($this->clientData->company)) ? ' (' . $this->clientData->getCompany() . ') ' : ''; ?>
+                            </strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><?php echo $this->translate( 'label_show_order_summary-user-data-post-code-city') ?>:</td>
+                        <td>
+                            <?php
+                                $address = array();
+                                $address[] = $this->clientData->getCity();
+                                $address[] = $this->clientData->getPostCode();
+                            ?>
+                            <strong>
+                                <?php echo implode(', ', array_filter($address)); ?>
+                            </strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><?php echo $this->translate( 'label_show_order_summary-user-data-street') ?>:</td>
+                        <td>
+                            <strong>
+                                <?php echo $this->clientData->getStreet(); ?>
+                            </strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><?php echo $this->translate( 'label_show_order_summary-user-data-email-phones') ?></td>
+                        <td>
+                            <strong>
+                                <?php echo $this->clientData->getEmail() . ' ' . $this->clientData->getPhone(); ?>
+                            </strong>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <a class="user-data-edit"
+               href="<?php echo $this->url( array('event_uri' => $this->selectedEvent->getUri() ), 'user_account_edit' ) ?>">
+                <?php echo $this->translate( 'label_show_order_summary_edit-account'); ?>
+            </a>
+
+            <a class="send-order"
+               href="<?php echo $this->url( array( 'event_uri' => $this->selectedEvent->getUri()), 'shop_send-order') ?>">
+                <?php echo $this->translate( 'label_show_order_summary_send-order'); ?>
+            </a>
+            <div class="clear"></div>
+
+        </div>
+    <?php else :?>
+        <?php echo $this->translate( 'label_show_order_summary-empty' ); ?>
+    <?php endif; ?>
+</div>

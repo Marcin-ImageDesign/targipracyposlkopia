@@ -1,0 +1,43 @@
+<p style="margin-bottom:20px;"><?php echo $this->translate('Welcome');?>,  <?=$this->escape($this->userAuth->getName())?></p>
+
+<ul>
+    <li>
+        <a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'user_account_edit');?>" ><?php echo $this->translate('label_user_account_edit-data');?></a>
+    </li>
+    <?php if ($this->show_gamification):?>
+        <li>
+            <a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'user_account_rank');?>" ><?php echo $this->translate('label_user_account_rank');?></a>
+        </li>
+    <?php endif;?>
+
+    <?php if ( $this->selectedEvent->is_shop_active ) : ?>
+        <li>
+            <a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'shop_index');?>" ><?php echo $this->translate('label_user_account_my-order');?></a>
+        </li>
+    <?php endif; ?>
+    <li>
+        <a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'briefcase');?>" ><?php echo $this->translate('label_user_account_briefcase');?></a>
+    </li>
+    <?php if ($this->exhibParticipant):?>
+     <li>
+        <a href="<?php echo $this->url(array(), 'user_account_notifications-history');?>" ><?php echo $this->translate('label_user_account_notifications_history');?></a>
+    </li>
+    <?php endif;?>
+    <li>
+        <a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'user_account_change-pass');?>" ><?php echo $this->translate('label_user_account_change-password');?></a>
+    </li>
+    <li>
+        <a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri()), 'user_account_send-to-friend');?>" ><?php echo $this->translate('label_user_account_send-to-friend');?></a>
+    </li>
+    <li>
+        <span href="" onclick="event_share()" class="fbEventShare" id="fbEventShare"><?php echo $this->translate('Udostępnij wydarzenie');?></span>
+    </li>
+    <li>
+        <a href="<?php echo $this->url(array(),'logout'); ?>?redirect=<?php echo $this->url(array( 'event_uri'=>$this->selectedEvent->getUri()), 'event_hall')?>" ><?php echo $this->translate('label_user_account_logout');?></a>
+    </li>
+    <?php if(isset($this->briefcaseList)):?>
+        <li>
+            <a href="<?php echo $this->url($this->backRouteParams, $this->backRoute);?>" ><?php echo $this->translate('label_news_news_back');?></a>
+        </li>
+    <?php endif;?>
+</ul>

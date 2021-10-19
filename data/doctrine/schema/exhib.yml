@@ -1,0 +1,1076 @@
+ExhibParticipationType:
+  connection: baza
+  tableName: exhib_participation_type
+  options:
+    orderBy: id_exhib_participation_type DESC
+  columns:
+    id_exhib_participation_type:
+      type: integer
+      primary: true
+      autoincrement: true
+    name:
+      type: string
+      size: 255
+      default: ''
+    type:
+      type: string (255)
+      notnull: true
+
+ExhibParticipation:
+  connection: baza
+  tableName: exhib_participation
+  options:
+    orderBy: id_exhib_participation DESC
+  columns:
+    id_exhib_participation:
+      type: integer
+      primary: true
+      autoincrement: true    
+    id_base_user: integer  
+    hash: string (32) 
+    id_user: integer      
+    id_event: integer
+    is_active:       
+      type: boolean
+      default: true
+    id_exhib_participation_type: integer
+    id_user_created: integer
+  relations:
+    BaseUser:
+      local: id_base_user
+      foreign: id_base_user      
+      onDelete: CASCADE
+    User:
+      local: id_user
+      foreign: id_user
+      onDelete: CASCADE
+    ExhibParticipationType:
+      local: id_exhib_participation_type
+      foreign: id_exhib_participation_type
+    Event:
+      local: id_event
+      foreign: id_event
+      onDelete: CASCADE
+    UserCreated:
+      class: User
+      local: id_user_created
+      foreign: id_user
+      onDelete: SET NULL
+      
+ExhibStand:
+  connection: baza
+  tableName: exhib_stand
+  options:
+    orderBy: id_stand_level DESC
+  columns:
+    id_exhib_stand:
+      type: integer
+      primary: true
+      autoincrement: true
+    id_base_user: integer
+    hash: string (32)
+    id_event: integer
+    id_stand_type:
+      type: integer
+      default: 1
+      comment: "1 - stoisko standardowe; 2 - stoisko testowe"
+      notnull: true
+    id_image_logo:
+      type: integer
+      notnull: true
+      default: null
+    id_image_fb:
+      type: integer
+      notnull: true
+      default: null
+    id_image_hall:
+      type: integer
+      notnull: true
+      default: null
+    id_image_banner_desk:
+      type: integer
+      notnull: true
+      default: null
+    id_image_banner_top:
+      type: integer
+      notnull: false
+      default: null
+    id_image_banner_tv:
+      type: integer
+      notnull: false
+      default: null
+    data_banner:
+      type: string
+      notnull: true
+    is_active_chat:
+      type: boolean
+      default: false
+    live_chat_group_id: integer
+    id_exhib_stand_type: integer
+    id_stand_level: integer
+    id_event_stand_number: integer
+    is_active:
+      type: boolean
+      default: true
+    id_exhib_stand_hostess: integer
+    id_exhib_stand_view_image: integer
+    main_signboard_ext:
+      type: string
+      size: 8
+      default: '' 
+    desc_signboard_ext:
+      type: string
+      size: 8
+      default: '' 
+    tv_movie_ext:
+      type: string
+      size: 8
+      default: '' 
+    fb_address:
+      type: string
+      notnull: true
+    hall_number: integer
+    is_owner_view:
+      type: boolean
+      default: false
+    wall_billboard_ext:
+      type: string
+      size: 8
+      default: ''   
+    id_exhib_stand_participation:
+      type: integer
+      default: null
+    id_address_province:
+      type: integer
+      default: null
+    count_videos:
+      type: integer
+      default: null
+    count_products:
+      type: integer
+      default: null
+    count_bargains:
+      type: integer
+      default: null
+    count_files:
+      type: integer
+      default: null
+    map_videos:
+      type: string
+      default: null
+    google_analytics:
+      type: string
+      notnull: true
+    css_class: string (255)
+    is_metatag:
+      type: boolean
+      default: false
+    is_contact_active:
+      type: boolean
+      default: true
+    id_image_about_us:
+      type: integer
+      notnull: false
+      default: null
+  relations:
+    BaseUser:
+      local: id_base_user
+      foreign: id_base_user
+      onDelete: CASCADE
+    Event:
+      local: id_event
+      foreign: id_event
+    ImageLogo:
+      class: Image
+      foreignAlias: ExhibStandLogo
+      local: id_image_logo
+      foreign: id_image
+      type: one
+      foreignType: one
+      onDelete: CASCADE
+    ImageFb:
+      class: Image
+      foreignAlias: ExhibFbLogo
+      local: id_image_fb
+      foreign: id_image
+      type: one
+      foreignType: one
+      onDelete: CASCADE
+    ImageHall:
+      class: Image
+      foreignAlias: ExhibStandHall
+      local: id_image_hall
+      foreign: id_image
+      type: one
+      foreignType: one
+      onDelete: CASCADE
+    ImageBannerDesk:
+      class: Image
+      foreignAlias: ExhibStandBannerDesk
+      local: id_image_banner_desk
+      foreign: id_image
+      type: one
+      foreignType: one
+      onDelete: CASCADE
+    ImageBannerTop:
+      class: Image
+      foreignAlias: ExhibStandBannerTop
+      local: id_image_banner_top
+      foreign: id_image
+      type: one
+      foreignType: one
+      onDelete: CASCADE
+    BannerTv:
+      class: Image
+      foreignAlias: ExhibStandBannerTv
+      local: id_image_banner_tv
+      foreign: id_image
+      type: one
+      foreignType: one
+      onDelete: CASCADE
+    ExhibStandType:
+      local: id_exhib_stand_type
+      foreign: id_exhib_stand_type
+    StandLevel:
+      local: id_stand_level
+      foreign: id_stand_level
+    EventStandNumber:
+      local: id_event_stand_number
+      foreign: id_event_stand_number
+      type: one
+      foreignType: one
+      onDelete: SET NULL
+    ExhibStandHostess:
+      local: id_exhib_stand_hostess
+      foreign: id_exhib_stand_hostess
+    ExhibStandViewImage:
+      local: id_exhib_stand_view_image
+      foreign: id_exhib_stand_view_image
+    AddressProvince:
+      local: id_address_province
+      foreign: id_address_province
+      type: one
+      foreignType: many
+      onDelete: SET NULL
+    Translations:
+      class: ExhibStandTranslation
+      local: id_exhib_stand
+      foreign: id_exhib_stand
+      type: many
+      foreignType: one
+
+ExhibStandTranslation:
+  connection: baza
+  tableName: exhib_stand_translation
+  attributes:
+    coll_key: id_language
+  columns:
+    id_exhib_stand:
+      type: integer
+      primary: true
+    id_language:
+      type: integer
+      primary: true
+    name:
+      type: string (255)
+      notnull: true
+    uri:
+      type: string (255)
+      notnull: true
+    contact_info:
+      type: string
+      notnull: true
+    short_contact:
+      type: string
+      notnull: true
+    short_info:
+      type: string
+      notnull: true
+    www_adress:
+      type: string
+      notnull: true
+    exhibitor_info:
+      type: string
+      notnull: true
+    stand_keywords:
+      type: string
+      notnull: true
+    metatag_title:
+      type: string (255)
+    metatag_desc:
+      type: string (255)
+    metatag_key:
+      type: string (255)
+  relations:
+    Language:
+      local: id_language
+      foreign: id_language
+      onDelete: CASCADE
+
+ExhibStandType:
+  connection: baza
+  tableName: exhib_stand_type
+  options:
+    orderBy: id_exhib_stand_type DESC
+  columns:
+    id_exhib_stand_type:
+      type: integer
+      primary: true
+      autoincrement: true
+    name:
+      type: string
+      size: 255
+      default: ''
+      
+ExhibStandParticipation:
+  connection: baza
+  tableName: exhib_stand_participation
+  options:
+    orderBy: id_exhib_stand_participation DESC
+  columns:
+    id_exhib_stand_participation:
+      type: integer
+      primary: true
+      autoincrement: true
+    hash: string (32)   
+    id_exhib_participation: integer
+    id_exhib_stand: integer
+    is_active:
+      type: boolean
+      default: true
+    id_user_created: integer
+    videoconference_user_link:
+      type: string
+      default: '' 
+    videoconference_owner_link:
+      type: string
+      default: '' 
+    videoconference_userlimit:
+      type: integer
+      size: 11
+      default: 9999
+    last_active_videochat:
+      type: timestamp
+      default: null
+      notnull: false
+  relations:
+    ExhibParticipation:
+      local: id_exhib_participation
+      foreign: id_exhib_participation
+      type: one
+      foreignType: many
+      onDelete: CASCADE
+    ExhibStand:
+      local: id_exhib_stand
+      foreign: id_exhib_stand
+      type: one
+      foreignType: many
+    UserCreated:
+      class: User
+      local: id_user_created
+      foreign: id_user
+      onDelete: SET NULL
+
+ExhibStandFile:
+  connection: baza
+  tableName: exhib_stand_file
+  options:
+    orderBy: id_exhib_stand_file DESC
+  columns:
+    id_exhib_stand_file:
+      type: integer
+      primary: true
+      autoincrement: true
+    hash: string (32)  
+    created_at: timestamp  
+    name:
+      type: string
+      size: 255
+      default: '' 
+    description: text
+    file_ext:
+      type: string
+      size: 8
+      default: ''
+    uri: string (255)
+    id_exhib_stand: integer
+    id_base_user: integer
+    id_user_created:
+      type: integer
+      default: null  
+    is_visible:
+      type: boolean
+      default: true
+    is_published:
+      type: boolean
+      default: false
+    image_ext:
+      type: string
+      size: 8
+  relations:
+    BaseUser:
+      local: id_base_user
+      foreign: id_base_user
+    ExhibStand:
+      local: id_exhib_stand
+      foreign: id_exhib_stand
+    CreatorUser:
+      class: User
+      local: id_user_created
+      foreign: id_user
+      type: one
+      foreignType: many
+    ExhibStandFileLanguage:
+      foreignAlias: ExhibStandFile
+      local: id_exhib_stand_file
+      foreign: id_exhib_stand_file
+      type: many
+      foreignType: one
+    ExhibStandFileLanguageOne:
+      foreignAlias: ExhibStandFileOne
+      class: ExhibStandFileLanguage
+      local: id_exhib_stand_file
+      foreign: id_exhib_stand_file
+      type: one
+      foreignType: one 
+      
+ExhibStandFileLanguage:
+  connection: baza
+  tableName: exhib_stand_file_language
+  columns:
+    id_exhib_stand_file:
+      type: integer
+      primary: true
+    id_base_user_language: 
+      type: integer
+      primary: true
+    description: text
+  relations:
+    ExhibStandFile:
+      foreignAlias: ExhibStandFileLanguage
+      local: id_exhib_stand_file
+      foreign: id_exhib_stand_file
+      type: one
+      foreignType: many
+      onDelete: CASCADE
+    ExhibStandFileOne:
+      class: ExhibStandFile
+      foreignAlias: ExhibStandFileLanguageOne
+      local: id_exhib_stand_file
+      foreign: id_exhib_stand_file
+      type: one
+      foreignType: one
+      onDelete: CASCADE
+    BaseUserLanguage:
+      local: id_base_user_language
+      foreign: id_base_user_language
+      onDelete: CASCADE
+      
+ExhibStandHostess:
+  connection: baza
+  tableName: exhib_stand_hostess
+  options:
+    orderBy: id_exhib_stand_hostess DESC
+  columns:
+    id_exhib_stand_hostess:
+      type: integer
+      primary: true
+      autoincrement: true    
+    hash: string (32)     
+    id_base_user: integer
+    id_exhib_stand:
+      type: integer
+      notnull: false
+    name:
+      type: string
+      size: 255
+      default: '' 
+    file_ext:
+      type: string
+      size: 8
+      default: ''
+    uri: string (255)
+    is_active:
+      type: boolean
+      default: true
+    is_animated:
+      type: boolean
+      default: false
+    data_map:
+      type: string
+      default: null
+  relations:
+    BaseUser:
+      local: id_base_user
+      foreign: id_base_user
+    ExhibStand:
+      local: id_exhib_stand
+      foreign: id_exhib_stand
+
+ExhibStandViewImage:
+  connection: baza
+  tableName: exhib_stand_view_image
+  options:
+    orderBy: id_exhib_stand_view_image DESC
+  columns:
+    id_exhib_stand_view_image:
+      type: integer
+      primary: true
+      autoincrement: true    
+    hash: string (32)     
+    id_base_user: integer
+    id_user_created: integer
+    name:
+      type: string
+      size: 255
+      default: ''
+    id_image:
+      type: integer
+      notnull: true
+    file_ext:
+      type: string
+      size: 8
+      default: ''
+    id_stand_level:
+      type: integer
+      notnull: true
+    is_active:
+      type: boolean
+      default: true
+    id_exhib_stand: integer
+    is_public: 
+      type: boolean
+      default: true
+    data_icon: 
+      type: string
+      default: null
+    data_banner: 
+      type: string
+      default: null
+    data_stand:
+      type: string
+      default: null
+  relations:
+    BaseUser:
+      local: id_base_user
+      foreign: id_base_user
+    Image:
+      local: id_image
+      foreign: id_image
+      type: one
+      foreignType: one
+    UserCreated:
+      class: User
+      local: id_user_created
+      foreign: id_user
+      onDelete: SET NULL
+    ExhibStand:
+      local: id_exhib_stand
+      foreign: id_exhib_stand
+    StandLevel:
+      local: id_stand_level
+      foreign: id_stand_level
+      type: one
+      foreignType: many
+      
+ExhibEventTvMovie:
+  connection: baza
+  tableName: exhib_event_tv_movie
+  columns:
+    id_exhib_event_tv_movie:
+      type: integer
+      primary: true
+      autoincrement: true    
+    hash: string (32)        
+    id_event: integer
+    tv_movie_ext: string(16)
+    tv_number: integer
+    tv_movie_image_url:
+      type: string
+      default: ''
+    tv_movie_image_url_lightbox:
+      type: boolean
+      default: false  
+    tv_movie_auto_pause:
+      type: boolean
+      default: true
+  relations:
+    Event:
+      local: id_event
+      foreign: id_event
+      type: one
+      foreignType: many
+      onDelete: CASCADE
+      
+ExhibHall:
+  connection: baza
+  tableName: exhib_hall
+  options:
+    orderBy: id_exhib_hall DESC
+  columns:
+    id_exhib_hall:
+      type: integer
+      primary: true
+      autoincrement: true
+    hash: string (32)  
+    id_base_user: integer
+    id_user_created:
+      type: integer
+      default: null
+    name: string (255)  
+    is_active:       
+      type: boolean
+      default: true    
+  relations:
+    BaseUser:
+      local: id_base_user
+      foreign: id_base_user
+      onDelete: CASCADE    
+      
+Statistics:
+  connection: baza
+  tableName: statistics
+  options:
+    orderBy: id_statistics DESC
+  columns:
+    id_statistics:
+      type: bigint
+      primary: true
+      autoincrement: true
+    id_base_user: integer
+    created_at: timestamp  
+    ip: string (16) 
+    id_user:
+      type: integer
+      default: null
+    channel:
+      type: string (255)
+      notnull: true
+    id_element:
+      type: integer
+      notnull: false
+      default: null
+    id_element_item:
+      type: integer
+      notnull: false
+      default: null
+    data:
+      type: string
+      notnull: true
+    id_event:
+      type: integer
+  relations:
+    BaseUser:
+      local: id_base_user
+      foreign: id_base_user
+      onDelete: CASCADE  
+    User:
+      local: id_user
+      foreign: id_user
+      onDelete: SET NULL  
+    Event: 
+      local: id_event
+      foreign: id_event
+      onDelete: CASCADE
+
+ExhibStandHasBrand:
+  connection: baza
+  tableName: exhib_stand_has_brand
+  columns:
+    id_exhib_stand:
+      type: integer
+      primary: true
+      notnull: true
+    id_brand:
+      type: integer
+      primary: true
+      notnull: true
+  relations:
+    ExhibStand:
+      local: id_exhib_stand
+      foreign: id_exhib_stand
+      type: one
+      foreignType: many
+      onDelete: CASCADE
+    Brand:
+      local: id_brand
+      foreign: id_brand
+      type: one
+      foreignType: many
+      onDelete: CASCADE
+
+StandHasAddressProvince:
+  connection: baza
+  tableName: stand_has_address_province
+  columns:
+    id_stand:
+      type: integer
+      primary: true
+      notnull: true
+    id_address_province:
+      type: integer
+      primary: true
+      notnull: true
+  relations:
+    Stand:
+      class: ExhibStand
+      local: id_stand
+      foreign: id_exhib_stand
+      type: one
+      foreignType: many
+      onDelete: CASCADE
+    AddressProvince:
+      local: id_address_province
+      foreign: id_address_province
+      type: one
+      foreignType: many
+      onDelete: CASCADE
+
+StandLevel:
+  connection: baza
+  tableName: stand_level
+  options:
+    orderBy: id_stand_level DESC
+  columns:
+    id_stand_level:
+      type: integer
+      primary: true
+      autoincrement: true
+    name:
+      type: string
+      size: 255
+      notnull: true
+    id_event:
+      type: integer
+      primary: true
+      default: null
+  relations:
+    Event:
+      local: id_event
+      foreign: id_event
+      type: one
+      foreignType: many
+      onDelete: SET NULL
+
+StandProduct:
+  connection: baza
+  tableName: stand_product
+  actAs:
+    Timestampable:
+      created:
+        name: created_at
+        type: timestamp
+        format: Y-m-d H:i:s
+      updated:
+        name: modificated_at
+        type: timestamp
+        format: Y-m-d H:i:s
+  columns:
+    id_stand_product:
+      type: integer
+      primary: true
+      autoincrement: true
+    id_exhib_stand:
+      type: integer
+      notnull: true
+    is_active:
+      type: boolean
+      default: true
+    hash: string (32)
+    id_image:
+      type: integer (10)
+      notnull: false
+    is_promotion:
+      type: boolean
+      default: false
+    price:
+      type: decimal
+      scale: 2
+      notnull: true
+    original_price:
+      type: decimal
+      scale: 2
+      notnull: true
+    unit:
+      type: string (32)
+      default: ''
+    form_target: string
+    skip_offer_page:
+      type: boolean
+      default: false
+    offer_city:
+      type: string (255)
+      default: null
+    id_fb_image:
+      type: integer (10)
+      notnull: false
+  relations:
+    ExhibStand:
+      local: id_exhib_stand
+      foreign: id_exhib_stand
+      type: one
+      foreignType: many
+      onDelete: CASCADE
+    Image:
+      class: Image
+      foreignAlias: StandProduct
+      local: id_image
+      foreign: id_image
+      type: one
+      foreignType: one
+      onDelete: CASCADE
+    Translations:
+      class: StandProductTranslation
+      local: id_stand_product
+      foreign: id_stand_product
+      type: many
+      foreignType: one
+    FbImage:
+      local: id_fb_image
+      foreign: id_image
+      type: one
+      foreignType: one
+      onDelete: CASCADE
+StandProductFile:
+    connection: baza
+    tableName: stand_product_file
+    columns:
+      id_stand_product_file:
+        type: integer
+        primary: true
+        autoincrement: true
+      id_stand_product:
+        type: integer
+        notnull: true
+      hash:
+        type: string(32)
+        notnull: true
+      created_at:
+        type: timestamp
+      title:
+        type: string(255)
+        notnull: true
+      file_ext:
+        type: string(8)
+      name:
+        type: string(255)
+        notnull: true
+    relations:
+      StandProduct:
+        local: id_stand_product
+        foreign: id_stand_product
+StandProductTranslation:
+  connection: baza
+  tableName: stand_product_translation
+  attributes:
+    coll_key: id_language
+  columns:
+    id_stand_product:
+      type: integer
+      primary: true
+    id_language:
+      type: integer
+      primary: true
+    name:
+      type: string
+    lead:
+      type: string
+    keywords:
+      type: string
+      default: null
+    description:
+      type: string
+    link:
+      type: string
+      default: null
+  relations:
+    Language:
+      local: id_language
+      foreign: id_language
+      onDelete: CASCADE
+      
+StandVideo:
+  connection: baza
+  tableName: stand_video
+  columns: 
+    id_stand_video:
+      type: integer
+      primary: true
+      autoincrement: true
+    id_exhib_stand: 
+      type: integer
+      notnull: true
+    name: string (255)
+    is_active:
+      type: boolean
+      default: true
+    created_at: timestamp
+    lead: string
+    video_link: string
+    hash: string (32)
+    show_on_stand:
+      type: boolean
+      default: false
+  relations:
+    ExhibStand:
+      local: id_exhib_stand
+      foreign: id_exhib_stand
+      type: one
+      foreignType: many
+      onDelete: CASCADE
+    Translations:
+      class: StandVideoTranslation
+      local: id_stand_video
+      foreign: id_stand_video
+      type: many
+      foreignType: one
+
+StandVideoTranslation:
+  connection: baza
+  tableName: stand_video_translation
+  attributes:
+    coll_key: id_language
+  columns:
+    id_stand_video:
+      type: integer
+      primary: true
+    id_language:
+      type: integer
+      primary: true
+    name:
+      type: string
+      default: ''
+    lead: 
+      type: string
+      default: ''
+  relations:
+    Language:
+      local: id_language
+      foreign: id_language
+      onDelete: CASCADE
+
+EventHasStandViewImage:
+  connection: baza
+  tableName: event_has_stand_view_image
+  columns:
+    id_event: 
+      type: integer
+      primary: true
+    id_exhib_stand_view_image: 
+      type: integer
+      primary: true
+  relations:
+    Event:
+      local: id_event
+      foreign: id_event
+      type: one
+      foreignType: many
+      onDelete: CASCADE
+    StandViewImage:
+      class: ExhibStandViewImage
+      local: id_exhib_stand_view_image
+      foreign: id_exhib_stand_view_image
+      type: one
+      foreignType: many
+      onDelete: CASCADE
+
+GamificationUserPoints:
+  connection: baza
+  tableName: gamification_user_points
+  columns:
+    id_event: 
+      type: integer
+      primary: true
+    id_user: 
+      type: integer
+      primary: true
+    points: 
+      type: integer
+      notnull: false
+  relations:
+    Event:
+      local: id_event
+      foreign: id_event
+      type: one
+      foreignType: many
+      onDelete: CASCADE
+    User:
+      local: id_user
+      foreign: id_user
+      type: one
+      foreignType: many
+      onDelete: CASCADE
+    GamificationUserHistoryPoints:
+      local: id_user
+      foreign: id_user
+      type: one
+      foreignType: many
+      onDelete: CASCADE
+
+GamificationUserHistoryPoints:
+  connection: baza
+  tableName: gamification_user_history_points
+  columns:
+    id_event:
+      type: integer
+      primary: true
+    id_user:
+      type: integer
+      primary: true
+    points:
+      type: integer
+      notnull: false
+    rank:
+      type: integer
+      notnull: false
+
+GamificationActionPoint:
+  connection: baza
+  tableName: gamification_action_point
+  columns:
+    action: 
+      type: string
+    point: 
+      type: integer
+    description: 
+      type: string
+      notnull: false
+
+GamificationDayRanking:
+  connection: baza
+  tableName: gamification_day_ranking
+  columns:
+    id_event:
+      type: integer
+      primary: true
+    id_user:
+      type: integer
+      primary: true
+    points:
+      type: integer
+      notnull: false
+  relations:
+    Event:
+      local: id_event
+      foreign: id_event
+      type: one
+      foreignType: many
+      onDelete: CASCADE
+    User:
+      local: id_user
+      foreign: id_user
+      type: one
+      foreignType: many
+      onDelete: CASCADE
+
+SendToFriend:
+  connection: baza
+  tableName: send_to_friend
+  columns:
+    id_user:
+      type: integer
+      primary: true
+    email:
+      type: string (150)
+      primary: true
+    date: datetime

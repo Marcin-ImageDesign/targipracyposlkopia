@@ -1,0 +1,9 @@
+<div class="onLeft breadcrumb">
+    <a href="<?=$this->url()?>"><?php echo $this->translate('Root folder'); ?></a>
+    <?php $path = '/'; ?>
+    <?php foreach( $this->breadcrumbPath as $dir ): ?>
+        <?php $path.=$dir.'/'; ?>
+        &raquo;
+        <a href="<?=$this->url()?>?path=<?=$path?>"><?=$this->escape($dir)?></a>
+    <?php endforeach; ?>
+</div>

@@ -1,0 +1,27 @@
+<?php
+$this->headLink()->appendStylesheet('/_css/admin/form.css');
+?>
+
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+<h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+<div>
+    <?php echo $this->formSlider; ?>
+</div>
+<div class="cl"></div>
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+//        <?php // if ( $this->slider->imageExists() ): ?>
+//                //Jeżeli element ma już grafikę wgrywamy kod html który nam ją pokaże, a także link do usunięcia zdjęcia
+//                $('div.img_content').append('<div class="img_see" style="clear:both;margin-left:175px;vertical-align:top;"></div>');
+//                $('div.img_content .img_see').append('<img style="max-height:100px;max-width:200px;margin-top:0px;border:1px solid #eee;" src="<?=addslashes($this->slider->getBrowseImage()); ?>" alt="" /><br />');
+//                $('div.img_content .img_see').append('<?= $this->slider->getImg(); ?><br />');
+//                $('div.img_content .img_see').append('<a href="<?php echo $this->url(array('hash' => $this->slider->hash), 'admin_slider_img_delete'); ?>" >Usuń zdjęcie</a>');
+//        <?php // endif; ?>
+            
+        
+    });
+</script>
+

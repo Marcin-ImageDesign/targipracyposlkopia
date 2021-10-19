@@ -1,0 +1,36 @@
+<div class="filesOptions">
+	<div class="selectedOptions taRight">
+		<?php $rand = rand(); ?>
+		<div id="filesOperationInfo" class="toolTipShow" showtooltip="operatingFiles_<?=$rand?>">
+			<?php if( count( $this->selectedFiles['files'] ) > 0 ): ?>
+				<img  src="/_images/icon/tango_16/help-browser.png" class="mb-4"/>
+			<?php endif; ?>
+
+			<div id="operatingFiles_<?=$rand?>" class="operatingFiles">
+				<div class="title">
+					<?php echo $this->translate('Following items from directory')?> "/<?=$this->selectedFiles['files_path']?>" <?php echo $this->translate('will be')?> <?=$this->selectedFiles['operation']=='cut'? $this->translate('cut out'):$this->translate('copied')?>:
+				</div>
+				<ul>
+					<?php foreach($this->selectedFiles['files'] as $file => $overwrite): ?>
+						<li><?=$file?></li>
+					<?php endforeach; ?>
+				</ul>
+			</div>
+		</div>
+
+        <div class="change_view onRight ptS">
+            <a href="<?=$this->url()?>?view=tiles&path=<?=$this->path?>" title="<?php echo $this->translate('view tiles'); ?>">
+                <img src="/_images/icon/view_tiles.png" alt="<?php echo $this->translate('view tiles'); ?>" class="mb-3 pl2"/>
+            </a>
+            <a href="<?=$this->url()?>?view=list&path=<?=$this->path?>" title="<?php echo $this->translate('view list'); ?>">
+                <img src="/_images/icon/view_list.png" alt="<?php echo $this->translate('view list'); ?>" class="mb-3 pl2"/>
+            </a>
+        </div>
+
+		<input type="submit" name="selectedOption" class="deleteSelected optionButton" value="<?php echo $this->translate('delete'); ?>" onclick="if( confirm('<?php echo $this->translate('Are you sure you want to delete this item?'); ?>') ) return true; else return false;"/> |
+		<input type="submit" name="selectedOption" class="copySelected optionButton" value="<?php echo $this->translate('copy'); ?>"/> |
+		<input type="submit" name="selectedOption" class="cutSelected optionButton" value="<?php echo $this->translate('cut'); ?>"/> |
+		<input type="submit" name="selectedOption" class="pasteSelected optionButton <?=( !empty($this->selectedFiles['files'] ) ) ? '' : 'optionButtonDisabled'?>" value="<?php echo $this->translate('paste'); ?>" <?=(!empty($this->selectedFiles['files'] ))?'':'disabled'?>/> |
+		<input type="submit" name="selectedOption" class="cancelSelected optionButton <?=( !empty($this->selectedFiles['files'] ) ) ? '' : 'optionButtonDisabled'?>" value="<?php echo $this->translate('cancel'); ?>" <?=(!empty($this->selectedFiles['files'] ))?'':'disabled'?>/>
+	</div>
+</div>

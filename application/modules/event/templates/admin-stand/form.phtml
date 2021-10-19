@@ -1,0 +1,79 @@
+<?php
+$this->headLink()->appendStylesheet('/_css/admin/form.css');
+?>
+
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+<?php
+    $this->headScript()->appendFile('/_js/admin/ui.multiselect.js');
+     $this->headLink()->appendStylesheet('/_css/admin/ui.multiselect.css');
+?>
+
+<h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+<div>
+    <?php echo $this->form; ?>
+</div>
+<div class="cl"></div>
+
+<script type="text/javascript">
+    var hlOptions;
+    $(document).ready(function(){
+        hlOptions = $('#EventFormAdminStand-event_hall_map').data('hall-map-numbers');
+        hlUrls = $('#EventFormAdminStand-event_hall_map').data('urls');
+        choosenNumber = $('#EventFormAdminStand-id_event_stand_number').val();
+        $('body').on('change', '#EventFormAdminStand-event_hall_map', changeEventHallMap);
+        $('body').on('change', '#EventFormAdminStand-id_stand_level', changeStandLevel);
+        $('body').on('click', '#field-wrapper-is_owner_view span', standView);
+        $('#EventFormAdminStand-id_stand_level').trigger('loaded');
+        $('#field-wrapper-is_owner_view span').trigger('loaded');
+        $(".multiselect").multiselect({dividerLocation: 0.5});
+        changeEventHallMap();
+    });
+
+
+    var changeEventHallMap = function(){
+        var selected_hall = $('#EventFormAdminStand-event_hall_map option:selected').val();
+        if (typeof selected_hall != 'undefined'){
+            var selectStandLevel = $('#EventFormAdminStand-id_stand_level');
+            selectStandLevel.trigger('change');
+            var prev_link = $('a.hallPreview');
+            prev_link.attr('href', hlUrls[selected_hall]);
+        }
+    }
+
+    var changeStandLevel = function () {
+        var id_hall_map = $('#EventFormAdminStand-event_hall_map').val();
+        var value = $(this).val();
+        $(".form-item_stand-block").hide();
+        $(".form-item_stand-block_"+value).show();
+
+        var selectNumbers = $('#EventFormAdminStand-id_event_stand_number');
+        selectNumbers.find('option').remove();
+        $.each(hlOptions[id_hall_map][value], function(i, item) {
+            if (i == choosenNumber){
+                selectNumbers.append('<option value="'+i+'" selected="selected" label="'+item+'">'+item+'</option>');
+            }else{
+                selectNumbers.append('<option value="'+i+'" label="'+item+'">'+item+'</option>');
+            }
+        });
+    }
+    
+    var standView = function () {
+        if($(this).attr('class') == "switch-1"){// własne stoisko
+            $(".group_stand-view-own").show();
+            $(".group_stand-view-standard").hide();
+        }else{ // standard
+            $(".group_stand-view-standard").show();
+            $(".group_stand-view-own").hide();
+        }
+    }
+
+    var setHallPreviev = function () {
+        
+    }
+    
+    
+    
+   
+</script>

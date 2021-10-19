@@ -1,0 +1,37 @@
+<?php
+    $this->headLink()->appendStylesheet('/_css/admin/form.css');
+?>
+
+<?php $this->placeholder('headling_1')->captureStart(); ?>
+    <h1><?php echo $this->placeholder('headling_1_content'); ?></h1>
+<?php $this->placeholder('headling_1')->captureEnd(); ?>
+
+<form action="<?=$this->url()?>" method="POST" class="form" id="filesNewCatalog">
+	<?=$this->formHidden('path', $this->path )?>
+	<?=$this->formHidden('mode', $this->mode)?>
+
+    <fieldset class="form-header" id="fieldset-header">
+        <div class="form-item form-item-large">
+            <label class="label-hidden required" for="header-title"><?php echo $this->translate('Name'); ?></label>
+            <div class="field-wrapper">
+                <?=$this->formText('catalog_name', $this->form['catalog_name'], array( 'maxlength' => '255', 'class' => 'field-text field-text-big '.( $this->error->isError('catalog_name') ? 'error' : '' ) ) )?>
+                <div class="field_error" id="error_catalog_name"><?=$this->error->getError('catalog_name', false)?></div>
+            </div>
+        </div>
+        <div class="ui-button-big">
+            <div class="submit">
+                <input type="submit" class="ui-button ui-button-bg-white ui-button-text-red ui-button-text-only ui-button ui-button-nicy ui-button-text" value="<?php echo $this->translate('Save'); ?>" id="header-submit" name="option">
+                <span class="loadingField noVisible bold plM">
+                    <img src="/_images/icon/loading_blue.gif" class="mb-3"/> wysyłam, proszę czekać...
+                </span>
+            </div>
+        </div>
+    </fieldset>
+</form>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+//		var optionsFileUpload = {beforeSubmit: defaultShowRequest, success: defaultShowResponse, dataType: 'json'};
+//		$('#filesNewCatalog').ajaxForm(optionsFileUpload);
+	});
+</script>

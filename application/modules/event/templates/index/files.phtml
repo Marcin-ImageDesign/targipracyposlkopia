@@ -1,0 +1,50 @@
+<?php $this->placeholder('h1')->captureStart();?>
+<h1 class="title"><?=$this->escape($this->selectedEvent->getTitle())?></h1>
+<?php $this->placeholder('h1')->captureEnd();?>
+<?php $tabH=(count($this->event_files) + count($this->stand_files))*135;;?>
+<h2><?php echo $this->translate('label_event_index_files_files'); ?></h2>
+<div class="mcsb">
+    <div style="min-height:<?php echo $tabH;?>px">
+
+        <table cellspacing="0" cellpadding="0" align="center" class="grid datas" style="width:100%; text-align: left; border-spacing: 0 9px;">
+            <thead>
+            <tr class="row">
+                <th class="head">
+
+                </th>
+                <th class="head">
+
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($this->event_files as $file): ?>
+                <tr class="row" style="background: #F6F6F6;">
+                    <td valign="top" class="col" width="160" style="padding: 5px;">
+                        <a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'hash' => $file->getHash()), 'event_download_file'); ?>" target="_blank">
+                            <img src="<?= $file->getBrowserImage(); ?>" alt="">
+                        </a>
+                    </td>
+                    <td valign="top" class="col" style="padding: 5px;">
+                        <a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'hash' => $file->getHash()), 'event_download_file'); ?>" target="_blank"><span style="font-size: 12px; font-weight: bold;color:#000"><?php echo $this->escape($file->getTitle()); ?></span></a><br/>
+                        <?php echo $file->getLead(); ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            <?php foreach ($this->stand_files as $file): ?>
+                <tr class="row" style="background: #F6F6F6;">
+                    <td valign="top" class="col" width="160" style="padding: 5px;">
+                        <a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'hash' => $file->getHash()), 'event_download_stand_file'); ?>" target="_blank">
+                            <img src="<?= $file->getBrowserImage(); ?>" alt="">
+                        </a>
+                    </td>
+                    <td valign="top" class="col" style="padding: 5px;">
+                        <a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(), 'hash' => $file->getHash()), 'event_download_file'); ?>" target="_blank"><span style="font-size: 12px; font-weight: bold;color:#000"><?php echo $this->escape($file->getName()); ?></span></a><br/>
+                        <?php echo $file->getDescription(); ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>

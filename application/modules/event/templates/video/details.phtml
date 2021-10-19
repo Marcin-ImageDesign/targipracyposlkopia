@@ -1,0 +1,9 @@
+<a class="contentLoad eventVideoBack" href="<?php echo $this->url(array('event_uri' => $this->eventVideo->Event->getUri()), 'event-video_index');?>">&laquo; <?php echo $this->translate('event_video_back_to_list');?></a>
+<div class="videoWrapper_m">
+    <iframe width="100%" height="100%" src="https://www.youtube.com/embed/<?php echo $this->eventVideo->getVideoKey();?>?autoplay=1&wmode=transparent&controls=1&theme=light&color=white&showinfo=0&showsearch=0&rel=0&egm=1&start=<?php echo $_GET['start'] ?>" frameborder="0" allowfullscreen></iframe>
+    
+</div>
+
+<?php $this->headScript()->captureStart(); ?>
+
+<?php $this->headScript()->captureEnd(); ?>

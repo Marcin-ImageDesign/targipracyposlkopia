@@ -1,0 +1,80 @@
+<?php $briefcaseService = Zend_Registry::get('BriefcaseService'); ?>
+<?php $i = 0; ?>
+<?php foreach ($this->eventProductList as $eventProduct): /** @var $eventProduct StandProduct */?>
+    <tr class="border_tr row <?php if ($eventProduct->is_promotion):?>promotion_row<?php endif;?> <?= (($i % 2) == 0 ) ? '' : 'rdkOdd' ?>" style="text-align:center;">
+        <?php $url = '';
+            if ($eventProduct->getSkipOfferPage()){
+                $url = $eventProduct->getFormTarget();
+            }else{
+                $url =  $this->url(
+                    array(
+                        'event_uri' => $this->selectedEvent->getUri(),
+                        'stand_uri' => $eventProduct->ExhibStand->getUri(),
+                        'product_hash' => $eventProduct->getHash(),
+                        'hall_uri'=>$eventProduct->ExhibStand->EventStandNumber->EventHallMap->uri,
+                        'back_to' => 'catalogue'
+                    ),
+                   'event_stand-offer_details');
+            };
+        ?>
+        <td valign="middle" align="center" class="col" style="text-align:center;" width="104">
+            <?php if ($eventProduct->imageExists()):?>
+                <a <?php if ($eventProduct->getSkipOfferPage()):?>target="_blank"<?php endif;?> href="<?php echo $url?>"
+                   title="<?=$this->escape($eventProduct->getName())?>"
+                >
+                    <img width="100" src="<?php echo Service_Image::getUrl($eventProduct->id_image, 100);?>" alt="<?=$this->escape($eventProduct->getName())?>" />
+                </a>
+            <?php endif;?>
+        </td>
+        <td valign="middle" align="center" class="col" style="text-align:center;" colspan="">
+            <?php if ($eventProduct->is_promotion):?>
+                <div class='promo_box'><?php echo $this->translate('Wyróżniona oferta');?></div>
+            <?php endif;?>
+            <a <?php if ($eventProduct->getSkipOfferPage()):?>target="_blank"<?php endif;?> href="<?php echo $url?>"><?php echo $eventProduct->getName() ?>
+            </a><br />
+            <?php echo $this->translate('Exhibitor');?>: <a href="<?php echo $this->url(array('event_uri' => $this->selectedEvent->getUri(),'hall_uri' => $eventProduct->ExhibStand->EventStandNumber->EventHallMap->uri, 'stand_uri' => $eventProduct->ExhibStand->getUri()), 'event_stand');?>"><?php echo $eventProduct->ExhibStand->getName();?></a>
+            <p><?php echo $this->LimitText($eventProduct->getLead(), 18);?></p>
+
+            <div class="productIcons">
+                <?php if ( $this->selectedEvent->is_shop_active == 1 ) : ?>
+                    <form action="<?php echo $this->url(['event_uri' => $this->selectedEvent->getUri()], 'shop_add') ?>">
+                        <input type="hidden" name="element" value="<?php echo $eventProduct->getId() ?>"/>
+                        <input type="hidden" name="value" value="1"/>
+                        <input type="submit" class="add2Cart floatL"
+                               value="<?= $this->translate('label_briefcase_add-to-shop'); ?>"/>
+                    </form>
+                <?php endif; ?>
+
+                <a <?php if ($eventProduct->getSkipOfferPage()):?>target="_blank"<?php endif;?> href="<?= $url?>" class="productMore" style="margin-right:0; margin-left:20px;">
+                    <?= $this->translate('label_event_stand-offer_index_see-details'); ?>
+                </a>
+
+                <?php if ( $this->selectedEvent->is_shop_active == 0) : ?>
+                    <?php if(false == $briefcaseService->checkElementExists($this->id_briefcase_type, $eventProduct->getId(), $this->selectedEvent->getId())):?>
+                        <a class="productBriefcaseAdd add_element tooltipLoad briefcase" href="<?php echo $this->url(array('id_briefcase_type'=>$this->id_briefcase_type,'element'=>$eventProduct->getId(),'namespace'=>$this->selectedEvent->getId()),'briefcase_add-element')?>?return=<?php echo $this->url();?>">
+                            <?= $this->translate('label_briefcase_add-to-briefcase'); ?>
+                        </a>
+                        <div class="tooltipContent" id="addToBookmarks"><?= $this->translate('label_briefcase_add-to-briefcase'); ?></div>
+                    <?php else:?>
+                        <a class="productBriefcaseDel remove_element briefcase tooltipLoad" href="<?php echo $this->url(array('id_briefcase_type'=>$this->id_briefcase_type,'element'=>$eventProduct->getId(),'namespace'=>$this->selectedEvent->getId()),'briefcase_remove-element')?>?return=<?php echo $this->url();?>">
+                            <?= $this->translate('label_briefcase_remove-from-briefcase'); ?>
+                        </a>
+                        <div class="tooltipContent" id="removeFromBookmarks"><?= $this->translate('label_briefcase_remove-from-briefcase'); ?></div>
+                    <?php endif;?>
+                <?php endif; ?>
+
+                <div class="clr"></div>
+            </div>
+        </td>
+        <?php if($this->show_prices):?>
+            <td valign="middle" align="center" class="col" style="text-align:center;">
+            <?php if($eventProduct->priceExists()): ?>
+                <?php echo $this->currency($eventProduct->getPrice()); ?>
+            <?php else:?>
+                <?php echo $eventProduct->getUnit(); ?>
+            <?php endif;?>
+            </td>
+        <?php endif;?>
+    </tr>
+    <?php $i=$i+1; ?>
+<?php endforeach; ?>
